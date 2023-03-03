@@ -180,6 +180,28 @@
             <artifactId>springfox-swagger-ui</artifactId>
             <version>${springfox.version}</version>
         </dependency>
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger2</artifactId>
+            <version>${springfox.version}</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>mapstruct</artifactId>
+                    <groupId>org.mapstruct</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>com.github.ulisesbocchio</groupId>
+            <artifactId>jasypt-spring-boot-starter</artifactId>
+            <version>2.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-commons-core</artifactId>
+            <version>1.1.0.RELEASE</version>
+            <type>jar</type>
+        </dependency>
     </dependencies>
 
     <dependencyManagement>
@@ -343,13 +365,7 @@
                             <skipTests>true</skipTests>
                         </configuration>
                     </plugin>
-                    <plugin>
-                        <groupId>pl.project13.maven</groupId>
-                        <artifactId>git-commit-id-plugin</artifactId>
-                        <configuration>
-                            <failOnNoGitDirectory>false</failOnNoGitDirectory>
-                        </configuration>
-                    </plugin>
+                
                 </plugins>
             </build>
 
