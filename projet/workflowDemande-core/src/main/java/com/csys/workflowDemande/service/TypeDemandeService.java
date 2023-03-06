@@ -71,9 +71,9 @@ public class TypeDemandeService {
     return TypeDemandeFactory.typedemandeToTypeDemandeDTOs(result);
   }
 
-  public void delete(String id) { log.debug("Request to delete demande devis: {}", id);
+  public void delete(String id) { log.debug("Request to delete type-demande devis: {}", id);
         TypeDemande inBase = findTypeDemande(id);
-        Preconditions.checkBusinessLogique(inBase != null, "demande-devis.NotFound");
+        Preconditions.checkBusinessLogique(inBase != null, "type-demande.NotFound");
         
     typedemandeRepository.deleteById(id);
   }
