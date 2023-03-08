@@ -3,7 +3,6 @@ package com.csys.workflowDemande.factory;
 import com.csys.workflowDemande.domain.TypeDemande;
 import com.csys.workflowDemande.dto.TypeDemandeDTO;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 public class TypeDemandeFactory {
@@ -23,7 +22,7 @@ public class TypeDemandeFactory {
     return typedemande;
   }
 
-  public static Collection<TypeDemandeDTO> typedemandeToTypeDemandeDTOs(Collection<TypeDemande> typedemandes) {
+  public static List<TypeDemandeDTO> typedemandeToTypeDemandeDTOs(List<TypeDemande> typedemandes) {
     List<TypeDemandeDTO> typedemandesDTO=new ArrayList<>();
     typedemandes.forEach(x -> {
       typedemandesDTO.add(typedemandeToTypeDemandeDTO(x));
