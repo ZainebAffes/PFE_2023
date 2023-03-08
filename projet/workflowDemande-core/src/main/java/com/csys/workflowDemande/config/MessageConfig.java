@@ -18,8 +18,8 @@ import org.springframework.context.annotation.Profile;
 @Configuration
 public class MessageConfig {
 
-    @Value("${spring.cloud.config.uri}")
-    String CONFIG_SERVER_IP;
+//    @Value("${spring.cloud.config.uri}")
+//    String CONFIG_SERVER_IP;
 
     @RefreshScope
     @Bean
