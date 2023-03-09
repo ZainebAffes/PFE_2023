@@ -9,7 +9,9 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * Properties are configured in the application.yml file.
  * </p>
  */
+
 @ConfigurationProperties(prefix = "application", ignoreUnknownFields = false)
 public class ApplicationProperties {
+    
 
 }

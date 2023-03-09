@@ -71,7 +71,7 @@ public class EtiquetteparametragedemandeResource {
     EtiquetteparametragedemandeDTO dto = etiquetteparametragedemandeService.findOne(id);
     return ResponseEntity.ok().body(dto);
   }
-
+@GetMapping("/etiquetteparametragedemandes")
   public List<EtiquetteparametragedemandeDTO> getAllEtiquetteparametragedemandes() {
     log.debug("Request to get all  Etiquetteparametragedemandes : {}");
     return etiquetteparametragedemandeService.findAll();
