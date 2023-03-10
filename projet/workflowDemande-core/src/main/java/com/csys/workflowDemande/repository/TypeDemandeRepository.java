@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface TypeDemandeRepository extends JpaRepository<TypeDemande, String> {
 
-    //public TypeDemande findOne(String codeTypeDemande);
+    public TypeDemande findByCodeTypeDemande(String codeTypeDemande);
 
    // public void delete(String id);
 }

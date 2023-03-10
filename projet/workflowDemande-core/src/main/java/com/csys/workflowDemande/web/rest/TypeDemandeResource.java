@@ -6,7 +6,7 @@ import java.lang.String;
 import java.lang.Void;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.Collection;
+import java.util.List;
 import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -71,7 +71,8 @@ public class TypeDemandeResource {
     return ResponseEntity.ok().body(dto);
   }
 
-  public Collection<TypeDemandeDTO> getAllTypeDemandes() {
+    @GetMapping("/typedemandes/filter")
+  public List<TypeDemandeDTO> getAllTypeDemandes() {
     log.debug("Request to get all  TypeDemandes : {}");
     return typedemandeService.findAll();
   }

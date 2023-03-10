@@ -5,10 +5,12 @@ management:
 security:
     basic:
         enabled: false
-
 spring:
     application:
         name: workflowDemande-core
+    mvc:
+        pathmatch:
+            matching-strategy: ant_path_matcher
     jackson:
         serialization:
             write-dates-as-timestamps: true
@@ -19,19 +21,16 @@ spring:
     output:
         ansi:
             enabled: ALWAYS
-    kafka:
-        consumer:
-            auto-offset-reset: earliest
-            group-id: csys
+  
     devtools:
         restart:
             enabled: true
         livereload:
             enabled: true
     datasource:
-        url: jdbc:sqlserver://172.16.10.10\sql2014;database=Gcliniquedev
+        url: jdbc:sqlserver://ELLOUZE\SQL2019;database=GRH
         username: SA
-        password: m0dp@$$
+        password: 123
         encrypt: false
 
     jpa:
@@ -57,9 +56,9 @@ spring:
             hibernate.cache.hazelcast.use_lite_member: true
             org.hibernate.envers.store_data_at_delete: true
     mail:
-        username: no-reply@csys.com.tn
-        password: Clinisys@123
-        host: mail.csys.com.tn
+        username: 
+        password: 
+        host: 
         port: 465
         properties:
             mail:
@@ -73,9 +72,6 @@ spring:
         include: no-liquibase
     config:
         use-legacy-processing: true
-    boot:
-        admin:
-            url: http://172.16.10.15:1111
 lang:
     secondary: ar
 

@@ -20,7 +20,7 @@ import org.springframework.core.env.Environment;
 @EnableEncryptableProperties
 @SpringBootApplication(exclude = {SessionAutoConfiguration.class})
 @EnableConfigurationProperties({LiquibaseProperties.class, ApplicationProperties.class})
-@EnableCircuitBreaker
+//@EnableCircuitBreaker
 @RefreshScope
 
 public class WorkflowDemandeApplication {
