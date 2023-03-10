@@ -9,7 +9,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title> Facturation</title>
+        <title> Workflow demandes</title>
     </head>
     <body>
         <script src="js/jquery/jquery.min.js"></script>  

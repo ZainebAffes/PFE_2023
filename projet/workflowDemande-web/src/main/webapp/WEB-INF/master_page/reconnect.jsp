@@ -11,7 +11,7 @@
 <html>
     <head>
         <meta charset="utf-8">
-        <title>FACTURATION</title>
+        <title>Workflow demandes</title>
         <meta name="description" content="">
         <meta name="author" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"> 
@@ -78,7 +78,7 @@
                         </div>
                         <div id="dateAffiche" class="project-context hidden-xs" style="width:190px; font-weight: 500;margin-top: -1px;margin-left: 10px;">
                             <span style=" text-align: left; font-size: 19px;color: black;">
-                                <h1> <small> Facturation</small></h1>
+                                <h1> <small> Workflow demandes</small></h1>
                             </span>
                         </div>
                     </div>

@@ -2,7 +2,7 @@ $(document).ready(function (e) {
     $("#submit1").unbind("click");
     $("#submit1").bind("click", function (e) {
         let xhr = new XMLHttpRequest();
-        xhr.open("GET", `${url_base}/fichier-base-core/logout`);
+        xhr.open("GET", `${url_base}/logout`);
         xhr.responseType = "json";
         xhr.setRequestHeader("Content-type", "application/json");
         xhr.setRequestHeader("x-auth-token", localStorage.getItem("x-auth-token"));

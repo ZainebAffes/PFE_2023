@@ -144,7 +144,7 @@ public final class index_jsp extends org.apache.jasper.runtime.HttpJspBase
       out.write("<html  style=\"overflow: hidden!important;\">\n");
       out.write("    <head>  \n");
       out.write("        <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">\n");
-      out.write("        <title>Facturation</title>\n");
+      out.write("        <title>Workflow demandes</title>\n");
       out.write("        <meta name=\"description\" content=\"\">\n");
       out.write("        <meta name=\"author\" content=\"\"> \n");
       out.write("        <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no\">\n");

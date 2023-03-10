@@ -1,18 +1,8 @@
 var listPrestationSelect = [];
-var authentificationWeb = findParamByCode("authentificationWeb");
-//parmAuthentificationWeb = authentificationWeb !== null && authentificationWeb !== "" ? authentificationWeb.valeur.toUpperCase() : "";
-parmAuthentificationWeb = "FALSE";
-var urlAuthentificationWeb = findParamByCode("urlAuthentificationWeb");
-parmUrlAuthentificationWeb = urlAuthentificationWeb !== null && urlAuthentificationWeb !== "" ? urlAuthentificationWeb.valeur : "";
 $(function () {
-    var prmSaisie = findParamByCode('saisie_minuscule');
-    saisie = prmSaisie !== null ? prmSaisie.valeur.toUpperCase() : "FALSE";
-    $(document.body).on('keyup', 'input.input-xs , td input ,textarea', function () {
+   $(document.body).on('keyup', 'input.input-xs , td input ,textarea', function () {
         var s = this.selectionStart;
         var e = this.selectionEnd;
-        if (saisie === 'FALSE') {
-            this.value = this.value.toUpperCase();
-        }
         this.selectionStart = s;
         this.selectionEnd = e;
     });
@@ -288,11 +278,7 @@ function fetchGridd(totalDebitBO, totalCreditBO, totalDebitSI, totalCreditSI, to
 }
 function DessinerButton(idMenu, idHeader, btn_imprime) {
     var url = "";
-    if (parmAuthentificationWeb === "TRUE") {
-        url = `${parmUrlAuthentificationWeb}/api/AccessFormUsers?module=${idModule}&menu=${idMenu}`;
-    } else {
         url = `${url_base_access}/gestion-access-core/api/access-button-user/findByCodeMenuAndModule?module=${idModule}&menu=${idMenu}`;
-    }
     $.ajax({
         url: url,
         type: 'GET',

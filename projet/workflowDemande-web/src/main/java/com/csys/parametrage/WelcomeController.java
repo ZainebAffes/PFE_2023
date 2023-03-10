@@ -46,10 +46,10 @@ public class WelcomeController {
         return json;
     }
 
-    @RequestMapping("ListePatient")
-    public String ListePatient(Map<String, Object> model, Locale locale, Principal user) {
+    @RequestMapping("ListeDemande")
+    public String ListeDemande(Map<String, Object> model, Locale locale, Principal user) {
         model.put("username", SecurityContextHolder.getContext().getAuthentication().getName());
-        return "/WEB-INF/body_page/ListePatient.jsp";
+        return "/WEB-INF/body_page/ListeDemande.jsp";
     }
 
     @RequestMapping("menu")

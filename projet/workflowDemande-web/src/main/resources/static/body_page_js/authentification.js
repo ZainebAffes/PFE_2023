@@ -93,17 +93,10 @@ function validerAuthentification() {
     data["user"] = username.value;
     data["pass"] = password.value;
 
-    var authentificationWeb = findParamByCode("authentificationWeb");
-    // parmAuthentificationWeb = authentificationWeb !== null && authentificationWeb !== "" ? authentificationWeb.valeur.toUpperCase() : "";
-    parmAuthentificationWeb = "FALSE";
-    if (data.user && data.pass) {
-        if (parmAuthentificationWeb === "TRUE") {
-            authenticateNouveau(data);
-        } else {
+ 
             authenticate(data);
-        }
-    } else
-        showNotification('Attention', "champs manquants !", 'error', 3000);
+        
+   
 }
 /**
  * Effectuer l'authentification
@@ -141,44 +134,6 @@ function authenticate(data) {
 
     let params = "username=" + data["user"] + "&password=" + encodeURIComponent(data["pass"].toLowerCase()) + "&submit=Login";
     xhr.send(params);
-}
-function authenticateNouveau(data) {
-    var urlAuthentificationWeb = findParamByCode("urlAuthentificationWeb");
-    parmUrlAuthentificationWeb = urlAuthentificationWeb !== null ? urlAuthentificationWeb.valeur.toUpperCase() : "";
-    var messengerPeople_Authorization = findParamByCode("AuthentificationKey");
-    paraMmessengerPeople_Authorization = messengerPeople_Authorization !== null ? messengerPeople_Authorization.valeur : "";
-    var url = `${parmUrlAuthentificationWeb}/api/accesControl/authentification`;
-    var payload = {
-        "userName": data["user"],
-        "passWord": encodeURIComponent(data["pass"].toLowerCase()),
-        "codeModule": `${idModule}`
-    };
-    localStorage.setItem("username", data["user"]);
-    $.ajax({
-        url: url,
-        type: 'POST',
-        data: JSON.stringify(payload),
-        contentType: "application/json; charset=utf-8",
-        async: false,
-        success: function (data) {
-            let token = "";
-            token = data.jeton;
-
-            if ($('input[type="checkbox"]').is(':checked')) {
-                window.localStorage.setItem('loginFichierBase', data["user"]);
-                window.localStorage.setItem('passwordFichierBase', data["pass"]);
-            }
-
-            // window.localStorage.setItem("x-auth-token", token);
-            document.cookie = "x-auth-token=" + token + ";path=/";
-            window.location.href = url_menu;
-        },
-        complete: function (jqXHR, textStatus) {
-            if (textStatus === "error") {
-                showNotification('Attention', "Veuillez vérifier votre nom d'utilisateur / mot de passe ! ", 'error', 3000);
-            }
-        }
-    });
 }
 function showNotification(title, msg, type, delais) {
     var index;
