@@ -25,14 +25,16 @@ import javax.xml.bind.annotation.XmlTransient;
  */
 @Entity
 @Table(name = "TypeDemande")
-@XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = "TypeDemande.findAll", query = "SELECT t FROM TypeDemande t"),
-    @NamedQuery(name = "TypeDemande.findByCodeTypeDemande", query = "SELECT t FROM TypeDemande t WHERE t.codeTypeDemande = :codeTypeDemande"),
-    @NamedQuery(name = "TypeDemande.findByDescription", query = "SELECT t FROM TypeDemande t WHERE t.description = :description"),
-    @NamedQuery(name = "TypeDemande.findByNom", query = "SELECT t FROM TypeDemande t WHERE t.nom = :nom")})
 public class TypeDemande implements Serializable {
+ private static final long serialVersionUID = 1L;
 
+    @Id
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 50)
+    @Column(name = "codeTypeDemande")
+    private String codeTypeDemande;
+    
     @Size(max = 50)
     @Column(name = "description")
     private String description;
@@ -42,19 +44,8 @@ public class TypeDemande implements Serializable {
     @OneToMany(mappedBy = "codeTypeDemande")
     private List<ParametrageDemande> parametrageDemandeList;
 
-    private static final long serialVersionUID = 1L;
-    @Id
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 50)
-    @Column(name = "codeTypeDemande")
-    private String codeTypeDemande;
-
+   
     public TypeDemande() {
-    }
-
-    public TypeDemande(String codeTypeDemande) {
-        this.codeTypeDemande = codeTypeDemande;
     }
 
     public String getCodeTypeDemande() {
@@ -65,31 +56,6 @@ public class TypeDemande implements Serializable {
         this.codeTypeDemande = codeTypeDemande;
     }
 
-
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (codeTypeDemande != null ? codeTypeDemande.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof TypeDemande)) {
-            return false;
-        }
-        TypeDemande other = (TypeDemande) object;
-        if ((this.codeTypeDemande == null && other.codeTypeDemande != null) || (this.codeTypeDemande != null && !this.codeTypeDemande.equals(other.codeTypeDemande))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "com.csys.workflowDemande.domain.TypeDemande[ codeTypeDemande=" + codeTypeDemande + " ]";
-    }
 
     public String getDescription() {
         return description;
@@ -115,5 +81,29 @@ public class TypeDemande implements Serializable {
     public void setParametrageDemandeList(List<ParametrageDemande> parametrageDemandeList) {
         this.parametrageDemandeList = parametrageDemandeList;
     }
-    
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (codeTypeDemande != null ? codeTypeDemande.hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof TypeDemande)) {
+            return false;
+        }
+        TypeDemande other = (TypeDemande) object;
+        if ((this.codeTypeDemande == null && other.codeTypeDemande != null) || (this.codeTypeDemande != null && !this.codeTypeDemande.equals(other.codeTypeDemande))) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "com.csys.workflowDemande.domain.TypeDemande[ codeTypeDemande=" + codeTypeDemande + " ]";
+    }
+
 }

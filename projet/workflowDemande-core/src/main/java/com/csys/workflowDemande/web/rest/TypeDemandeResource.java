@@ -42,10 +42,6 @@ public class TypeDemandeResource {
     if (bindingResult.hasErrors()) {
       throw new MethodArgumentNotValidException(null, bindingResult);
     }
-    if ( typedemandeDTO.getCodeTypeDemande() != null ||  !typedemandeDTO.getCodeTypeDemande().isEmpty() ) {
-      bindingResult.addError( new FieldError("TypeDemandeDTO","codeTypeDemande","POST method does not accepte "+ENTITY_NAME+" with code"));
-      throw new MethodArgumentNotValidException(null, bindingResult);
-    }
     TypeDemandeDTO result = typedemandeService.save(typedemandeDTO);
     return ResponseEntity.created( new URI("/api/typedemandes/"+ result.getCodeTypeDemande())).body(result);
   }

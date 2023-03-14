@@ -5,11 +5,11 @@ import com.csys.workflowDemande.dto.TypeDemandeDTO;
 import com.csys.workflowDemande.factory.TypeDemandeFactory;
 import com.csys.workflowDemande.repository.TypeDemandeRepository;
 import java.lang.String;
-<<<<<<< HEAD
+
 import java.util.Collection;
-=======
+
 import java.util.List;
->>>>>>> ff2732035e0b77f360ecb88a31fcc8b4a76a883f
+
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,19 +55,7 @@ public class TypeDemandeService {
     TypeDemandeDTO dto = TypeDemandeFactory.typedemandeToTypeDemandeDTO(typedemande.get());
     return dto;
   }
-<<<<<<< HEAD
 
-  @Transactional(
-      readOnly = true
-  )
-  public TypeDemande findTypeDemande(String id) {
-    log.debug("Request to get TypeDemande: {}",id);
-     Optional<TypeDemande> typedemande= typedemandeRepository.findById(id);
-    Preconditions.checkBusinessLogique(typedemande != null, "TypeDemande does not exist");
-    return typedemande.get();
-  }
-=======
->>>>>>> ff2732035e0b77f360ecb88a31fcc8b4a76a883f
 
   @Transactional(
       readOnly = true
@@ -79,9 +67,21 @@ public class TypeDemandeService {
     return typedemande.get();
   }
 
+
+
   @Transactional(
       readOnly = true
   )
+  /*public TypeDemande findTypeDemande(String id) {
+    log.debug("Request to get TypeDemande: {}",id);
+     Optional<TypeDemande> typedemande= typedemandeRepository.findById(id);
+    Preconditions.checkBusinessLogique(typedemande != null, "TypeDemande does not exist");
+    return typedemande.get();
+  }
+
+  @Transactional(
+      readOnly = true
+  )*/
   public List<TypeDemandeDTO> findAll() {
     log.debug("Request to get AllfindAll TypeDemandes");
     List<TypeDemande> result= typedemandeRepository.findAll();
