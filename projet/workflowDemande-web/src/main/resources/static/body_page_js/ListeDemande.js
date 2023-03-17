@@ -36,6 +36,7 @@ $(function () {
             window.parent.$.loader.close();
         }, 100);
     });
+    
     $('#rafresh').unbind('click');
     $('#rafresh').bind('click', function (e) {
         showLoadingNotification();

@@ -39,7 +39,7 @@
             }
             #_grid_ListDemande thead > tr th:nth-child(2),
             #_grid_ListDemande tbody > tr td:nth-child(2){
-                width: 20%!important;
+                width: 30%!important;
             }
             #_grid_ListDemande thead > tr th:nth-child(3),
             #_grid_ListDemande tbody > tr td:nth-child(3){
@@ -55,10 +55,7 @@
             #_grid_ListDemande tbody > tr td:nth-child(5){
                 width: 10%!important;
             }
-            #_grid_ListDemande thead > tr th:nth-child(6),
-            #_grid_ListDemande tbody > tr td:nth-child(6){
-                width: 10%!important;
-            }
+          
             #_grid_ListDemande  tbody {
                 flex: 1 1 auto;
                 width: 100%;
