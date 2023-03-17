@@ -10,15 +10,15 @@ public class TypeDemandeFactory {
     TypeDemandeDTO typedemandeDTO=new TypeDemandeDTO();
     typedemandeDTO.setCodeTypeDemande(typedemande.getCodeTypeDemande());
     typedemandeDTO.setDescription(typedemande.getDescription());
-    typedemandeDTO.setNom(typedemande.getNom());
-    return typedemandeDTO;
-  }
+  //  typedemandeDTO.setNom(typedemande.getNom());
+   return typedemandeDTO;
+ }
 
   public static TypeDemande typedemandeDTOToTypeDemande(TypeDemandeDTO typedemandeDTO) {
     TypeDemande typedemande=new TypeDemande();
     typedemande.setCodeTypeDemande(typedemandeDTO.getCodeTypeDemande());
     typedemande.setDescription(typedemandeDTO.getDescription());
-    typedemande.setNom(typedemandeDTO.getNom());
+    //typedemande.setNom(typedemandeDTO.getNom());
     return typedemande;
   }
 
