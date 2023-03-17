@@ -12,6 +12,7 @@ public class ParametrageDemandeFactory {
     parametragedemandeDTO.setDesignation(parametragedemande.getDesignation());
     parametragedemandeDTO.setCodeParametrageEtiquette(parametragedemande.getCodeParametrageEtiquette());
     parametragedemandeDTO.setCodeTypeDemande(parametragedemande.getCodeTypeDemande());
+    parametragedemandeDTO.setDescriptionTypeDemande(parametragedemande.getCodeTypeDemande().getDescription());
     return parametragedemandeDTO;
   }
 
