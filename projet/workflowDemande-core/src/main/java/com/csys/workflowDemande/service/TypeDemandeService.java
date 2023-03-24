@@ -16,63 +16,61 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.csys.workflowDemande.util.Preconditions;
-
+import com.csys.workflowDemande.util.WhereClauseBuilder;
 
 @Service
 @Transactional
 public class TypeDemandeService {
-  private final Logger log = LoggerFactory.getLogger(TypeDemandeService.class);
 
-  private final TypeDemandeRepository typedemandeRepository;
+    private final Logger log = LoggerFactory.getLogger(TypeDemandeService.class);
 
-  public TypeDemandeService(TypeDemandeRepository typedemandeRepository) {
-    this.typedemandeRepository=typedemandeRepository;
-  }
+    private final TypeDemandeRepository typedemandeRepository;
 
-  public TypeDemandeDTO save(TypeDemandeDTO typedemandeDTO) {
-    log.debug("Request to save TypeDemande: {}",typedemandeDTO);
-    TypeDemande typedemande = TypeDemandeFactory.typedemandeDTOToTypeDemande(typedemandeDTO);
-    typedemande = typedemandeRepository.save(typedemande);
-    TypeDemandeDTO resultDTO = TypeDemandeFactory.typedemandeToTypeDemandeDTO(typedemande);
-    return resultDTO;
-  }
+    public TypeDemandeService(TypeDemandeRepository typedemandeRepository) {
+        this.typedemandeRepository = typedemandeRepository;
+    }
 
-  public TypeDemandeDTO update(TypeDemandeDTO typedemandeDTO) {
-    log.debug("Request to update TypeDemande: {}",typedemandeDTO);
-    TypeDemande inBase= typedemandeRepository.findById(typedemandeDTO.getCodeTypeDemande()).get();
-    Preconditions.checkBusinessLogique(inBase != null, "TypeDemande does not exist");
-    TypeDemandeDTO result= save(typedemandeDTO);
-    return result;
-  }
+    public TypeDemandeDTO save(TypeDemandeDTO typedemandeDTO) {
+        log.debug("Request to save TypeDemande: {}", typedemandeDTO);
+        TypeDemande typedemande = TypeDemandeFactory.typedemandeDTOToTypeDemande(typedemandeDTO);
+        typedemande = typedemandeRepository.save(typedemande);
+        TypeDemandeDTO resultDTO = TypeDemandeFactory.typedemandeToTypeDemandeDTO(typedemande);
+        return resultDTO;
+    }
 
-  @Transactional(
-      readOnly = true
-  )
-  public TypeDemandeDTO findOne(String id) {
-    log.debug("Request to get TypeDemande: {}",id);
-      Optional<TypeDemande> typedemande= typedemandeRepository.findById(id);
-    Preconditions.checkBusinessLogique(typedemande != null, "TypeDemande does not exist");
-    TypeDemandeDTO dto = TypeDemandeFactory.typedemandeToTypeDemandeDTO(typedemande.get());
-    return dto;
-  }
+    public TypeDemandeDTO update(TypeDemandeDTO typedemandeDTO) {
+        log.debug("Request to update TypeDemande: {}", typedemandeDTO);
+        TypeDemande inBase = typedemandeRepository.findById(typedemandeDTO.getCodeTypeDemande()).get();
+        Preconditions.checkBusinessLogique(inBase != null, "TypeDemande does not exist");
+        TypeDemandeDTO result = save(typedemandeDTO);
+        return result;
+    }
 
+    @Transactional(
+            readOnly = true
+    )
+    public TypeDemandeDTO findOne(String id) {
+        log.debug("Request to get TypeDemande: {}", id);
+        Optional<TypeDemande> typedemande = typedemandeRepository.findById(id);
+        Preconditions.checkBusinessLogique(typedemande != null, "TypeDemande does not exist");
+        TypeDemandeDTO dto = TypeDemandeFactory.typedemandeToTypeDemandeDTO(typedemande.get());
+        return dto;
+    }
 
-  @Transactional(
-      readOnly = true
-  )
-  public TypeDemande findTypeDemande(String id) {
-    log.debug("Request to get TypeDemande: {}",id);
-     Optional<TypeDemande> typedemande= typedemandeRepository.findById(id);
-    Preconditions.checkBusinessLogique(typedemande != null, "TypeDemande does not exist");
-    return typedemande.get();
-  }
+    @Transactional(
+            readOnly = true
+    )
+    public TypeDemande findTypeDemande(String id) {
+        log.debug("Request to get TypeDemande: {}", id);
+        Optional<TypeDemande> typedemande = typedemandeRepository.findById(id);
+        Preconditions.checkBusinessLogique(typedemande != null, "TypeDemande does not exist");
+        return typedemande.get();
+    }
 
-
-
-  @Transactional(
-      readOnly = true
-  )
-  /*public TypeDemande findTypeDemande(String id) {
+    @Transactional(
+            readOnly = true
+    )
+    /*public TypeDemande findTypeDemande(String id) {
     log.debug("Request to get TypeDemande: {}",id);
      Optional<TypeDemande> typedemande= typedemandeRepository.findById(id);
     Preconditions.checkBusinessLogique(typedemande != null, "TypeDemande does not exist");
@@ -82,17 +80,29 @@ public class TypeDemandeService {
   @Transactional(
       readOnly = true
   )*/
-  public List<TypeDemandeDTO> findAll() {
-    log.debug("Request to get AllfindAll TypeDemandes");
-    List<TypeDemande> result= typedemandeRepository.findAll();
-    return TypeDemandeFactory.typedemandeToTypeDemandeDTOs(result);
-  }
+    public List<TypeDemandeDTO> findAll(String designation) {
+        log.debug("Request to get AllfindAll TypeDemandes");
+        List<TypeDemande> result;
+        if (designation != null) {
+            result = typedemandeRepository.findByDescription(designation);
+        } else {
+            result = typedemandeRepository.findAll();
+        }
+        return TypeDemandeFactory.typedemandeToTypeDemandeDTOs(result);
+    }
+//private List<TypeDemande> findAllTypeDemandes( String designation) {
+//        QTypeDemande qTypeDemande = QTypeDemande.motifAnnulationAdmission;
+//        WhereClauseBuilder builder = new WhereClauseBuilder()
+//                .optionalAnd(designation, () -> qTypeDemande.designation.like("%" + designation + "%"));
+//        List<TypeDemande> result = typedemandeRepository.findAll(builder);
+//        return result;
+//    }
 
-  public void delete(String id) { log.debug("Request to delete type-demande devis: {}", id);
+    public void delete(String id) {
+        log.debug("Request to delete type-demande devis: {}", id);
         TypeDemande inBase = findTypeDemande(id);
         Preconditions.checkBusinessLogique(inBase != null, "type-demande.NotFound");
-        
-    typedemandeRepository.deleteById(id);
-  }
-}
 
+        typedemandeRepository.deleteById(id);
+    }
+}

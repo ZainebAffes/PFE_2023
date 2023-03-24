@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -68,9 +69,9 @@ public class TypeDemandeResource {
   }
 
     @GetMapping("/typedemandes/filter")
-  public List<TypeDemandeDTO> getAllTypeDemandes() {
+  public List<TypeDemandeDTO> getAllTypeDemandes(@RequestParam(required = false) String designation) {
     log.debug("Request to get all  TypeDemandes : {}");
-    return typedemandeService.findAll();
+    return typedemandeService.findAll(designation);
   }
 
   @DeleteMapping("/typedemandes/{id}")

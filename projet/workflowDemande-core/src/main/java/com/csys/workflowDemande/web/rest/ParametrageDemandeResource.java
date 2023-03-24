@@ -27,61 +27,62 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api")
 public class ParametrageDemandeResource {
-  private static final String ENTITY_NAME = "parametragedemande";
 
-  private final ParametrageDemandeService parametragedemandeService;
+    private static final String ENTITY_NAME = "parametragedemande";
 
-  private final Logger log = LoggerFactory.getLogger(ParametrageDemandeService.class);
+    private final ParametrageDemandeService parametragedemandeService;
 
-  public ParametrageDemandeResource(ParametrageDemandeService parametragedemandeService) {
-    this.parametragedemandeService=parametragedemandeService;
-  }
+    private final Logger log = LoggerFactory.getLogger(ParametrageDemandeService.class);
 
-  @PostMapping("/parametragedemandes")
-  public ResponseEntity<ParametrageDemandeDTO> createParametrageDemande(@Valid @RequestBody ParametrageDemandeDTO parametragedemandeDTO, BindingResult bindingResult) throws URISyntaxException, MethodArgumentNotValidException {
-    log.debug("REST request to save ParametrageDemande : {}", parametragedemandeDTO);
-    if (bindingResult.hasErrors()) {
-      throw new MethodArgumentNotValidException(null, bindingResult);
+    public ParametrageDemandeResource(ParametrageDemandeService parametragedemandeService) {
+        this.parametragedemandeService = parametragedemandeService;
     }
-    if ( parametragedemandeDTO.getCode() != null) {
-      bindingResult.addError( new FieldError("ParametrageDemandeDTO","code","POST method does not accepte "+ENTITY_NAME+" with code"));
-      throw new MethodArgumentNotValidException(null, bindingResult);
+
+    @PostMapping("/parametragedemandes")
+    public ResponseEntity<ParametrageDemandeDTO> createParametrageDemande(@Valid @RequestBody ParametrageDemandeDTO parametragedemandeDTO, BindingResult bindingResult) throws URISyntaxException, MethodArgumentNotValidException {
+        log.debug("REST request to save ParametrageDemande : {}", parametragedemandeDTO);
+        if (bindingResult.hasErrors()) {
+            throw new MethodArgumentNotValidException(null, bindingResult);
+        }
+        if (parametragedemandeDTO.getCode() != null) {
+            bindingResult.addError(new FieldError("ParametrageDemandeDTO", "code", "POST method does not accepte " + ENTITY_NAME + " with code"));
+            throw new MethodArgumentNotValidException(null, bindingResult);
+        }
+        ParametrageDemandeDTO result = parametragedemandeService.save(parametragedemandeDTO);
+        return ResponseEntity.created(new URI("/api/parametragedemandes/" + result.getCode())).body(result);
     }
-    ParametrageDemandeDTO result = parametragedemandeService.save(parametragedemandeDTO);
-    return ResponseEntity.created( new URI("/api/parametragedemandes/"+ result.getCode())).body(result);
-  }
 
-  @PutMapping("/parametragedemandes")
-  public ResponseEntity<ParametrageDemandeDTO> updateParametrageDemande(@Valid @RequestBody ParametrageDemandeDTO parametragedemandeDTO, BindingResult bindingResult) throws MethodArgumentNotValidException {
-    log.debug("Request to update ParametrageDemande: {}",parametragedemandeDTO);
-    if (bindingResult.hasErrors()) {
-      throw new MethodArgumentNotValidException(null, bindingResult);
+    @PutMapping("/parametragedemandes")
+    public ResponseEntity<ParametrageDemandeDTO> updateParametrageDemande(@Valid @RequestBody ParametrageDemandeDTO parametragedemandeDTO, BindingResult bindingResult) throws MethodArgumentNotValidException {
+        log.debug("Request to update ParametrageDemande: {}", parametragedemandeDTO);
+        if (bindingResult.hasErrors()) {
+            throw new MethodArgumentNotValidException(null, bindingResult);
+        }
+        if (parametragedemandeDTO.getCode() == null) {
+            bindingResult.addError(new FieldError("ParametrageDemandeDTO", "code", "PUT method does not accepte " + ENTITY_NAME + " with code"));
+            throw new MethodArgumentNotValidException(null, bindingResult);
+        }
+        ParametrageDemandeDTO result = parametragedemandeService.update(parametragedemandeDTO);
+        return ResponseEntity.ok().body(result);
     }
-    if ( parametragedemandeDTO.getCode() == null) {
-      bindingResult.addError( new FieldError("ParametrageDemandeDTO","code","PUT method does not accepte "+ENTITY_NAME+" with code"));
-      throw new MethodArgumentNotValidException(null, bindingResult);
+
+    @GetMapping("/parametragedemandes/{id}")
+    public ResponseEntity<ParametrageDemandeDTO> getParametrageDemande(@PathVariable Integer id) {
+        log.debug("Request to get ParametrageDemande: {}", id);
+        ParametrageDemandeDTO dto = parametragedemandeService.findOne(id);
+        return ResponseEntity.ok().body(dto);
     }
-    ParametrageDemandeDTO result =parametragedemandeService.update(parametragedemandeDTO);
-    return ResponseEntity.ok().body(result);
-  }
 
-  @GetMapping("/parametragedemandes/{id}")
-  public ResponseEntity<ParametrageDemandeDTO> getParametrageDemande(@PathVariable Integer id) {
-    log.debug("Request to get ParametrageDemande: {}",id);
-    ParametrageDemandeDTO dto = parametragedemandeService.findOne(id);
-    return ResponseEntity.ok().body(dto);
-  }
+    @GetMapping("/parametragedemandes")
+    public List<ParametrageDemandeDTO> getAllParametrageDemandes() {
+        log.debug("Request to get all  ParametrageDemandes : {}");
+        return parametragedemandeService.findAll();
+    }
 
-  public List<ParametrageDemandeDTO> getAllParametrageDemandes() {
-    log.debug("Request to get all  ParametrageDemandes : {}");
-    return parametragedemandeService.findAll();
-  }
-
-  @DeleteMapping("/parametragedemandes/{id}")
-  public ResponseEntity<Void> deleteParametrageDemande(@PathVariable Integer id) {
-    log.debug("Request to delete ParametrageDemande: {}",id);
-    parametragedemandeService.delete(id);
-    return ResponseEntity.ok().build();
-  }
+    @DeleteMapping("/parametragedemandes/{id}")
+    public ResponseEntity<Void> deleteParametrageDemande(@PathVariable Integer id) {
+        log.debug("Request to delete ParametrageDemande: {}", id);
+        parametragedemandeService.delete(id);
+        return ResponseEntity.ok().build();
+    }
 }
-

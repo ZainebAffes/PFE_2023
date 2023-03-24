@@ -1,4 +1,10 @@
-var listPrestationSelect = [];
+$.ajaxSetup({
+    beforeSend: function (xhr)
+    {
+        xhr.setRequestHeader("x-auth-token", localStorage.getItem("x-auth-token"));
+        xhr.setRequestHeader("Accept-Language", localStorage.getItem("langue"));
+    }
+});
 $(function () {
    $(document.body).on('keyup', 'input.input-xs , td input ,textarea', function () {
         var s = this.selectionStart;

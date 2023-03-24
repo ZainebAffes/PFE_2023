@@ -24,11 +24,6 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @Entity
 @Table(name = "parametrage_demande")
-@XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = "ParametrageDemande.findAll", query = "SELECT p FROM ParametrageDemande p"),
-    @NamedQuery(name = "ParametrageDemande.findByCode", query = "SELECT p FROM ParametrageDemande p WHERE p.code = :code"),
-    @NamedQuery(name = "ParametrageDemande.findByDesignation", query = "SELECT p FROM ParametrageDemande p WHERE p.designation = :designation")})
 public class ParametrageDemande implements Serializable {
 
     private static final long serialVersionUID = 1L;
