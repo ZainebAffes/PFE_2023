@@ -61,21 +61,21 @@ public class TypeDemandeResource {
     return ResponseEntity.ok().body(result);
   }
 
-  @GetMapping("/typedemandes/{id}")
-  public ResponseEntity<TypeDemandeDTO> getTypeDemande(@PathVariable String id) {
+    @GetMapping("/typedemandes/{id}")
+    public ResponseEntity<TypeDemandeDTO> getTypeDemande(@PathVariable String id) {
     log.debug("Request to get TypeDemande: {}",id);
     TypeDemandeDTO dto = typedemandeService.findOne(id);
     return ResponseEntity.ok().body(dto);
   }
 
     @GetMapping("/typedemandes/filter")
-  public List<TypeDemandeDTO> getAllTypeDemandes(@RequestParam(required = false) String designation) {
+    public List<TypeDemandeDTO> getAllTypeDemandes(@RequestParam(required = false) String designation) {
     log.debug("Request to get all  TypeDemandes : {}");
     return typedemandeService.findAll(designation);
   }
 
-  @DeleteMapping("/typedemandes/{id}")
-  public ResponseEntity<Void> deleteTypeDemande(@PathVariable String id) {
+    @DeleteMapping("/typedemandes/{id}")
+    public ResponseEntity<Void> deleteTypeDemande(@PathVariable String id) {
     log.debug("Request to delete TypeDemande: {}",id);
     typedemandeService.delete(id);
     return ResponseEntity.ok().build();

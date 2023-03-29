@@ -17,7 +17,7 @@ function ActionBoutton() {
             var codTypeDemande = $('.selectionnee').find('td').eq(0).text();
             majTypeDemande(codTypeDemande, "update");
 
-            parametrageChampHarmoniser("1008");
+          
         }
     });
 
@@ -83,9 +83,7 @@ function majTypeDemande(codTypeDemande, action) {
     var TypeDemande = findTypeDemandeById(codTypeDemande);
     $('#modalAdd').modal('show');
     $('#codTypeDemande').val(codTypeDemande);
-    $('#desTypeDemande').val(TypeDemande.desTypeDemande);
-    $('#codTypeDemandeTypeTypeDemande').val(TypeDemande.codTypeDemandeTypeTypeDemande);
-    $('#checkboxActif').prop("checked", TypeDemande.actif);
+    $('#desTypeDemande').val(TypeDemande.description);
     $('#codTypeDemande').prop("disabled", "disabled");
     if (action === "update") {
         $('#desTypeDemande').prop("disabled", false);
@@ -211,6 +209,7 @@ function AfficheModalAddTypeDemande() {
     $('#codTypeDemande').val('');
     $('#desTypeDemande').val('');
     $('#desTypeDemande').prop("disabled", false);
+    $('#codTypeDemande').prop("disabled", false);
     $('#checkboxActif').prop("disabled", false);
     $("#btnMAJTypeDemande").show();
     sessionStorage.setItem("TypeDemande", 'ajout');
@@ -296,7 +295,7 @@ function findTypeDemandeById(id) {
 
     var response = "";
     $.ajax({
-        url: `${url_base}/typedemandes?id=${id}`,
+        url: `${url_base}/typedemandes/${id}`,
         type: 'GET',
         async: false,
         dataType: 'json',
@@ -343,7 +342,7 @@ function updateTypeDemande(object) {
 function deleteTypeDemande(codTypeDemande) {
     var response = "";
     $.ajax({
-        url: `${url_base}/typedemandes?parametragetypeDemandes=${codTypeDemande}&user=` + window.localStorage.getItem('username'),
+         url: `${url_base}/typedemandes/${codTypeDemande}`,
         contentType: "text/html; charset=utf-8",
         type: 'DELETE',
         async: false,
@@ -458,16 +457,4 @@ function findTypeDemande(desTypeDemande) {
     return response;
 
 }
-function allowDrop(ev) {
-    ev.preventDefault();
-}
 
-function drag(ev) {
-    ev.dataTransfer.setData("text", ev.target.id);
-}
-
-function drop(ev) {
-    ev.preventDefault();
-    var data = ev.dataTransfer.getData("text");
-    ev.target.appendChild(document.getElementById(data));
-}

@@ -101,8 +101,15 @@ public class TypeDemandeService {
     public void delete(String id) {
         log.debug("Request to delete type-demande devis: {}", id);
         TypeDemande inBase = findTypeDemande(id);
+        
+          Preconditions.checkBusinessLogique(inBase != null, "type-demande.NotFound");
+
         Preconditions.checkBusinessLogique(inBase != null, "type-demande.NotFound");
 
         typedemandeRepository.deleteById(id);
+    }
+
+    public void deleteById(String id) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }
