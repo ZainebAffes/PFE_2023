@@ -5,18 +5,20 @@
 package com.csys.workflowDemande.domain;
 
 import java.io.Serializable;
+import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
@@ -35,12 +37,17 @@ public class ParametrageDemande implements Serializable {
     @Size(max = 10)
     @Column(name = "designation")
     private String designation;
+    @NotNull
+    @Size(min = 1, max = 50)
+    @Column(name = "code_TypeDemande")
+    private String codeTypeDemande;
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @JoinColumn(name = "code_parametrage_etiquette", referencedColumnName = "code")
+    private List<Etiquetteparametragedemande> etiquetteparametragedemandes;
+    @JoinColumn(name = "code_TypeDemande", referencedColumnName = "codeTypeDemande", updatable = false, insertable = false, nullable = true)
     @ManyToOne
-    private Etiquetteparametragedemande codeParametrageEtiquette;
-    @JoinColumn(name = "codeTypeDemande", referencedColumnName = "codeTypeDemande")
-    @ManyToOne
-    private TypeDemande codeTypeDemande;
+    private TypeDemande typeDemande;
 
     public ParametrageDemande() {
     }
@@ -65,20 +72,28 @@ public class ParametrageDemande implements Serializable {
         this.designation = designation;
     }
 
-    public Etiquetteparametragedemande getCodeParametrageEtiquette() {
-        return codeParametrageEtiquette;
+    public List<Etiquetteparametragedemande> getEtiquetteparametragedemandes() {
+        return etiquetteparametragedemandes;
     }
 
-    public void setCodeParametrageEtiquette(Etiquetteparametragedemande codeParametrageEtiquette) {
-        this.codeParametrageEtiquette = codeParametrageEtiquette;
+    public void setEtiquetteparametragedemandes(List<Etiquetteparametragedemande> etiquetteparametragedemandes) {
+        this.etiquetteparametragedemandes = etiquetteparametragedemandes;
     }
 
-    public TypeDemande getCodeTypeDemande() {
+    public String getCodeTypeDemande() {
         return codeTypeDemande;
     }
 
-    public void setCodeTypeDemande(TypeDemande codeTypeDemande) {
+    public void setCodeTypeDemande(String codeTypeDemande) {
         this.codeTypeDemande = codeTypeDemande;
+    }
+
+    public TypeDemande getTypeDemande() {
+        return typeDemande;
+    }
+
+    public void setTypeDemande(TypeDemande typeDemande) {
+        this.typeDemande = typeDemande;
     }
 
     @Override
@@ -105,5 +120,5 @@ public class ParametrageDemande implements Serializable {
     public String toString() {
         return "com.csys.workflowDemande.domain.ParametrageDemande[ code=" + code + " ]";
     }
-    
+
 }

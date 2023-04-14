@@ -9,7 +9,9 @@ import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -18,6 +20,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+import org.hibernate.annotations.ManyToAny;
 
 /**
  *
@@ -25,11 +28,6 @@ import javax.xml.bind.annotation.XmlTransient;
  */
 @Entity
 @Table(name = "option_etiquette")
-@XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = "OptionEtiquette.findAll", query = "SELECT o FROM OptionEtiquette o"),
-    @NamedQuery(name = "OptionEtiquette.findByCodeOption", query = "SELECT o FROM OptionEtiquette o WHERE o.codeOption = :codeOption"),
-    @NamedQuery(name = "OptionEtiquette.findByChoix", query = "SELECT o FROM OptionEtiquette o WHERE o.choix = :choix")})
 public class OptionEtiquette implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -41,8 +39,11 @@ public class OptionEtiquette implements Serializable {
     @Size(max = 10)
     @Column(name = "choix")
     private String choix;
-    @OneToMany(mappedBy = "optionEtiquette")
-    private List<Etiquetteparametragedemande> etiquetteparametragedemandeList;
+      @Column(name = "option_etiquette")
+    private Integer optionEtiquette;
+    
+    
+    
 
     public OptionEtiquette() {
     }
@@ -67,14 +68,16 @@ public class OptionEtiquette implements Serializable {
         this.choix = choix;
     }
 
-    @XmlTransient
-    public List<Etiquetteparametragedemande> getEtiquetteparametragedemandeList() {
-        return etiquetteparametragedemandeList;
+    
+
+    public Integer getOptionEtiquette() {
+        return optionEtiquette;
     }
 
-    public void setEtiquetteparametragedemandeList(List<Etiquetteparametragedemande> etiquetteparametragedemandeList) {
-        this.etiquetteparametragedemandeList = etiquetteparametragedemandeList;
+    public void setOptionEtiquette(Integer optionEtiquette) {
+        this.optionEtiquette = optionEtiquette;
     }
+
 
     @Override
     public int hashCode() {

@@ -63,9 +63,15 @@ public class ParametrageDemandeService {
   @Transactional(
       readOnly = true
   )
-  public List<ParametrageDemandeDTO> findAll() {
+  public List<ParametrageDemandeDTO> findAll(String designation) {
     log.debug("Request to get All ParametrageDemandes");
-    List<ParametrageDemande> result= parametragedemandeRepository.findAll();
+    List<ParametrageDemande> result;
+    if(designation !=null){
+        result= parametragedemandeRepository.findByDesignation(designation);
+    }else{
+        result= parametragedemandeRepository.findAll();
+    }
+    
     return ParametrageDemandeFactory.parametragedemandeToParametrageDemandeDTOs(result);
   }
 

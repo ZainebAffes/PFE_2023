@@ -18,7 +18,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <jsp:include page="../body_page/css_declare.jsp"/>   
+        <jsp:include page="../body_page/css_declare.jsp"/> 
         <title>Demandes</title>
         <style>
 
@@ -55,7 +55,7 @@
             #_grid_ListDemande tbody > tr td:nth-child(5){
                 width: 10%!important;
             }
-          
+
             #_grid_ListDemande  tbody {
                 flex: 1 1 auto;
                 width: 100%;
@@ -107,7 +107,7 @@
                 text-overflow: ellipsis;
                 font-size:12px;
             }
-            label{
+            drag{
                 font-size: 12px;
                 font-weight: 300;
             }
@@ -129,6 +129,7 @@
 
             legend {
                 margin: 0px 0 10px;
+
             }
 
             .input-xs {
@@ -149,7 +150,7 @@
             .form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control {
                 background-color: #fff;
             }
-            .control-label{
+            .control-drag{
                 top: 5px;
             }
             .hover {
@@ -204,18 +205,6 @@
                 margin-left: -1132px;
 
             }
-            .btn.filtreActif{
-                background-color: white;
-                color: black;
-                border-left-width: 5px;
-                border-bottom-color: #0000003b;
-                border-top-color: #0000003b;
-                border-right-color: #0000003b;
-                margin: 0px 2px!important;
-                border-radius: 1px;
-                box-sizing: border-box;
-                width: calc(33.33% - 8px);
-            }
             #tableListRassemblant  thead > tr th:nth-child(1),
             #tableListRassemblant  tbody > tr td:nth-child(1){
                 width: 30%!important;
@@ -263,6 +252,104 @@
                 padding: 5px;
                 font-size: 12px;
             }
+
+
+
+            .container {
+
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                height: 546px;
+                flex-direction: row-reverse;
+                justify-content: flex-end;
+
+            }
+
+
+
+            .tags-list {
+                display: flex;
+                flex-direction: column;
+                padding-left: 15%;
+                list-style: none;
+                width: 50%;
+                height: 90%;
+
+            }
+
+            .tag {
+                /*              display: inline-block;*/
+                border: hidden;
+
+                position: relative;
+
+                padding: 10px;
+                margin-bottom: 10px;
+                box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+                transition: 0.3s;
+                width:100%;
+                border-radius: 5px;
+
+            }
+
+
+            .dropzones {
+                width: 80%;
+                height: 90%;
+                border-style: solid;
+            }
+            .dropped-tag {
+                background-color: transparent;
+                border: 1px;
+                box-sizing: border-box;
+                position: relative;
+                font-size: 14px;
+                min-width: 0px;
+                outline: none;
+                width: 100%;
+                border-style: solid;
+                line-height: 1.42857;
+                font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+            }
+            .dropped-tag:hover{
+                color: blue;
+            }
+
+            .delete-tag{
+                padding: 5px 15px;
+                border: none;
+                border-radius: 4px;
+                color: black;
+                cursor: pointer;
+                text-align: center;
+                position: relative;
+                background-color: whitesmoke;
+                margin-top: 15px;
+                margin-right: 15px;
+                margin-left: 70%;
+            }
+
+            .delete-tag:hover{
+                opacity: 0.7;
+                background-color: #cccccc;
+            }
+
+
+
+            .tag:hover {
+                box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+            }
+
+            .etiquettes {
+                display: inline-block;
+                width: 30%;
+                margin-right: 3%;
+                margin-bottom: 10px;
+            }
+
+
+
         </style>
     </head>
     <body id="my_body" class="styleCsys">
@@ -279,32 +366,19 @@
                             <a class="btn btn-default  pull-left" id="rafresh" > 
                                 <span class="widget-icon"><i class="glyphicon glyphicon-refresh"></i></span>  
                             </a>
-                            <h2><strong id="etat-header">Gestion des Demandes</strong></h2> 
+                            <h2><strong id="etat-header">Gestion des demandes</strong></h2> 
                         </header>
                         <!-- widget div-->
                         <div style="min-height: calc(100vh - 55px);">
-                            <div class="col-md-9">
-                                <label class="input">
+                            <div class="col-md-2">
+                                <div class="input">
                                     <div class="icon-addon addon-md">
                                         <input class="form-control" id="search" type="text" placeholder="Rechercher...">
-                                        <label class="glyphicon glyphicon-search" rel="tooltip" title="" style="padding: 10px 0;"></label>
+                                        <div class="glyphicon glyphicon-search" rel="tooltip" title="" style="padding: 10px 0;"></div>
                                     </div>
-                                </label>
+                                </div>
                             </div>
-                            <div class="col-md-3 " style="">
-                                <label class="btn btn-default active filtreActif" style="">
-                                    <i class="fa fa-search" style="/*font-size: 1.5em;*/"></i>
-                                    <span>Tous</span>
-                                </label>
-                                <label class="btn btn-success filtreActif" style="font-size:12px;">
-                                    <i class="fa fa-check-circle" style="/*font-size: 1.5em;*/"></i>
-                                    <span>Actif</span>
-                                </label>
-                                <label class="btn btn-info filtreActif" style="font-size:12px;">
-                                    <i class="fa fa-search" style="/*font-size: 1.5em;*/"></i>
-                                    <span>Non actif</span>
-                                </label>
-                            </div>
+
                             <div class="widget-body screen col-md-12">
 
                                 <div class="row">
@@ -322,15 +396,15 @@
                 <div class="modal-content">
                     <div class="modal-header" style="color: #1293b8;" >
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="fa fa-times"></i></button>
-                        <h4  class="modal-title"><i style="font-size: 20px;" id="modalIcon1" class="glyphicon glyphicon-check"></i> <span id="addlabelTitre">Confirmation d'ajout</span><label id="addLabelFich" style="display: none"> </label></h4>
+                        <h4  class="modal-title"><i style="font-size: 20px;" id="modalIcon1" class="glyphicon glyphicon-check"></i> <span id="addlabelTitre">Confirmation d'ajout</span><div id="addLabelFich" style="display: none"> </div></h4>
                     </div>
                     <div id="add_popup_div" class="modal-body">
-                        <label id="add_msg"></label>
+                        <div id="add_msg"></div>
                         <div class="row">
                             <div  id="_grid_ListRassemblant" style=""> 
                             </div>
                         </div>
-                        <label id="add_msg_confirm"></label>
+                        <div id="add_msg_confirm"></div>
                     </div>
                     <div  class="modal-footer" style="padding: 1px 20px 4px;">
                         <div class="row"><br>
@@ -343,8 +417,8 @@
                 </div>
             </div>
         </div>
-        <div class="modal fade screen" id="modalAdd" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-            <div class="modal-dialog centre_screen" style="width: 60%;">
+        <div class="modal fade screen" id="modalAdd" tabindex="-1" role="dialog" aria-dragledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+            <div class="modal-dialog centre_screen" style="width: 95%;">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h4 style="font-size: 20px;color: #3276b1;" class="modal-title">
@@ -353,101 +427,146 @@
                         </h4>
                     </div>      
                     <!-- widget div-->
-                    <div id="popup_div" class="modal-body">
-                        <div class="row">
-                            <div class="widget-body screen col-md-12">
-                                <fieldset >
+                    <div class="modal-body" style="padding-bottom: 7px;height: 600px;">
+                        <div class="row" >
+                            <div class="col-md-12">
+
+                                <fieldset>
                                     <div class="row">
                                         <div class="form-group col-md-3">
-                                            <label class="col-md-4 control-label">Code<span class="champOblig">*</span></label>
+                                            <div class="col-md-4 control-drag">Code<span class="champOblig">*</span></div>
                                             <div class="col-md-6 input-group">
-                                                <input maxlength="6" id="codDemande" type="text"  class=" form-control datepicker input-xs"  data-mask-clearifnotmatch="true" >
+                                                <input maxlength="6" id="code" type="text"  class=" form-control datepicker input-xs"  data-mask-clearifnotmatch="true" >
                                             </div>
                                         </div>
 
                                         <div class="form-group col-md-3" >
-                                            <label class="col-md-3 control-label">Désignation<span class="champOblig">*</span></label>
-                                            <div class="col-md-8 input-group">
-                                                <input draggable = "true"  maxlength="100" id="desDemande" type="text"  class=" form-control datepicker input-xs"  data-mask-clearifnotmatch="true" >
+                                            <div class="col-md-4 control-drag">Désignation <span class="champOblig">*</span></div>
+                                            <div class="col-md-6 input-group">
+                                                <input maxlength="100" id="designation" type="text"  class=" form-control datepicker input-xs"  data-mask-clearifnotmatch="true" >
                                             </div>
                                         </div>
-                                        <div id="div1" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
-                                        <img id="drag1" src="img_logo.gif" draggable="true" ondragstart="drag(event)" width="336" height="69">
-                                        <div class="drop-targets">
-                                            <div class="box">
-                                                <div class="item" id="item" draggable="true">
-                                                </div>
-                                                <div class="box"></div>
-                                                <div class="box"></div>
-                                            </div>
 
-                                            <div class="form-group col-md-2" >
-                                                <label id="chActif" class="col-md-5 control-label">
-                                                    <input id="checkboxActif" type="checkbox" class="checkbox" checked>
-                                                    <span style=" font-size: 12px;">Actif</span>
-                                                </label>
+                                        <div class="form-group col-md-6" >
+                                            <div class="col-md-4 control-drag">Type de demande <span class="champOblig">*</span></div>
+                                            <div class="col-md-6 input-group">
+                                                <select id="codeTypeDemande"class=" form-control datepicker input-xs"  data-mask-clearifnotmatch="true">
+
+                                                </select>
                                             </div>
-                                        </div>
+                                        </div></div>
+
+
+
+
                                 </fieldset>
                             </div>
-                        </div>
+                            <div class="widget-body screen col-md-7">
+                                <fieldset>
 
+                                    <div class="container">
+                                        <div class="dropzones" id="dropzones">
+                                            <div id="zone">
+
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </fieldset>
+
+                            </div>
+                            <div class="widget-body screen col-md-5">
+                                <fieldset>
+                                    <div>
+
+                                        <div class="container">
+                                            <div class="tags-list">
+                                                <h4>Champs</h4>
+                                                <div id="divLegendServ"  >
+                                                    <legend style="font-size: 0.8em ;">
+                                                        <p class="p1">CRÉER UN CHAMP</p>
+                                                        <p>
+                                                            Faites glisser un type de champ vers l'une des sections de gauche
+                                                            afin de créer un champ personnalisé pour ce type de ticket.</p>
+                                                    </legend>
+                                                </div>  
+
+                                                <div class="etiquettes">
+                                                    <div class="tag" id="texte" draggable="true"data-type="text">
+                                                        <div>
+                                                        <span draggable="false" class="glyphicon glyphicon-text-width" ><i> Description courte : </i></span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="tag" id="temps"  draggable="true"data-type="temps">
+                                                        <span class="glyphicon glyphicon-time"><i> Temps :</i></span>
+                                                    </div>
+                                                    <div class="tag" id="date" draggable="true"data-type="date">
+                                                        <span class="fa fa-calendar"><i> Date : </i></span>                                                        
+                                                    </div>
+                                                    <div class="tag" id="nombre"draggable="true"placeholder="nombre"data-type="nombre">
+                                                        <i> Nombre :</i>
+                                                    </div>
+                                                    
+                                                    <div class="tag" draggable="true"data-type="caseCocher">
+                                                        <span class="glyphicon glyphicon-time"><i> Case à cocher :</i></span>
+                                                    
+                                                    </div>
+                                                    
+                                                </div>  
+                                                <!--                                                <span class="glyphicon glyphicon-text-width"><i> Description courte : </i></span>
+                                                                                                <div class="tag"><input draggable="true" type="text"class=" form-control datepicker input-xs"  data-mask-clearifnotmatch="true" placeholder="text"></div>
+                                                
+                                                                                                <span class="glyphicon glyphicon-time"><i> Temps :</i></span>
+                                                                                                <div class="tag"><input draggable="true" type="time"class=" form-control datepicker input-xs"  data-mask-clearifnotmatch="true"></div>
+                                                
+                                                                                                <span class="fa fa-calendar"><i> Date : </i></span>                                                        
+                                                                                                <div class="tag"><input draggable="true" type="date"class=" form-control datepicker input-xs"  data-mask-clearifnotmatch="true"></div>
+                                                
+                                                                                                <i> Nombre :</i>
+                                                                                                <div class="tag" id="nombre"><input draggable="true" type="number"class=" form-control datepicker input-xs"  data-mask-clearifnotmatch="true" placeholder="nombre" >
+                                                                                                   
+                                                                                                </div>
+                                                
+                                                                                                <span class="glyphicon glyphicon-align-left"> <i> Paragraphe :</i></span>
+                                                
+                                                                                                <div class="tag"> <textarea  draggable="true" placeholder="Paragraphe.." class=" form-control datepicker input-xs"  data-mask-clearifnotmatch="true"></textarea></div>
+                                                -->
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                </fieldset>
+
+                            </div>
+                        </div>
                     </div>
+
                     <!-- end widget div -->
                     <div  class="modal-footer" style="padding: 1px 20px 4px;">
                         <div class="row">
                             <div align="right">
-                                <button id="btnMAJFam" type="button" class="btn btn-default"><i class="fa fa-check"></i>&nbsp; Valider</button>
-                                <button id='btnCloseModalFam' type="button" class="btn btn-default" onClick="$('#modalAdd').modal('hide');"><i class="fa fa-times"></i>&nbsp; Fermer</button>
+                                <button id="btnMAJDemande" type="button" class="btn btn-default"><i class="fa fa-check"></i>&nbsp; Valider</button>
+                                <button id='btnCloseModalDemande' type="button" class="btn btn-default" onClick="$('#modalAdd').modal('hide');"><i class="fa fa-times"></i>&nbsp; Fermer</button>
                             </div>
                         </div>
                     </div> 
-                </div>
-            </div>
-        </div>
-
-
-        <div class="modal fade " id="parametrage" tabindex="-1" role="dialog" aria-hidden="true">
-            <div class="modal-dialog centre_screen" style="width: 850px;">
-                <div class="modal-content">
-                    <div class="modal-header"   >
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="fa fa-times"></i></button>
-                        <h4 class="modal-title" style="font-size: 20px;color: #3276b1;">
-                            <i id="modalIcon" class="glyphicon glyphicon-trash"></i> 
-                            <span id="labelTitre">Paramétrage impression</span>
-                            <label id="LabelFich" style="display: none"> </label>
-                        </h4>
-                    </div>
-
-                    <div id="parametragebody" class="modal-body" style="  overflow-x: auto;overflow-y: auto;max-height: 200px;">
-                    </div>
-
-                    <div class="modal-footer" >
-
-                        <button id="btnCloseModalImpr" type="" onClick="$('#parametrage').modal('hide');" class="btn btn-default" style="float:right"><i class="fa fa-times"></i> Fermer</button>
-                        <div onclick="validerparametrage()" >
-                            <a href="javascript:void(0);" class="btn btn-default"   style="margin-right:10px;float:right"> 
-                                <span class="widget-icon"><i class="fa fa-check"></i></span>&nbsp;&nbsp;Valider
-                            </a>
-                        </div>
-                    </div>
-                </div>
+                </div> 
             </div>
         </div>
         <div class="modal fade " id="sessionExpirationConfirm" tabindex="-1" role="dialog" aria-hidden="true">
             <div class="modal-dialog centre_screen" style="width: 530px;">
                 <div class="modal-content">
-
                     <div class="modal-header"   >
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="fa fa-times"></i></button>
                         <h4 class="modal-title" style="font-size: 20px;color: #3276b1;">
                             <i id="modalIcon" class="glyphicon glyphicon-trash"></i> 
                             <span id="labelTitre">Expiration de session</span>
-                            <label id="LabelFich" style="display: none"> </label>
+                            <div id="LabelFich" style="display: none"> </div>
                         </h4>
                     </div>
                     <div id="popup_sessionExpiration" class="modal-body">
-                        <label>Votre session a expiré! Pour des raisons de sécurité, vous serez automatiquement déconnecté après <span id="SecondsUntilExpire"></span> secondes</label>
+                        <div>Votre session a expiré! Pour des raisons de sécurité, vous serez automatiquement déconnecté après <span id="SecondsUntilExpire"></span> secondes</div>
                     </div>
 
                     <div  class="modal-footer" style="padding: 1px 20px 4px;">

@@ -16,7 +16,7 @@ public class OptionEtiquetteDTO {
   )
   private String choix;
 
-  private List etiquetteparametragedemandeList;
+     private Integer optionEtiquette;
 
   public Integer getCodeOption() {
     return codeOption;
@@ -34,12 +34,14 @@ public class OptionEtiquetteDTO {
     this.choix = choix;
   }
 
-  public List getEtiquetteparametragedemandeList() {
-    return etiquetteparametragedemandeList;
-  }
+    public Integer getOptionEtiquette() {
+        return optionEtiquette;
+    }
 
-  public void setEtiquetteparametragedemandeList(List etiquetteparametragedemandeList) {
-    this.etiquetteparametragedemandeList = etiquetteparametragedemandeList;
-  }
+    public void setOptionEtiquette(Integer optionEtiquette) {
+        this.optionEtiquette = optionEtiquette;
+    }
+
+  
 }
 

@@ -13,12 +13,10 @@ function ActionBoutton() {
     $('#btn_Modifier').bind('click', function (e) {
         var rowDde = $('#tableListDemande').find('tr.selectionnee');
         if (rowDde.length === 0)
-            showNotification('Attention', "Veuillez choisir un demande ", 'error', 3000);
+            showNotification('Attention', "Veuillez choisir une demande ", 'error', 3000);
         else {
             var code = $('.selectionnee').find('td').eq(0).text();
             majDemande(code, "update");
-
-            parametrageChampHarmoniser("1008");
         }
     });
 
@@ -26,7 +24,7 @@ function ActionBoutton() {
     $('#btn_Consulter').bind('click', function (e) {
         var rowDde = $('#tableListDemande').find('tr.selectionnee');
         if (rowDde.length === 0)
-            showNotification('Attention', "Veuillez choisir un demande ", 'error', 3000);
+            showNotification('Attention', "Veuillez choisir une demande ", 'error', 3000);
         else {
             var code = $('.selectionnee').find('td').eq(0).text();
             majDemande(code, "consult");
@@ -37,7 +35,7 @@ function ActionBoutton() {
     $('#btn_Annuler').bind('click', function (e) {
         var rowDde = $('#tableListDemande').find('tr.selectionnee');
         if (rowDde.length === 0)
-            showNotification('Attention', "Veuillez choisir un demande ", 'error', 3000);
+            showNotification('Attention', "Veuillez choisir une demande ", 'error', 3000);
         else
         {
             var code = $('.selectionnee').find('td').eq(0).text();
@@ -48,32 +46,13 @@ function ActionBoutton() {
     $('#btn_Imprimer').unbind('click');
     $('#btn_Imprimer').bind('click', function (e) {
         $('#search').val("");
-        var varActif;
-        var etatActif = $('.filtreActif').find('.fa-check-circle').parent().find('span').eq(0).text();
-        if (etatActif === "Actif") {
-            varActif = "true";
-        } else if (etatActif === "Non actif") {
-            varActif = "false";
-        } else if (etatActif === "Tous") {
-            varActif = "true,false";
-        }
         var type = "PDF";
-        var url = `${url_base}/parametragedemandes/print?actifs=${varActif}&user=` + window.localStorage.getItem('username') + `&type=` + type;
+        var url = `${url_base}/parametragedemandes/print?user=` + window.localStorage.getItem('username') + `&type=` + type;
         impressionListe(url);
     });
 
     $("#btn_Exporter").unbind("click");
     $("#btn_Exporter").bind("click", function (e) {
-
-        var varActif;
-        var etatActif = $('.filtreActif').find('.fa-check-circle').parent().find('span').eq(0).text();
-        if (etatActif === "Actif") {
-            varActif = "true";
-        } else if (etatActif === "Non actif") {
-            varActif = "false";
-        } else if (etatActif === "Tous") {
-            varActif = "true,false";
-        }
         var type = "Excel";
         var url = `${url_base}/parametragedemandes/print?actifs=${varActif}&user=` + window.localStorage.getItem('username') + `&type=` + type;
         exporterList(url, "demande");
@@ -86,20 +65,19 @@ function majDemande(code, action) {
     $('#code').val(code);
     $('#designation').val(Demande.designation);
     $('#codeTypeDemande').val(Demande.codeTypeDemande);
-    $('#checkboxActif').prop("checked", Demande.actif);
     $('#code').prop("disabled", "disabled");
+
     if (action === "update") {
         $('#designation').prop("disabled", false);
         $('#codeTypeDemande').prop("disabled", false);
-        $('#checkboxActif').prop("disabled", false);
         $('#modalIconDemande').replaceWith('<i id="modalIconDemande" class="glyphicon glyphicon-edit"></i>');
-        $('#labelTitre').text("Modification d'un demande");
+        $('#labelTitre').text("Modification d'une demande");
         sessionStorage.setItem("Demande", 'modif');
         $("#btnMAJDemande").show();
     }
     if (action === "delete") {
         $('#modalIconDemande').replaceWith('<i id="modalIconDemande" class="glyphicon glyphicon-trash"></i>');
-        $('#labelTitre').text("Annulation d'un demande");
+        $('#labelTitre').text("Annulation d'une demande");
         $('#designation').prop("disabled", "disabled");
         $('#codeTypeDemande').prop("disabled", true);
         $('#checkboxActif').prop("disabled", "disabled");
@@ -108,7 +86,7 @@ function majDemande(code, action) {
     }
     if (action === "consult") {
         $('#modalIconDemande').replaceWith('<i id="modalIconDemande" class="glyphicon glyphicon-list"></i>');
-        $('#labelTitre').text("Détail d'un demande");
+        $('#labelTitre').text("Détail d'une demande");
         $('#designation').prop("disabled", "disabled");
         $('#codeTypeDemande').prop("disabled", true);
         $('#checkboxActif').prop("disabled", "disabled");
@@ -127,7 +105,7 @@ function DrawTableDemande() {
 function DrawListDemande(idTable, idContainer) {
     showLoadingNotification();
     var List = [];
-   
+
     List = findDemande(undefined);
     document.getElementById(idContainer).innerHTML = '';
     var table_list = "<table id='" + idTable + "' class='display dataTable projects-table table table-striped table-bordered table-hover' cellspacing='0'  width='100%' align='center'>";
@@ -235,32 +213,18 @@ function DrawListDemande(idTable, idContainer) {
     hideLoadingNotification();
 }
 function AfficheModalAddDemande() {
-    $('#labelTitre').text("Ajout d'un demande");
-    $('#modal_ajout_Demande_title h2').val("Ajout d'un demande");
+    $('#labelTitre').text("Ajout d'une demande");
+    $('#modal_ajout_Demande_title h2').val("Ajout d'une demande");
     $('#modalIconDemande').replaceWith('<i id="modalIconDemande" class="glyphicon glyphicon-plus"></i>');
     $('#modalAdd').modal('show');
     $('#code').val('');
     $('#designation').val('');
     $('#codeTypeDemande').val('');
-    $('#actif').prop("checked", true);
+
     $('#designation').prop("disabled", false);
     $('#checkboxActif').prop("disabled", false);
     $('#codeTypeDemande').prop("disabled", false);
-    var genCodeAuto = generateCodeAutoByparam("DelaiRegFrs", '');
-    var codeAuto = genCodeAuto !== null ? genCodeAuto.code : '';
-    var auto = genCodeAuto !== null ? genCodeAuto.auto : 'M';
-    var maxLength = genCodeAuto.maxLength !== null && genCodeAuto.maxLength !== 0 ? genCodeAuto.maxLength : 10;
-    var disabled = auto === 'A' ? "disabled='disabled'" : "";
-    if (auto === 'A' || auto === 'F') {
-        $('#code').prop('disabled', disabled);
-    } else {
-        $('#code').removeAttr('disabled');
-    }
-    $('#code').prop('maxLength', maxLength);
 
-    if (auto === 'A') {
-        $('#code').val(codeAuto);
-    }
     $('#designation').val('');
     $("#btnMAJDemande").show();
     sessionStorage.setItem("Demande", 'ajout');
@@ -293,13 +257,7 @@ function submitMAJDemande() {
         if ($('.css-error').length > 0) {
             showNotification('Avertissement', "Veuillez vérifier le(s) champ(s) saisi(s) ! ", 'error', 3000);
         } else {
-            var ifActif = $('#checkboxActif').is(':checked');
-            var actif;
-            if (ifActif === true) {
-                actif = "true";
-            } else if (ifActif === false) {
-                actif = "false";
-            }
+
             var payload = payloadDemande();
             if (sessionStorage.getItem("Demande") === 'ajout') {
                 var spec = findDemande(undefined, $('#codeTypeDemande').val());
@@ -327,7 +285,7 @@ function submitMAJDemande() {
 }
 function addDemande(list) {
     $.ajax({
-        url: `${url_base}/parametragedemandes?user=` + window.localStorage.getItem('username'),
+        url: `${url_base}/parametragedemandes`,
         type: 'POST',
         contentType: "application/json; charset=utf-8",
         data: JSON.stringify(list),
@@ -356,10 +314,9 @@ function addDemande(list) {
 }
 
 function findDemandeById(id) {
-
     var response = "";
     $.ajax({
-        url: `${url_base}/parametragedemandes?id=${id}`,
+        url: `${url_base}/parametragedemandes/${id}`,
         type: 'GET',
         async: false,
         dataType: 'json',
@@ -406,7 +363,7 @@ function updateDemande(object) {
 function deleteDemande(code) {
     var response = "";
     $.ajax({
-        url: `${url_base}/parametragedemandes?parametragedemandes=${code}&user=` + window.localStorage.getItem('username'),
+        url: `${url_base}/parametragedemandes/${code}`,
         contentType: "text/html; charset=utf-8",
         type: 'DELETE',
         async: false,
@@ -427,12 +384,18 @@ function deleteDemande(code) {
     return response;
 }
 function payloadDemande() {
-    var actif = $('#checkboxActif').is(':checked') === true ? "true" : "false";
+    var oElements = document.querySelectorAll("[dragged]");
+
+    for (i = 0; i < oElements.length; i += 1) {
+        if (oElements[i].parentNode.id) {
+            console.log("%s : %s", oElements[i].parentNode.id, oElements[i].id);
+        }
+    }
     var payload = {
         "code": $('#code').val(),
         "designation": $('#designation').val(),
         "codeTypeDemande": $('#codeTypeDemande').val()
-        
+
     };
     return payload;
 }
@@ -441,7 +404,7 @@ function DrawListRassemblant(idTable, idContainer, list) {
     var table_list = "<table id='" + idTable + "' class='display dataTable projects-table table table-striped table-bordered table-hover' cellspacing='0'  width='100%' align='center'>";
     table_list += "</table>";
     $("#" + idContainer).html(table_list);
-    var colDef = [1];
+    var colDef = [2];
     table = $('#' + idTable).on('page.dt', function () {}).DataTable({
         "dom": 'frtip',
         "searching": true,
@@ -465,6 +428,17 @@ function DrawListRassemblant(idTable, idContainer, list) {
             {
                 title: "Désignation",
                 data: 'designation',
+                render: function (data) {
+                    if (data === undefined)
+                        return '';
+                    else
+                        return "<span title='" + data + "'>" + data + "</span>";
+                }
+            },
+
+            {
+                title: "Type demande",
+                data: 'descriptionTypeDemande',
                 render: function (data) {
                     if (data === undefined)
                         return '';
@@ -519,17 +493,4 @@ function findDemande(designation) {
     });
     return response;
 
-}
-function allowDrop(ev) {
-  ev.preventDefault();
-}
-
-function drag(ev) {
-  ev.dataTransfer.setData("text", ev.target.id);
-}
-
-function drop(ev) {
-  ev.preventDefault();
-  var data = ev.dataTransfer.getData("text");
-  ev.target.appendChild(document.getElementById(data));
 }

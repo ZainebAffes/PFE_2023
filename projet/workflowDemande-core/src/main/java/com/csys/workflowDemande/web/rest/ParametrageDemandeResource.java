@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -74,9 +75,9 @@ public class ParametrageDemandeResource {
     }
 
     @GetMapping("/parametragedemandes")
-    public List<ParametrageDemandeDTO> getAllParametrageDemandes() {
+    public List<ParametrageDemandeDTO> getAllParametrageDemandes(@RequestParam(required = false) String designation) {
         log.debug("Request to get all  ParametrageDemandes : {}");
-        return parametragedemandeService.findAll();
+        return parametragedemandeService.findAll(designation);
     }
 
     @DeleteMapping("/parametragedemandes/{id}")

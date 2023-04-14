@@ -4,6 +4,7 @@ import com.csys.workflowDemande.domain.Etiquetteparametragedemande;
 import com.csys.workflowDemande.domain.TypeDemande;
 import java.lang.Integer;
 import java.lang.String;
+import java.util.List;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -18,10 +19,10 @@ public class ParametrageDemandeDTO {
     )
     private String designation;
     private String descriptionTypeDemande;
-    private Etiquetteparametragedemande codeParametrageEtiquette;
+    private List<EtiquetteparametragedemandeDTO> etiquetteparametragedemandeDTOs;
+    private TypeDemande typeDemandes;
 
-    private TypeDemande codeTypeDemande;
-
+    private String codeTypeDemande;
     public Integer getCode() {
         return code;
     }
@@ -38,21 +39,23 @@ public class ParametrageDemandeDTO {
         this.designation = designation;
     }
 
-    public Etiquetteparametragedemande getCodeParametrageEtiquette() {
-        return codeParametrageEtiquette;
+    public TypeDemande getTypeDemandes() {
+        return typeDemandes;
     }
 
-    public void setCodeParametrageEtiquette(Etiquetteparametragedemande codeParametrageEtiquette) {
-        this.codeParametrageEtiquette = codeParametrageEtiquette;
+    public void setTypeDemandes(TypeDemande typeDemandes) {
+        this.typeDemandes = typeDemandes;
     }
 
-    public TypeDemande getCodeTypeDemande() {
+    public String getCodeTypeDemande() {
         return codeTypeDemande;
     }
 
-    public void setCodeTypeDemande(TypeDemande codeTypeDemande) {
+    public void setCodeTypeDemande(String codeTypeDemande) {
         this.codeTypeDemande = codeTypeDemande;
     }
+
+  
 
     public String getDescriptionTypeDemande() {
         return descriptionTypeDemande;
@@ -61,5 +64,13 @@ public class ParametrageDemandeDTO {
     public void setDescriptionTypeDemande(String descriptionTypeDemande) {
         this.descriptionTypeDemande = descriptionTypeDemande;
     }
-    
+
+    public List<EtiquetteparametragedemandeDTO> getEtiquetteparametragedemandeDTOs() {
+        return etiquetteparametragedemandeDTOs;
+    }
+
+    public void setEtiquetteparametragedemandeDTOs(List<EtiquetteparametragedemandeDTO> etiquetteparametragedemandeDTOs) {
+        this.etiquetteparametragedemandeDTOs = etiquetteparametragedemandeDTOs;
+    }
+
 }

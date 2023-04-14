@@ -11,7 +11,6 @@ public class OptionEtiquetteFactory {
     OptionEtiquetteDTO optionetiquetteDTO=new OptionEtiquetteDTO();
     optionetiquetteDTO.setCodeOption(optionetiquette.getCodeOption());
     optionetiquetteDTO.setChoix(optionetiquette.getChoix());
-    optionetiquetteDTO.setEtiquetteparametragedemandeList(optionetiquette.getEtiquetteparametragedemandeList());
     return optionetiquetteDTO;
   }
 
@@ -19,7 +18,6 @@ public class OptionEtiquetteFactory {
     OptionEtiquette optionetiquette=new OptionEtiquette();
     optionetiquette.setCodeOption(optionetiquetteDTO.getCodeOption());
     optionetiquette.setChoix(optionetiquetteDTO.getChoix());
-    optionetiquette.setEtiquetteparametragedemandeList(optionetiquetteDTO.getEtiquetteparametragedemandeList());
     return optionetiquette;
   }
 

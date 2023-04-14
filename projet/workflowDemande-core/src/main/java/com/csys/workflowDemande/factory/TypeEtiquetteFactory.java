@@ -11,8 +11,7 @@ public class TypeEtiquetteFactory {
     typeetiquetteDTO.setCode(typeetiquette.getCode());
     typeetiquetteDTO.setType(typeetiquette.getType());
     typeetiquetteDTO.setLogo(typeetiquette.getLogo());
-    typeetiquetteDTO.setEtiquetteparametragedemandeList(typeetiquette.getEtiquetteparametragedemandeList());
-    return typeetiquetteDTO;
+     return typeetiquetteDTO;
   }
 
   public static TypeEtiquette typeetiquetteDTOToTypeEtiquette(TypeEtiquetteDTO typeetiquetteDTO) {
@@ -20,7 +19,6 @@ public class TypeEtiquetteFactory {
     typeetiquette.setCode(typeetiquetteDTO.getCode());
     typeetiquette.setType(typeetiquetteDTO.getType());
     typeetiquette.setLogo(typeetiquetteDTO.getLogo());
-    typeetiquette.setEtiquetteparametragedemandeList(typeetiquetteDTO.getEtiquetteparametragedemandeList());
     return typeetiquette;
   }
 

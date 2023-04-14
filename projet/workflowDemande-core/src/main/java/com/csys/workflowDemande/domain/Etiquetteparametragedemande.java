@@ -7,18 +7,17 @@ package com.csys.workflowDemande.domain;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 /**
@@ -27,18 +26,7 @@ import javax.xml.bind.annotation.XmlTransient;
  */
 @Entity
 @Table(name = "Etiquette_parametrage_demande")
-@XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = "Etiquetteparametragedemande.findAll", query = "SELECT e FROM Etiquetteparametragedemande e"),
-    @NamedQuery(name = "Etiquetteparametragedemande.findByCode", query = "SELECT e FROM Etiquetteparametragedemande e WHERE e.code = :code"),
-    @NamedQuery(name = "Etiquetteparametragedemande.findByDescription", query = "SELECT e FROM Etiquetteparametragedemande e WHERE e.description = :description"),
-    @NamedQuery(name = "Etiquetteparametragedemande.findByMin", query = "SELECT e FROM Etiquetteparametragedemande e WHERE e.min = :min"),
-    @NamedQuery(name = "Etiquetteparametragedemande.findByMax", query = "SELECT e FROM Etiquetteparametragedemande e WHERE e.max = :max"),
-    @NamedQuery(name = "Etiquetteparametragedemande.findByIsRequired", query = "SELECT e FROM Etiquetteparametragedemande e WHERE e.isRequired = :isRequired"),
-    @NamedQuery(name = "Etiquetteparametragedemande.findByPosition", query = "SELECT e FROM Etiquetteparametragedemande e WHERE e.position = :position"),
-    @NamedQuery(name = "Etiquetteparametragedemande.findByDefultValue", query = "SELECT e FROM Etiquetteparametragedemande e WHERE e.defultValue = :defultValue"),
-    @NamedQuery(name = "Etiquetteparametragedemande.findByVisible", query = "SELECT e FROM Etiquetteparametragedemande e WHERE e.visible = :visible"),
-    @NamedQuery(name = "Etiquetteparametragedemande.findByMultiple", query = "SELECT e FROM Etiquetteparametragedemande e WHERE e.multiple = :multiple")})
+
 public class Etiquetteparametragedemande implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -70,14 +58,26 @@ public class Etiquetteparametragedemande implements Serializable {
     @Size(max = 10)
     @Column(name = "multiple")
     private String multiple;
-    @JoinColumn(name = "option_etiquette", referencedColumnName = "code_option")
+
+    @NotNull
+    @Column(name = "code_type_etiquette")
+    private Integer codeTypeEtiquette;
+    @NotNull
+    @Column(name = "code_parametrage_etiquette")
+    private Integer codeParametrageEtiquette;
+      
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @JoinColumn(name = "code_option", referencedColumnName = "code", updatable = false, insertable = false, nullable = true)
+    private List<OptionEtiquette> optionEtiquettes;
+
+    @JoinColumn(name = "code_parametrage_etiquette", referencedColumnName = "code", updatable = false, insertable = false, nullable = true)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    private ParametrageDemande parametrageDemande;
+
+    @JoinColumn(name = "code_type_etiquette", referencedColumnName = "code", updatable = false, insertable = false, nullable = true)
     @ManyToOne
-    private OptionEtiquette optionEtiquette;
-    @JoinColumn(name = "code_type_etiquette", referencedColumnName = "code")
-    @ManyToOne
-    private TypeEtiquette codeTypeEtiquette;
-    @OneToMany(mappedBy = "codeParametrageEtiquette")
-    private List<ParametrageDemande> parametrageDemandeList;
+    private TypeEtiquette typeEtiquette;
 
     public Etiquetteparametragedemande() {
     }
@@ -158,29 +158,43 @@ public class Etiquetteparametragedemande implements Serializable {
         this.multiple = multiple;
     }
 
-    public OptionEtiquette getOptionEtiquette() {
-        return optionEtiquette;
+    public List<OptionEtiquette> getOptionEtiquettes() {
+        return optionEtiquettes;
     }
 
-    public void setOptionEtiquette(OptionEtiquette optionEtiquette) {
-        this.optionEtiquette = optionEtiquette;
+    public void setOptionEtiquettes(List<OptionEtiquette> optionEtiquettes) {
+        this.optionEtiquettes = optionEtiquettes;
     }
 
-    public TypeEtiquette getCodeTypeEtiquette() {
+    public ParametrageDemande getParametrageDemande() {
+        return parametrageDemande;
+    }
+
+    public void setParametrageDemande(ParametrageDemande parametrageDemande) {
+        this.parametrageDemande = parametrageDemande;
+    }
+
+    public Integer getCodeTypeEtiquette() {
         return codeTypeEtiquette;
     }
 
-    public void setCodeTypeEtiquette(TypeEtiquette codeTypeEtiquette) {
+    public void setCodeTypeEtiquette(Integer codeTypeEtiquette) {
         this.codeTypeEtiquette = codeTypeEtiquette;
     }
 
-    @XmlTransient
-    public List<ParametrageDemande> getParametrageDemandeList() {
-        return parametrageDemandeList;
+    public TypeEtiquette getTypeEtiquette() {
+        return typeEtiquette;
     }
 
-    public void setParametrageDemandeList(List<ParametrageDemande> parametrageDemandeList) {
-        this.parametrageDemandeList = parametrageDemandeList;
+    public void setTypeEtiquette(TypeEtiquette typeEtiquette) {
+        this.typeEtiquette = typeEtiquette;
+    }
+    public Integer getCodeParametrageEtiquette() {
+        return codeParametrageEtiquette;
+    }
+
+    public void setCodeParametrageEtiquette(Integer codeParametrageEtiquette) {
+        this.codeParametrageEtiquette = codeParametrageEtiquette;
     }
 
     @Override
@@ -207,5 +221,5 @@ public class Etiquetteparametragedemande implements Serializable {
     public String toString() {
         return "com.csys.workflowDemande.domain.Etiquetteparametragedemande[ code=" + code + " ]";
     }
-    
+
 }

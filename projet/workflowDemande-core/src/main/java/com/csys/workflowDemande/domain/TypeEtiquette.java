@@ -5,19 +5,16 @@
 package com.csys.workflowDemande.domain;
 
 import java.io.Serializable;
-import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -25,12 +22,7 @@ import javax.xml.bind.annotation.XmlTransient;
  */
 @Entity
 @Table(name = "type_etiquette")
-@XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = "TypeEtiquette.findAll", query = "SELECT t FROM TypeEtiquette t"),
-    @NamedQuery(name = "TypeEtiquette.findByCode", query = "SELECT t FROM TypeEtiquette t WHERE t.code = :code"),
-    @NamedQuery(name = "TypeEtiquette.findByType", query = "SELECT t FROM TypeEtiquette t WHERE t.type = :type"),
-    @NamedQuery(name = "TypeEtiquette.findByLogo", query = "SELECT t FROM TypeEtiquette t WHERE t.logo = :logo")})
+
 public class TypeEtiquette implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -45,8 +37,6 @@ public class TypeEtiquette implements Serializable {
     @Size(max = 10)
     @Column(name = "logo")
     private String logo;
-    @OneToMany(mappedBy = "codeTypeEtiquette")
-    private List<Etiquetteparametragedemande> etiquetteparametragedemandeList;
 
     public TypeEtiquette() {
     }
@@ -79,14 +69,7 @@ public class TypeEtiquette implements Serializable {
         this.logo = logo;
     }
 
-    @XmlTransient
-    public List<Etiquetteparametragedemande> getEtiquetteparametragedemandeList() {
-        return etiquetteparametragedemandeList;
-    }
-
-    public void setEtiquetteparametragedemandeList(List<Etiquetteparametragedemande> etiquetteparametragedemandeList) {
-        this.etiquetteparametragedemandeList = etiquetteparametragedemandeList;
-    }
+  
 
     @Override
     public int hashCode() {
