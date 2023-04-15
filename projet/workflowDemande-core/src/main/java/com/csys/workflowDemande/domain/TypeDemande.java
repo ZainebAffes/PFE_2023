@@ -26,6 +26,15 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity
 @Table(name = "TypeDemande")
 public class TypeDemande implements Serializable {
+
+    @Size(max = 50)
+    @Column(name = "description")
+    private String description;
+    @Size(max = 50)
+    @Column(name = "nom")
+    private String nom;
+    @OneToMany(mappedBy = "typeDemande1")
+    private List<Demande> demandeList;
  private static final long serialVersionUID = 1L;
 
     @Id
@@ -35,12 +44,6 @@ public class TypeDemande implements Serializable {
     @Column(name = "codeTypeDemande")
     private String codeTypeDemande;
     
-    @Size(max = 50)
-    @Column(name = "description")
-    private String description;
-    @Size(max = 50)
-    @Column(name = "nom")
-    private String nom;
     @OneToMany(mappedBy = "codeTypeDemande")
     private List<ParametrageDemande> parametrageDemandeList;
 
@@ -57,21 +60,6 @@ public class TypeDemande implements Serializable {
     }
 
 
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getNom() {
-        return nom;
-    }
-
-    public void setNom(String nom) {
-        this.nom = nom;
-    }
 
     @XmlTransient
     public List<ParametrageDemande> getParametrageDemandeList() {
@@ -104,6 +92,31 @@ public class TypeDemande implements Serializable {
     @Override
     public String toString() {
         return "com.csys.workflowDemande.domain.TypeDemande[ codeTypeDemande=" + codeTypeDemande + " ]";
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getNom() {
+        return nom;
+    }
+
+    public void setNom(String nom) {
+        this.nom = nom;
+    }
+
+    @XmlTransient
+    public List<Demande> getDemandeList() {
+        return demandeList;
+    }
+
+    public void setDemandeList(List<Demande> demandeList) {
+        this.demandeList = demandeList;
     }
 
 }

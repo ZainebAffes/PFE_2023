@@ -492,10 +492,9 @@
                                                 </div>  
 
                                                 <div class="etiquettes">
-                                                    <div class="tag" id="texte" draggable="true"data-type="text">
-                                                        <div>
-                                                        <span draggable="false" class="glyphicon glyphicon-text-width" ><i> Description courte : </i></span>
-                                                        </div>
+                                                    <div class="tag" id="texte" draggable="true"data-type="text">                                                        
+                                                        <span class="glyphicon glyphicon-text-width" ><i> Description courte : </i></span>
+                                                       
                                                     </div>
                                                     <div class="tag" id="temps"  draggable="true"data-type="temps">
                                                         <span class="glyphicon glyphicon-time"><i> Temps :</i></span>
@@ -503,7 +502,7 @@
                                                     <div class="tag" id="date" draggable="true"data-type="date">
                                                         <span class="fa fa-calendar"><i> Date : </i></span>                                                        
                                                     </div>
-                                                    <div class="tag" id="nombre"draggable="true"placeholder="nombre"data-type="nombre">
+                                                    <div class="tag" id="nombre"draggable="true"data-type="nombre">
                                                         <i> Nombre :</i>
                                                     </div>
                                                     

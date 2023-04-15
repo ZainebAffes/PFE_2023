@@ -19,6 +19,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -28,15 +29,18 @@ import javax.validation.constraints.Size;
 @Table(name = "parametrage_demande")
 public class ParametrageDemande implements Serializable {
 
+    @Size(max = 10)
+    @Column(name = "designation")
+    private String designation;
+    @OneToMany(mappedBy = "idEmploye1")
+    private List<Demande> demandeList;
+
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
     @NotNull
     @Column(name = "code")
     private Integer code;
-    @Size(max = 10)
-    @Column(name = "designation")
-    private String designation;
     @NotNull
     @Size(min = 1, max = 50)
     @Column(name = "code_TypeDemande")
@@ -64,13 +68,6 @@ public class ParametrageDemande implements Serializable {
         this.code = code;
     }
 
-    public String getDesignation() {
-        return designation;
-    }
-
-    public void setDesignation(String designation) {
-        this.designation = designation;
-    }
 
     public List<Etiquetteparametragedemande> getEtiquetteparametragedemandes() {
         return etiquetteparametragedemandes;
@@ -119,6 +116,23 @@ public class ParametrageDemande implements Serializable {
     @Override
     public String toString() {
         return "com.csys.workflowDemande.domain.ParametrageDemande[ code=" + code + " ]";
+    }
+
+    public String getDesignation() {
+        return designation;
+    }
+
+    public void setDesignation(String designation) {
+        this.designation = designation;
+    }
+
+    @XmlTransient
+    public List<Demande> getDemandeList() {
+        return demandeList;
+    }
+
+    public void setDemandeList(List<Demande> demandeList) {
+        this.demandeList = demandeList;
     }
 
 }

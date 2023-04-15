@@ -62,6 +62,30 @@ public class EtiquetteparametragedemandeDTO {
     private ParametrageDemandeDTO parametrageDemande;
     private Integer codeTypeEtiquette;
     private Integer code_parametrage_etiquette;
+
+    public EtiquetteparametragedemandeDTO(Integer code, String description, Double min, Double max, String isRequired, String position, String defultValue, String visible, String multiple, List<OptionEtiquetteDTO> optionEtiquetteDTOs, TypeEtiquetteDTO typeEtiquetteDTO, ParametrageDemandeDTO parametrageDemande, Integer codeTypeEtiquette, Integer code_parametrage_etiquette) {
+        this.code = code;
+        this.description = description;
+        this.min = min;
+        this.max = max;
+        this.isRequired = isRequired;
+        this.position = position;
+        this.defultValue = defultValue;
+        this.visible = visible;
+        this.multiple = multiple;
+        this.optionEtiquetteDTOs = optionEtiquetteDTOs;
+        this.typeEtiquetteDTO = typeEtiquetteDTO;
+        this.parametrageDemande = parametrageDemande;
+        this.codeTypeEtiquette = codeTypeEtiquette;
+        this.code_parametrage_etiquette = code_parametrage_etiquette;
+    }
+
+    public EtiquetteparametragedemandeDTO() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+    
+    
+    
     public Integer getCode() {
         return code;
     }

@@ -11,6 +11,8 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -29,7 +31,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 public class Etiquetteparametragedemande implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Basic(optional = false)
     @NotNull
@@ -65,7 +67,6 @@ public class Etiquetteparametragedemande implements Serializable {
     @NotNull
     @Column(name = "code_parametrage_etiquette")
     private Integer codeParametrageEtiquette;
-      
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @JoinColumn(name = "code_option", referencedColumnName = "code", updatable = false, insertable = false, nullable = true)
@@ -189,6 +190,7 @@ public class Etiquetteparametragedemande implements Serializable {
     public void setTypeEtiquette(TypeEtiquette typeEtiquette) {
         this.typeEtiquette = typeEtiquette;
     }
+
     public Integer getCodeParametrageEtiquette() {
         return codeParametrageEtiquette;
     }

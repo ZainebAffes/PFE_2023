@@ -7,6 +7,11 @@
     <class>com.csys.workflowDemande.domain.TypeEtiquette</class>
     <class>com.csys.workflowDemande.domain.Etiquetteparametragedemande</class>
     <class>com.csys.workflowDemande.domain.OptionEtiquette</class>
+    <class>com.csys.workflowDemande.domain.EtatValidation</class>
+    <class>com.csys.workflowDemande.domain.Demande</class>
+    <class>com.csys.workflowDemande.domain.GroupeEmploye</class>
+    <class>com.csys.workflowDemande.domain.TypeEmployé</class>
+    <class>com.csys.workflowDemande.domain.Employe</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:sqlserver://10.12.12.10:1420;databaseName=gcliniquenew"/>
       <property name="javax.persistence.jdbc.user" value="sa"/>
