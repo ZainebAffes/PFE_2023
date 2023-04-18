@@ -91,57 +91,29 @@ $(function () {
         if (draggedTag) {
             //input: le nom du champs
             const newInput = document.createElement('input');
-            //newInput.classList.add('tag');
             newInput.setAttribute('type', 'text');
             newInput.setAttribute('placeholder', 'Saisir le nom du champ');
-            newInput.classList.add('dropped-tag');
+            newInput.classList.add('dropped-nom');
             newInput.classList.add('nom');
             newInput.setAttribute('id', 'nom');
             draggedTag.appendChild(newInput);
             if (event.preventDefault)
                 event.preventDefault();
-            // get dropped object
 
 
-            //input min
-            const newInput1 = document.createElement('input');
-            //newInput.classList.add('tag');
-            newInput1.setAttribute('type', 'text');
-            newInput1.classList.add('dropped-tag');
-            newInput1.setAttribute('id', 'min');
-            draggedTag.appendChild(newInput1);
-            const requiredLabel1 = document.createElement('label1');
-            requiredLabel1.innerHTML = 'MIN ';
-            requiredLabel1.setAttribute('for', 'input1');
-            draggedTag.appendChild(requiredLabel1);
-            draggedTag.appendChild(newInput1);
-            
-             //input max
-            const newInput11 = document.createElement('input');
-            //newInput.classList.add('tag');
-            newInput11.setAttribute('type', 'text');
-            newInput11.classList.add('dropped-tag');
-            newInput11.setAttribute('id', 'max');
-            draggedTag.appendChild(newInput1);
-            const requiredLabel11 = document.createElement('label1');
-            requiredLabel11.innerHTML = 'MAX ';
-            requiredLabel11.setAttribute('for', 'input1');
-            draggedTag.appendChild(requiredLabel11);
-            draggedTag.appendChild(newInput11);
-            
-            
-            
             //selon type 
-
             const newInput2 = document.createElement('input');
             newInput2.classList.add('dropped-tag');
             const draggedType = draggedTag.getAttribute('data-type');
             if (draggedType === 'text') {
                 newInput2.setAttribute('type', 'text');
-                newInput2.setAttribute('id', 'valeur');
+                newInput2.setAttribute('id', 'text');
                 newInput2.setAttribute('placeholder', 'text');
+                newInput2.setAttribute('for', 'input');
+
             } else if (draggedType === 'date') {
                 newInput2.setAttribute('type', 'date');
+
                 newInput2.setAttribute('class', ' form-control datepicker input-xs');
                 newInput2.setAttribute('data-mask-clearifnotmatch', 'true');
             } else if (draggedType === 'temps') {
@@ -149,51 +121,43 @@ $(function () {
             } else if (draggedType === 'nombre') {
                 newInput2.setAttribute('type', 'number');
                 newInput2.setAttribute('placeholder', 'Saisir une valeur numérique');
-            }
-            const requiredLabel22 = document.createElement('label1');
-            requiredLabel22.innerHTML = 'Valeur par défaut';
-            requiredLabel22.setAttribute('for', 'input2');
-
-            //case a cocher
-            let i = 1;
-            if (draggedType === 'caseCocher') {
-                const requiredLabel2 = document.createElement('label');
-                requiredLabel2.innerHTML = "Option";
-                requiredLabel2.setAttribute('for', 'Checkbox-' + i);
-                const checkboxWrapper = document.createElement('div');
-                checkboxWrapper.classList.add('checkbox-wrapper');
-                const checkboxInput = document.createElement('input');
-                checkboxInput.setAttribute('type', 'checkbox');
-                checkboxInput.setAttribute('id', 'Checkbox-' + i);
-                const optionInput = document.createElement('input');
-                optionInput.setAttribute('type', 'text');
-                optionInput.setAttribute('placeholder', 'option');
-                checkboxWrapper.appendChild(checkboxInput);
-                checkboxWrapper.appendChild(optionInput);
-                draggedTag.appendChild(requiredLabel2);
-                draggedTag.appendChild(checkboxWrapper);
-                const addButton = document.createElement('button');
-                addButton.innerHTML = '+';
-                addButton.addEventListener('click', () => {
-                    i++;
-                    const newCheckboxWrapper = document.createElement('div');
-                    newCheckboxWrapper.classList.add('checkbox-wrapper');
-                    const newCheckboxInput = document.createElement('input');
-                    newCheckboxInput.setAttribute('type', 'checkbox');
-                    newCheckboxInput.setAttribute('id', 'Checkbox-' + i);
-                    const newOptionInput = document.createElement('input');
-                    newOptionInput.setAttribute('type', 'text');
-                    newOptionInput.setAttribute('placeholder', 'option');
-                    newCheckboxWrapper.appendChild(newCheckboxInput);
-                    newCheckboxWrapper.appendChild(newOptionInput);
-                    draggedTag.appendChild(newCheckboxWrapper);
+                const minValue = 0;
+                const maxValue = 100;
+                newInput2.setAttribute('min', minValue);
+                newInput2.setAttribute('max', maxValue);
+                newInput2.addEventListener('change', () => {
+                    const value = parseInt(newInput2.value);
+                    if (isNaN(value) || value < minValue || value > maxValue) {
+                        newInput2.value = '';
+                    }
                 });
-                draggedTag.appendChild(addButton);
+
             }
+            
+const requiredLabel22 = document.createElement('label1');
+requiredLabel22.innerHTML = 'Valeur par défaut';
+newInput2.setAttribute('id', 'valeur');
+requiredLabel22.setAttribute('for', 'input2');
+            //case a cocher
+
+            if (draggedType === 'caseCocher') {
+               const checkboxDiv = document.createElement('div');
+  checkboxDiv.classList.add('checkbox-group');
+  const addCheckboxButton = document.createElement('button');
+  addCheckboxButton.textContent = '+ Ajouter une option';
+  const checkboxInput = document.createElement('input');
+  checkboxInput.setAttribute('type', 'checkbox');
+  checkboxInput.setAttribute('id', 'checkbox');
+  const checkboxLabel = document.createElement('label');
+  checkboxLabel.setAttribute('for', 'checkbox');
+  checkboxLabel.textContent = 'Option 1';
+  checkboxDiv.appendChild(checkboxInput);
+  checkboxDiv.appendChild(checkboxLabel);
+  checkboxDiv.appendChild(addCheckboxButton);
+  newInput2.appendChild(checkboxDiv);
+}
 
 
- draggedTag.appendChild(requiredLabel22);
-            draggedTag.appendChild(newInput2);
             //btn supprimer
             const deleteButton = document.createElement('button');
             deleteButton.innerHTML = 'Supprimer';
@@ -214,16 +178,10 @@ $(function () {
             requiredLabel.setAttribute('for', 'requiredCheckbox');
             draggedTag.appendChild(requiredCheckbox);
             draggedTag.appendChild(requiredLabel);
-            //message d'alert
-            newInput.addEventListener('blur', (e) => {
-                if (requiredCheckbox.checked && !e.target.value) {
-                    alert('Veuillez remplir ce champ.');
-                    e.target.focus();
-                }
-            });
+
             // }
         }
-      
+
     });
 
     function getDragAfterElement(y) {

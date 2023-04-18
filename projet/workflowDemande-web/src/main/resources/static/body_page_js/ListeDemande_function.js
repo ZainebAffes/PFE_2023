@@ -384,59 +384,30 @@ function deleteDemande(code) {
     return response;
 }
 function payloadDemande() {
-    var oElements = document.querySelectorAll(".dropped-tag");
-    var noms = document.querySelectorAll(".nom");
-//
-//    for (i = 0; i < oElements.length; i += 1) {
-//        if (oElements[i].parentNode.id) {
-//            console.log("%s : %s", oElements[i].parentNode.id, oElements[i].value, oElements[i].height, oElements[i].weight);
-//        }
-//    }
-
-//this.code = code;
-//        this.description = description;
-//        this.min = min;
-//        this.max = max;
-//        this.isRequired = isRequired;
-//        this.position = position;
-//        this.defultValue = defultValue;
-//        this.visible = visible;
-//        this.multiple = multiple;
-//        this.optionEtiquetteDTOs = optionEtiquetteDTOs;
-//        this.typeEtiquetteDTO = typeEtiquetteDTO;
-//        this.parametrageDemande = parametrageDemande;
-//        this.codeTypeEtiquette = codeTypeEtiquette;
-//        this.code_parametrage_etiquette = code_parametrage_etiquette;
-//        
-//        
-
-    if (oElements !== null) {
-        var etiquettes = [];
-        for (var j = 0; j < noms.length; j++) {
-            var params = {};
-            for (var i = 0; i < oElements.length; i++) {
-                var facEtiquette = {};
-                if (oElements[i].id === "nom") {
-                    facEtiquette["description"] = oElements[i].value;
-                }
-                if (oElements[i].id === "min") {
-                    facEtiquette["min"] = oElements[i].value;
-                }
-                if (oElements[i].id === "max") {
-                    facEtiquette["max"] = oElements[i].value;
-                }
-                if (oElements[i].id === "valeur") {
-                    facEtiquette["defultValue"] = oElements[i].value;
-                }
-
-                facEtiquette["height"] = oElements[i].height;
-                //facEtiquette["weight"] = oElements[i].weight;
-                params["facEtiquette"] = facEtiquette;
-            }
-            etiquettes.push(params);
-        }
+  var oElements = document.querySelectorAll(".dropped-tag");
+  var noms = document.querySelectorAll(".nom");
+  if (oElements !== null) {
+    var etiquettes = [];
+    for (var j = 0; j < noms.length; j++) {
+      var etiquette = {};
+      etiquette["nom"] = noms[j].value;
+      //etiquette["type"] = oElements[j].getAttribute('data-type'); 
+      etiquette["min"] = oElements[j].getAttribute('min');
+      etiquette["max"] = oElements[j].getAttribute('max');
+      etiquette["isRequired"] = oElements[j].parentElement.querySelector('#requiredCheckbox').checked;
+      etiquette["position"] = j;
+      etiquette["defaultValue"] = oElements[j].parentElement.querySelector('#valeur').value;
+      etiquette["visible"] = oElements[j].style.display !== 'none';
+      etiquette["multiple"] = oElements[j].getAttribute('multiple') !== null;
+      etiquette["type"] = oElements[j].getAttribute('type');
+            
+            etiquettes.push(etiquette);
     }
+    
+  }
 
+
+              
     var payload = {
         "code": $('#code').val(),
         "designation": $('#designation').val(),

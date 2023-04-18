@@ -297,7 +297,8 @@
             .dropzones {
                 width: 80%;
                 height: 90%;
-                border-style: solid;
+                border: 1px;
+                border-style: solid ;
             }
             .dropped-tag {
                 background-color: transparent;
@@ -312,15 +313,30 @@
                 line-height: 1.42857;
                 font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
             }
+            
             .dropped-tag:hover{
                 color: blue;
             }
-
+            .dropped-nom{
+/*               background-color: transparent;*/
+                border: 0px;
+                box-sizing: border-box;
+                color: inherit;
+                cursor: inherit;
+                font-size: 14px;
+                min-width: 0px;
+                outline: none;
+                width: 100%;
+                line-height: 1.42857;
+                font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+            }
+            .dropped-nom:hover{
+                 border: 1px solid blue;
+            }
             .delete-tag{
                 padding: 5px 15px;
                 border: none;
-                border-radius: 4px;
-                color: black;
+                border-radius: 4px;               
                 cursor: pointer;
                 text-align: center;
                 position: relative;
@@ -492,7 +508,7 @@
                                                 </div>  
 
                                                 <div class="etiquettes">
-                                                    <div class="tag" id="texte" draggable="true"data-type="text">                                                        
+                                                    <div class="tag" id="texte" draggable="true"data-type="text" name="text">                                                        
                                                         <span class="glyphicon glyphicon-text-width" ><i> Description courte : </i></span>
                                                        
                                                     </div>
@@ -502,7 +518,7 @@
                                                     <div class="tag" id="date" draggable="true"data-type="date">
                                                         <span class="fa fa-calendar"><i> Date : </i></span>                                                        
                                                     </div>
-                                                    <div class="tag" id="nombre"draggable="true"data-type="nombre">
+                                                    <div class="tag" id="nombre"draggable="true"data-type="nombre" min="3">
                                                         <i> Nombre :</i>
                                                     </div>
                                                     
