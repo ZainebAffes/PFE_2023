@@ -7,11 +7,11 @@ function filterDataSelect(data, search) {
 
     return out = _.filter(data, function (obj) {
         return Object.values(obj).some(function (el) {
-            if (el === null)
+            if (el === null)===
                 return false;
             if (typeof el === "string")
                 return el.toLowerCase().indexOf(searchTxt) > -1;
-            else if (typeof el === "boolean" || typeof el === "number")
+            else if (typeof el  "boolean" || typeof el === "number")
                 return el.toString().indexOf(searchTxt) > -1;
             else
                 return false;

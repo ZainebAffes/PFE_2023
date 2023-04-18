@@ -1,11 +1,19 @@
 package com.csys.workflowDemande.web.rest;
 
+import com.csys.workflowDemande.domain.TypeDemande;
 import com.csys.workflowDemande.dto.TypeDemandeDTO;
 import com.csys.workflowDemande.service.TypeDemandeService;
+import com.csys.workflowDemande.web.rest.util.ExcelGenerator;
+import com.csys.workflowDemande.web.rest.util.PDFGenerator;
+import com.itextpdf.text.DocumentException;
+import java.io.IOException;
 import java.lang.String;
 import java.lang.Void;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import javax.validation.Valid;
 import org.slf4j.Logger;
@@ -23,7 +31,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
+import javax.servlet.http.HttpServletResponse;
 @RestController
 @RequestMapping("/api")
 public class TypeDemandeResource {
@@ -80,5 +88,37 @@ public class TypeDemandeResource {
     typedemandeService.delete(id);
     return ResponseEntity.ok().build();
   }
+  @GetMapping("/pdf/typeDemandes")
+	public void generatePdf(HttpServletResponse response,@RequestParam(required = false) String designation) throws DocumentException, IOException {
+		
+		response.setContentType("application/pdf");
+		DateFormat dateFormat = new SimpleDateFormat("YYYY-MM-DD:HH:MM:SS");
+		String currentDateTime = dateFormat.format(new Date());
+		String headerkey = "Content-Disposition";
+		String headervalue = "attachment; filename=pdf_" + currentDateTime + ".pdf";
+		response.setHeader(headerkey, headervalue);
+		
+		List<TypeDemandeDTO> typeDemandeList = typedemandeService.findAll(designation);
+		
+		PDFGenerator generator = new PDFGenerator();
+		generator.setTypeDemandeList(typeDemandeList);
+		generator.generate(response);
+                
+}
+       @GetMapping("/export/typeDemandes")
+	public void exportIntoExcel(HttpServletResponse response) throws IOException {
+		response.setContentType("application/octet-stream");
+		DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+		String currentDateTime = dateFormatter.format(new Date());
+
+		String headerKey = "Content-Disposition";
+		String headerValue = "attachment; filename=records_" + currentDateTime + ".xlsx";
+		response.setHeader(headerKey, headerValue);
+
+                List<TypeDemandeDTO> typeDemandeList = typedemandeService.getAll();
+		ExcelGenerator generator = new ExcelGenerator(typeDemandeList);
+
+		generator.generate(response);
 }
 
+}

@@ -1,168 +1,117 @@
-function drawBtnTypeDemande() {
-    DessinerButton('20', '#listetid_TypeDemande');
+function drawBtnDemande() {
+    DessinerButton('30', '#listetid_Demande');
     ActionBoutton();
 }
 function ActionBoutton() {
     $('#btn_Ajouter').unbind('click');
     $('#btn_Ajouter').bind('click', function (e) {
-        AfficheModalAddTypeDemande();
+        AfficheModalAddDemande();
+        $("#typeMode").val("add");
     });
 
     $('#btn_Modifier').unbind('click');
     $('#btn_Modifier').bind('click', function (e) {
-        var rowDde = $('#tableListTypeDemande').find('tr.selectionnee');
+        var rowDde = $('#tableListDemande').find('tr.selectionnee');
         if (rowDde.length === 0)
-            showNotification('Attention', "Veuillez choisir un typeDemande ", 'error', 3000);
+            showNotification('Attention', "Veuillez choisir une demande ", 'error', 3000);
         else {
-            var codTypeDemande = $('.selectionnee').find('td').eq(0).text();
-            majTypeDemande(codTypeDemande, "update");
-
-
+            var code = $('.selectionnee').find('td').eq(0).text();
+            majDemande(code, "update");
         }
     });
 
     $('#btn_Consulter').unbind('click');
     $('#btn_Consulter').bind('click', function (e) {
-        var rowDde = $('#tableListTypeDemande').find('tr.selectionnee');
+        var rowDde = $('#tableListDemande').find('tr.selectionnee');
         if (rowDde.length === 0)
-            showNotification('Attention', "Veuillez choisir un typeDemande ", 'error', 3000);
+            showNotification('Attention', "Veuillez choisir une demande ", 'error', 3000);
         else {
-            var codTypeDemande = $('.selectionnee').find('td').eq(0).text();
-            majTypeDemande(codTypeDemande, "consult");
+            var code = $('.selectionnee').find('td').eq(0).text();
+            majDemande(code, "consult");
         }
     });
 
     $('#btn_Annuler').unbind('click');
     $('#btn_Annuler').bind('click', function (e) {
-        var rowDde = $('#tableListTypeDemande').find('tr.selectionnee');
+        var rowDde = $('#tableListDemande').find('tr.selectionnee');
         if (rowDde.length === 0)
-            showNotification('Attention', "Veuillez choisir un typeDemande ", 'error', 3000);
+            showNotification('Attention', "Veuillez choisir une demande ", 'error', 3000);
         else
         {
-            var codTypeDemande = $('.selectionnee').find('td').eq(0).text();
-            majTypeDemande(codTypeDemande, "delete");
+            var code = $('.selectionnee').find('td').eq(0).text();
+            majDemande(code, "delete");
         }
     });
 
     $('#btn_Imprimer').unbind('click');
     $('#btn_Imprimer').bind('click', function (e) {
         $('#search').val("");
-        //var url = url_base + '/pdf/typeDemandes?designation=' + ($('#search').val());
-        var url = url_base + '/pdf/typeDemandes';
-        
+        var type = "PDF";
+        var url = `${url_base}/parametragedemandes/print?user=` + window.localStorage.getItem('username') + `&type=` + type;
         impressionListe(url);
     });
 
     $("#btn_Exporter").unbind("click");
     $("#btn_Exporter").bind("click", function (e) {
-//    const headers = [
-//    'Code',
-//    'désignation'
-//];
-//      console.log(window); 
-//      const workbook = new window.ExcelJS.Workbook();
-//
-//    const downloadAsExcel = () => {
-//    workbook.xlsx.writeBuffer().then((data) => {
-//    const blob = new Blob([data], {
-//      type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-//    });
-//    saveAs(blob, `typedemandes.xlsx`);
-//  
-//     });
-//};
-//fetch(url_base+"/typedemandes/filter", {
-//method: "GET"
-//}).then(async(response )=> {
-//    const json =  await response.json();
-//  
-//            console.log(json);
-//    const title = 'typedemandes';
-//
-//    const worksheet = workbook.addWorksheet(
-//    `typedemandes`
-//  );
-//
-//worksheet.addRow(headers);
-//json.forEach((typedemande)=>{
-//const newRow = worksheet.addRow([]);
-//newRow.getCell(1).value = typedemande.codeTypeDemande;
-//newRow.getCell(2).value = typedemande.description;});
-//            downloadAsExcel();
-//
-//worksheet.destroy();
-//
-//});
-//  
-        
-//        var varActif;
-//        var etatActif = $('.filtreActif').find('.fa-check-circle').parent().find('span').eq(0).text();
-//        if (etatActif === "Actif") {
-//            varActif = "true";
-//        } else if (etatActif === "Non actif") {
-//            varActif = "false";
-//        } else if (etatActif === "Tous") {
-//            varActif = "true,false";
-//        }
         var type = "Excel";
-         var url = url_base + '/export/typeDemandes';
-        exporterList(url,"typeDemandes");
+        var url = `${url_base}/parametragedemandes/print?actifs=${varActif}&user=` + window.localStorage.getItem('username') + `&type=` + type;
+        exporterList(url, "demande");
     });
-   
 
 }
-function majTypeDemande(codTypeDemande, action) {
-    var TypeDemande = findTypeDemandeById(codTypeDemande);
+function majDemande(code, action) {
+    var Demande = findDemandeById(code);
     $('#modalAdd').modal('show');
-    $('#codTypeDemande').val(codTypeDemande);
-    $('#desTypeDemande').val(TypeDemande.description);
-    $('#codTypeDemande').prop("disabled", "disabled");
+    $('#code').val(code);
+    $('#designation').val(Demande.designation);
+    $('#codeTypeDemande').val(Demande.codeTypeDemande);
+    $('#code').prop("disabled", "disabled");
+
     if (action === "update") {
-        $('#desTypeDemande').prop("disabled", false);
-        $('#codTypeDemandeTypeTypeDemande').prop("disabled", false);
-        $('#checkboxActif').prop("disabled", false);
-        $('#modalIconTypeDemande').replaceWith('<i id="modalIconTypeDemande" class="glyphicon glyphicon-edit"></i>');
-        $('#labelTitre').text("Modification d'un typeDemande");
-        sessionStorage.setItem("TypeDemande", 'modif');
-        $("#btnMAJTypeDemande").show();
+        $('#designation').prop("disabled", false);
+        $('#codeTypeDemande').prop("disabled", false);
+        $('#modalIconDemande').replaceWith('<i id="modalIconDemande" class="glyphicon glyphicon-edit"></i>');
+        $('#labelTitre').text("Modification d'une demande");
+        sessionStorage.setItem("Demande", 'modif');
+        $("#btnMAJDemande").show();
     }
     if (action === "delete") {
-        $('#modalIconTypeDemande').replaceWith('<i id="modalIconTypeDemande" class="glyphicon glyphicon-trash"></i>');
-        $('#labelTitre').text("Annulation d'un typeDemande");
-        $('#desTypeDemande').prop("disabled", "disabled");
-        $('#codTypeDemandeTypeTypeDemande').prop("disabled", true);
+        $('#modalIconDemande').replaceWith('<i id="modalIconDemande" class="glyphicon glyphicon-trash"></i>');
+        $('#labelTitre').text("Annulation d'une demande");
+        $('#designation').prop("disabled", "disabled");
+        $('#codeTypeDemande').prop("disabled", true);
         $('#checkboxActif').prop("disabled", "disabled");
-        sessionStorage.setItem("TypeDemande", 'delete');
-        $("#btnMAJTypeDemande").show();
+        sessionStorage.setItem("Demande", 'delete');
+        $("#btnMAJDemande").show();
     }
     if (action === "consult") {
-        $('#modalIconTypeDemande').replaceWith('<i id="modalIconTypeDemande" class="glyphicon glyphicon-list"></i>');
-        $('#labelTitre').text("Détail d'un typeDemande");
-        $('#desTypeDemande').prop("disabled", "disabled");
-        $('#codTypeDemandeTypeTypeDemande').prop("disabled", true);
+        $('#modalIconDemande').replaceWith('<i id="modalIconDemande" class="glyphicon glyphicon-list"></i>');
+        $('#labelTitre').text("Détail d'une demande");
+        $('#designation').prop("disabled", "disabled");
+        $('#codeTypeDemande').prop("disabled", true);
         $('#checkboxActif').prop("disabled", "disabled");
-        $("#btnMAJTypeDemande").hide();
+        $("#btnMAJDemande").hide();
     }
 
 }
 
-function DrawTableTypeDemande() {
+function DrawTableDemande() {
     window.parent.$.loader.open();
     setTimeout(function () {
-        DrawListTypeDemande("tableListTypeDemande", '_grid_ListTypeDemande');
+        DrawListDemande("tableListDemande", '_grid_ListDemande');
         window.parent.$.loader.close();
     }, 100);
 }
-function DrawListTypeDemande(idTable, idContainer) {
+function DrawListDemande(idTable, idContainer) {
     showLoadingNotification();
     var List = [];
 
-    List = findTypeDemande(undefined);
+    List = findDemande(undefined);
     document.getElementById(idContainer).innerHTML = '';
     var table_list = "<table id='" + idTable + "' class='display dataTable projects-table table table-striped table-bordered table-hover' cellspacing='0'  width='100%' align='center'>";
     table_list += "</table>";
     $("#" + idContainer).html(table_list);
-    var colDef = [0];
+    var colDef = [2];
     var pageLength = parseInt(($(document).height() - 220) / 34);
     table = $('#' + idTable).on('page.dt', function () {}).DataTable({
         "dom": 'frtip',
@@ -176,7 +125,7 @@ function DrawListTypeDemande(idTable, idContainer) {
         columns: [
             {
                 title: "Code",
-                data: 'codeTypeDemande',
+                data: 'code',
                 render: function (data, type, row, meta) {
                     if (data !== null)
                         return data;
@@ -186,7 +135,17 @@ function DrawListTypeDemande(idTable, idContainer) {
             },
             {
                 title: "désignation",
-                data: 'description',
+                data: 'designation',
+                render: function (data) {
+                    if (data === undefined)
+                        return '';
+                    else
+                        return "<span title='" + data + "'>" + data + "</span>";
+                }
+            },
+            {
+                title: "Type Demande",
+                data: 'descriptionTypeDemande',
                 render: function (data) {
                     if (data === undefined)
                         return '';
@@ -194,6 +153,26 @@ function DrawListTypeDemande(idTable, idContainer) {
                         return "<span title='" + data + "'>" + data + "</span>";
                 }
             }
+//            ,
+//            {
+//                title: "Créé par",
+//                data: 'userCreation',
+//                render: function (data) {
+//                    if (data === undefined || data === null || data === 'null')
+//                        return '';
+//                    else
+//                        return "<span title='" + data + "'>" + data + "</span>";
+//                }
+//            }, {
+//                data: 'dateCreation',
+//                title: 'Date de création',
+//                render: function (data) {
+//                    if (data === null || data === undefined)
+//                        return '';
+//                    else
+//                        return formatCalendarWithTime(data, 'dd/mm/yyyy');
+//                }
+//            }
         ],
         "aoColumnDefs": [{
                 'bSortable': false,
@@ -201,7 +180,7 @@ function DrawListTypeDemande(idTable, idContainer) {
             }],
         "order": [[0, "asc"]]
     });
-    $('#tableListTypeDemande  tbody').delegate('tr', 'click', function (e) {
+    $('#tableListDemande  tbody').delegate('tr', 'click', function (e) {
         var highlightColor = '#d9edf7';
         var css = $(this).attr('style');
         if ($(this).find('.dataTables_empty').length === 0) {
@@ -220,82 +199,93 @@ function DrawListTypeDemande(idTable, idContainer) {
     $("#search").on("keyup search input paste cut", function () {
         table.search(this.value).draw();
     });
-    $('#tableListTypeDemande > tbody').on('dblclick', function (e) {
-        var rowDde = $('#tableListTypeDemande').find('tr.selectionnee');
+    $('#tableListDemande > tbody').on('dblclick', function (e) {
+        var rowDde = $('#tableListDemande').find('tr.selectionnee');
         if (rowDde.length === 0)
-            showNotification('Attention', 'veuillez Sélectionner un TypeDemande', 'error', 2000);
+            showNotification('Attention', 'veuillez Sélectionner un Demande', 'error', 2000);
         else {
-            var codTypeDemande = $('.selectionnee').find('td').eq(0).text();
-            majTypeDemande(codTypeDemande, 'consult');
+            var code = $('.selectionnee').find('td').eq(0).text();
+            majDemande(code, 'consult');
         }
     });
-    $('#tableListTypeDemande_info').css("padding", '0');
-    $('#tableListTypeDemande_filter').hide();
+    $('#tableListDemande_info').css("padding", '0');
+    $('#tableListDemande_filter').hide();
     hideLoadingNotification();
 }
-function AfficheModalAddTypeDemande() {
-    $('#labelTitre').text("Ajout d'un type de demande");
-    $('#modal_ajout_TypeDemande_title h2').val("Ajout d'un type de Demande");
-    $('#modalIconTypeDemande').replaceWith('<i id="modalIconTypeDemande" class="glyphicon glyphicon-plus"></i>');
+function AfficheModalAddDemande() {
+    $('#labelTitre').text("Ajout d'une demande");
+    $('#modal_ajout_Demande_title h2').val("Ajout d'une demande");
+    $('#modalIconDemande').replaceWith('<i id="modalIconDemande" class="glyphicon glyphicon-plus"></i>');
     $('#modalAdd').modal('show');
-    $('#codTypeDemande').val('');
-    $('#desTypeDemande').val('');
-    $('#desTypeDemande').prop("disabled", false);
-    $('#codTypeDemande').prop("disabled", false);
+    $('#code').val('');
+    $('#designation').val('');
+    $('#codeTypeDemande').val('');
+
+    $('#designation').prop("disabled", false);
     $('#checkboxActif').prop("disabled", false);
-    $("#btnMAJTypeDemande").show();
-    sessionStorage.setItem("TypeDemande", 'ajout');
+    $('#codeTypeDemande').prop("disabled", false);
+
+    $('#designation').val('');
+    $("#btnMAJDemande").show();
+    sessionStorage.setItem("Demande", 'ajout');
 }
-function submitMAJTypeDemande() {
-    if (sessionStorage.getItem("TypeDemande") === 'delete') {
-        deleteTypeDemande($('#codTypeDemande').val());
+function submitMAJDemande() {
+    if (sessionStorage.getItem("Demande") === 'delete') {
+        deleteDemande($('#code').val());
     } else {
-        if (($('#codTypeDemande').val() === '')) {
-            $('#codTypeDemande').addClass('css-error');
-            $('#codTypeDemande').attr('style', 'background-color: #fff0f0;border-color: #A90329;');
+        if (($('#code').val() === '')) {
+            $('#code').addClass('css-error');
+            $('#code').attr('style', 'background-color: #fff0f0;border-color: #A90329;');
         } else {
-            $('#codTypeDemande').removeClass('css-error');
-            $('#codTypeDemande').attr('style', '');
+            $('#code').removeClass('css-error');
+            $('#code').attr('style', '');
         }
-        if (($('#desTypeDemande').val() === '')) {
-            $('#desTypeDemande').addClass('css-error');
-            $('#desTypeDemande').attr('style', 'border-width: 1px;background-color: #fff0f0;border-color: #A90329;');
+        if (($('#designation').val() === '')) {
+            $('#designation').addClass('css-error');
+            $('#designation').attr('style', 'border-width: 1px;background-color: #fff0f0;border-color: #A90329;');
         } else {
-            $('#desTypeDemande').removeClass('css-error');
-            $('#desTypeDemande').attr('style', '');
+            $('#designation').removeClass('css-error');
+            $('#designation').attr('style', '');
+        }
+        if (($('#codeTypeDemande').val() === '')) {
+            $('#codeTypeDemande').addClass('css-error');
+            $('#codeTypeDemande').attr('style', 'border-width: 1px;background-color: #fff0f0;border-color: #A90329;');
+        } else {
+            $('#codeTypeDemande').removeClass('css-error');
+            $('#codeTypeDemande').attr('style', '');
         }
         if ($('.css-error').length > 0) {
             showNotification('Avertissement', "Veuillez vérifier le(s) champ(s) saisi(s) ! ", 'error', 3000);
         } else {
-            var payload = payloadTypeDemande();
-            if (sessionStorage.getItem("TypeDemande") === 'ajout') {
-                var Type = findTypeDemande(undefined, $('#desTypeDemande').val());
-                if (Type.length > 0) {
-                    DrawListRassemblant('tableListRassemblant', '_grid_ListRassemblant', Type);
-                    $('#add_msg').html("<h6>des Types de demande(s) ressemblante(s): </h6>");
+
+            var payload = payloadDemande();
+            if (sessionStorage.getItem("Demande") === 'ajout') {
+                var spec = findDemande(undefined, $('#codeTypeDemande').val());
+                if (spec.length > 0) {
+                    DrawListRassemblant('tableListRassemblant', '_grid_ListRassemblant', spec);
+                    $('#add_msg').html("<h6>designation(s)de règlement(s) ressemblante(s): </h6>");
                     $('#add_msg_confirm').html("<span>Voulez vous confirmer l'ajout ? </span>");
                     $('#addConfirm').modal('show');
                     $('#modalAdd').modal('hide');
                     $("#submitAdd").unbind('click');
                     $("#submitAdd").click(function () {
                         $('#addConfirm').modal('hide');
-                        addTypeDemande(payload);
+                        addDemande(payload);
                     });
                 } else {
-                    addTypeDemande(payload);
+                    addDemande(payload);
                 }
             } else {
-                if (sessionStorage.getItem("TypeDemande") === 'modif') {
-                    updateTypeDemande(payload);
+                if (sessionStorage.getItem("Demande") === 'modif') {
+                    updateDemande(payload);
                 }
             }
         }
     }
 }
-function addTypeDemande(list) {
+function addDemande(list) {
     $.ajax({
-        url: `${url_base}/typedemandes`,
-//          url: `${url_base}//typedemandes?user=` + window.localStorage.getItem('username'),
+        url: `${url_base}/parametragedemandes`,
         type: 'POST',
         contentType: "application/json; charset=utf-8",
         data: JSON.stringify(list),
@@ -311,7 +301,7 @@ function addTypeDemande(list) {
             $('#modalAdd').modal('hide');
             showLoadingNotification();
             setTimeout(function () {
-                DrawTableTypeDemande();
+                DrawTableDemande();
                 hideLoadingNotification();
             }, 50);
         }
@@ -323,11 +313,10 @@ function addTypeDemande(list) {
 
 }
 
-function findTypeDemandeById(id) {
-
+function findDemandeById(id) {
     var response = "";
     $.ajax({
-        url: `${url_base}/typedemandes/${id}`,
+        url: `${url_base}/parametragedemandes/${id}`,
         type: 'GET',
         async: false,
         dataType: 'json',
@@ -342,9 +331,9 @@ function findTypeDemandeById(id) {
     });
     return response;
 }
-function updateTypeDemande(object) {
+function updateDemande(object) {
     $.ajax({
-        url: `${url_base}/typedemandes?user=` + window.localStorage.getItem('username'),
+        url: `${url_base}/parametragedemandes?user=` + window.localStorage.getItem('username'),
         type: 'PUT',
         contentType: "application/json; charset=utf-8",
         data: JSON.stringify(object),
@@ -362,7 +351,7 @@ function updateTypeDemande(object) {
             $('#modalAdd').modal('hide');
             showLoadingNotification();
             setTimeout(function () {
-                DrawTableTypeDemande();
+                DrawTableDemande();
                 hideLoadingNotification();
             }, 50);
         }
@@ -371,10 +360,10 @@ function updateTypeDemande(object) {
         }
     });
 }
-function deleteTypeDemande(codTypeDemande) {
+function deleteDemande(code) {
     var response = "";
     $.ajax({
-        url: `${url_base}/typedemandes/${codTypeDemande}`,
+        url: `${url_base}/parametragedemandes/${code}`,
         contentType: "text/html; charset=utf-8",
         type: 'DELETE',
         async: false,
@@ -386,7 +375,7 @@ function deleteTypeDemande(codTypeDemande) {
             $('#modalAdd').modal('hide');
             showLoadingNotification();
             setTimeout(function () {
-                DrawTableTypeDemande();
+                DrawTableDemande();
                 hideLoadingNotification();
             }, 50);
 
@@ -394,10 +383,19 @@ function deleteTypeDemande(codTypeDemande) {
     });
     return response;
 }
-function payloadTypeDemande() {
+function payloadDemande() {
+    var oElements = document.querySelectorAll("[dragged]");
+
+    for (i = 0; i < oElements.length; i += 1) {
+        if (oElements[i].parentNode.id) {
+            console.log("%s : %s", oElements[i].parentNode.id, oElements[i].id);
+        }
+    }
     var payload = {
-        "codeTypeDemande": $('#codTypeDemande').val(),
-        "description": $('#desTypeDemande').val()
+        "code": $('#code').val(),
+        "designation": $('#designation').val(),
+        "codeTypeDemande": $('#codeTypeDemande').val()
+
     };
     return payload;
 }
@@ -406,7 +404,7 @@ function DrawListRassemblant(idTable, idContainer, list) {
     var table_list = "<table id='" + idTable + "' class='display dataTable projects-table table table-striped table-bordered table-hover' cellspacing='0'  width='100%' align='center'>";
     table_list += "</table>";
     $("#" + idContainer).html(table_list);
-    var colDef = [1];
+    var colDef = [2];
     table = $('#' + idTable).on('page.dt', function () {}).DataTable({
         "dom": 'frtip',
         "searching": true,
@@ -419,7 +417,7 @@ function DrawListRassemblant(idTable, idContainer, list) {
         columns: [
             {
                 title: "Code",
-                data: 'codeTypeDemande',
+                data: 'code',
                 render: function (data, type, row, meta) {
                     if (data !== null)
                         return data;
@@ -429,7 +427,18 @@ function DrawListRassemblant(idTable, idContainer, list) {
             },
             {
                 title: "Désignation",
-                data: 'description',
+                data: 'designation',
+                render: function (data) {
+                    if (data === undefined)
+                        return '';
+                    else
+                        return "<span title='" + data + "'>" + data + "</span>";
+                }
+            },
+
+            {
+                title: "Type demande",
+                data: 'descriptionTypeDemande',
                 render: function (data) {
                     if (data === undefined)
                         return '';
@@ -468,56 +477,8 @@ function DrawListRassemblant(idTable, idContainer, list) {
     hideLoadingNotification();
 }
 
-function findTypeDemande(desTypeDemande) {
-
-    var url = url_base + '/typedemandes/filter';
-    if (desTypeDemande !== undefined) {
-        url = url + '?designation=' + desTypeDemande;
-    }
-    var response = "";
-    $.ajax({
-        url: url,
-        contentType: "text/html; charset=utf-8",
-        type: 'GET',
-        dataType: "json",
-        async: false,
-        success: function (data)
-        {
-            response = data;
-        }
-    });
-    return response;
-
-}
-function findTypeDemandePDF(desTypeDemande) {
-
-    var url = url_base + '/pdf/typeDemandes';
-    if (desTypeDemande !== undefined) {
-        url = url + '?designation=' + desTypeDemande;
-    }
-    var response = "";
-    $.ajax({
-        url: url,
-        contentType: "text/html; charset=utf-8",
-        type: 'GET',
-        dataType: "json",
-        async: false,
-        success: function (data)
-        {
-            response = data;
-        }
-    });
-    return response;
-
-}
-
-
-function getTypeDemande(desTypeDemande) {
-
-    var url = url_base + '/export/typeDemandes';
-    if (desTypeDemande !== undefined) {
-        url = url + '?designation=' + desTypeDemande;
-    }
+function findDemande(designation) {
+    var url = url_base + '/parametragedemandes';
     var response = "";
     $.ajax({
         url: url,

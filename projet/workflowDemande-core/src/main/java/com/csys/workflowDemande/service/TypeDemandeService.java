@@ -110,6 +110,13 @@ public class TypeDemandeService {
     }
 
     public void deleteById(String id) {
+        throw new UnsupportedOperationException("Not suppor  ted yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    public List<TypeDemandeDTO> getAll() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
-}
+    
+
+ }
+

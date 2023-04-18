@@ -68,6 +68,7 @@
                 head.appendChild(link);
             }
         </script>
+      
         <script src="js/jquery.animateNumber.min.js"></script>
         <script src="body_page_js/Acceuil.js"></script>
         <script src="body_page_js/Acceuil_function.js"></script>

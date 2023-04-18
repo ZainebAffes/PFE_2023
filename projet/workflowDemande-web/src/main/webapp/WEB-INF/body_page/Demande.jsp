@@ -452,7 +452,7 @@
         <script src="body_page_js/otherfunction.js?version=<%=date%>"></script>
         <script src="body_page_js/BackGridEditor.js?version=<%=date%>"></script> 
         <script src="js/plugin/other-plugin/summernote.min.js"></script>    
-        <script src="body_page_js/TypeDemande.js?version=<%=date%>"></script>
-        <script src="body_page_js/TypeDemande_function.js?version=<%=date%>"></script>
+        <script src="body_page_js/Demande.js?version=<%=date%>"></script>
+        <script src="body_page_js/Demande_function.js?version=<%=date%>"></script>
     </body>
 </html>

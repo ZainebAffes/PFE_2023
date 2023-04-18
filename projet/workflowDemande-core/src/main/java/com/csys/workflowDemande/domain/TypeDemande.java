@@ -26,7 +26,15 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity
 @Table(name = "TypeDemande")
 public class TypeDemande implements Serializable {
- private static final long serialVersionUID = 1L;
+
+    @Size(max = 50)
+    @Column(name = "description")
+    private String description;
+    @Size(max = 50)
+    @Column(name = "nom")
+    private String nom;
+
+    private static final long serialVersionUID = 1L;
 
     @Id
     @Basic(optional = false)
@@ -34,17 +42,10 @@ public class TypeDemande implements Serializable {
     @Size(min = 1, max = 50)
     @Column(name = "codeTypeDemande")
     private String codeTypeDemande;
-    
-    @Size(max = 50)
-    @Column(name = "description")
-    private String description;
-    @Size(max = 50)
-    @Column(name = "nom")
-    private String nom;
+
     @OneToMany(mappedBy = "codeTypeDemande")
     private List<ParametrageDemande> parametrageDemandeList;
 
-   
     public TypeDemande() {
     }
 
@@ -56,23 +57,6 @@ public class TypeDemande implements Serializable {
         this.codeTypeDemande = codeTypeDemande;
     }
 
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getNom() {
-        return nom;
-    }
-
-    public void setNom(String nom) {
-        this.nom = nom;
-    }
-
     @XmlTransient
     public List<ParametrageDemande> getParametrageDemandeList() {
         return parametrageDemandeList;
@@ -81,6 +65,7 @@ public class TypeDemande implements Serializable {
     public void setParametrageDemandeList(List<ParametrageDemande> parametrageDemandeList) {
         this.parametrageDemandeList = parametrageDemandeList;
     }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -105,5 +90,22 @@ public class TypeDemande implements Serializable {
     public String toString() {
         return "com.csys.workflowDemande.domain.TypeDemande[ codeTypeDemande=" + codeTypeDemande + " ]";
     }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getNom() {
+        return nom;
+    }
+
+    public void setNom(String nom) {
+        this.nom = nom;
+    }
+
 
 }
