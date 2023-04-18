@@ -20,6 +20,7 @@ public class EtiquetteparametragedemandeFactory {
         etiquetteparametragedemandeDTO.setDefultValue(etiquetteparametragedemande.getDefultValue());
         etiquetteparametragedemandeDTO.setVisible(etiquetteparametragedemande.getVisible());
         etiquetteparametragedemandeDTO.setMultiple(etiquetteparametragedemande.getMultiple());
+      
         etiquetteparametragedemandeDTO.setOptionEtiquetteDTOs(OptionEtiquetteFactory.optionetiquetteToOptionEtiquetteDTOs(etiquetteparametragedemande.getOptionEtiquettes()));
         etiquetteparametragedemandeDTO.setTypeEtiquetteDTO(TypeEtiquetteFactory.typeetiquetteToTypeEtiquetteDTO(etiquetteparametragedemande.getTypeEtiquette()));
         return etiquetteparametragedemandeDTO;
