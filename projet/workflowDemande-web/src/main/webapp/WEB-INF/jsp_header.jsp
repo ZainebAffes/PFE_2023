@@ -1,3 +1,4 @@
+
 <%@taglib uri="http://www.springframework.org/tags" prefix="spring" %>
 <%@page contentType="text/html" pageEncoding="UTF-8" session="false" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -84,7 +85,7 @@
 
         <div id="userAffiche" class="btn-header transparent pull-right" style="">
             <span name="_user" class="" style="margin-top: 8px;color: white;display: inline-block;">
-                <span style="font-size: 17px; font-family: serif;">
+                <span style="font-size: 17x; font-family: serif;">
                     <i class="fas fa-user"></i>
                     <span id="userName"></span>
                 </span>
@@ -92,12 +93,12 @@
         </div>     
 
     </div> 
-<!--    <div class="hidden-xs" style="width: 25vw;">
-        <h1 style="text-align: right;color: white;margin-top: 5px;display: inline-block; margin-left:10px; ">
-            <small style=" color: white;"> <span id="societe"> </span><span id="exercice"></span></small>
-        </h1> 
+<!--        <div class="hidden-xs" style="width: 25vw;">
+            <h1 style="text-align: right;color: white;margin-top: 5px;display: inline-block; margin-left:10px; ">
+                <small style=" color: white;"> <span id="societe"> </span><span id="exercice"></span></small>
+            </h1> 
 
-    </div>     -->
+        </div>     -->
     <jsp:include page="body_page/EditionModal.jsp"/> 
 
 </header>

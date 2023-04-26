@@ -2,86 +2,123 @@ package com.csys.workflowDemande.dto;
 
 import com.csys.workflowDemande.domain.Empolye;
 import com.csys.workflowDemande.domain.ParametrageDemande;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import java.lang.String;
-import java.util.Date;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import java.time.LocalDateTime;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 public class DemandeDTO {
-  @NotNull
-  @Size(
-      min = 1,
-      max = 50
-  )
-  private String numeroDemande;
 
-  @Size(
-      min = 0,
-      max = 50
-  )
-  private String designation;
+    @NotNull
+    @Size(
+            min = 1,
+            max = 50
+    )
+    private String numeroDemande;
 
-  @Temporal(TemporalType.DATE)
-  private Date dateCreation;
+    @Size(
+            min = 0,
+            max = 50
+    )
+    private String designation;
 
-  @Size(
-      min = 0,
-      max = 50
-  )
-  private String typeDemande;
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    private LocalDateTime dateCreation;
 
- // private Empolye idEmploye;
+    @Size(
+            min = 0,
+            max = 50
+    )
+    private String typeDemande;
+    private String nomEmploye;
+    private Empolye idEmploye;
+    private ParametrageDemande codeParametrageDemande;
+    private String desParametrageDemande;
+    private String logoEtat;
+    private String idEtat;
 
-  private ParametrageDemande codeParametrageDemande;
+    public String getNumeroDemande() {
+        return numeroDemande;
+    }
 
-  public String getNumeroDemande() {
-    return numeroDemande;
-  }
+    public void setNumeroDemande(String numeroDemande) {
+        this.numeroDemande = numeroDemande;
+    }
 
-  public void setNumeroDemande(String numeroDemande) {
-    this.numeroDemande = numeroDemande;
-  }
+    public String getDesignation() {
+        return designation;
+    }
 
-  public String getDesignation() {
-    return designation;
-  }
+    public void setDesignation(String designation) {
+        this.designation = designation;
+    }
 
-  public void setDesignation(String designation) {
-    this.designation = designation;
-  }
+    public LocalDateTime getDateCreation() {
+        return dateCreation;
+    }
 
-  public Date getDateCreation() {
-    return dateCreation;
-  }
+    public void setDateCreation(LocalDateTime dateCreation) {
+        this.dateCreation = dateCreation;
+    }
 
-  public void setDateCreation(Date dateCreation) {
-    this.dateCreation = dateCreation;
-  }
+    public String getTypeDemande() {
+        return typeDemande;
+    }
 
-  public String getTypeDemande() {
-    return typeDemande;
-  }
+    public void setTypeDemande(String typeDemande) {
+        this.typeDemande = typeDemande;
+    }
 
-  public void setTypeDemande(String typeDemande) {
-    this.typeDemande = typeDemande;
-  }
+    public Empolye getIdEmploye() {
+        return idEmploye;
+    }
 
-//  public Empolye getIdEmploye() {
-//    return idEmploye;
-//  }
-//
-//  public void setIdEmploye(Empolye idEmploye) {
-//    this.idEmploye = idEmploye;
-//  }
+    public void setIdEmploye(Empolye idEmploye) {
+        this.idEmploye = idEmploye;
+    }
 
-  public ParametrageDemande getCodeParametrageDemande() {
-    return codeParametrageDemande;
-  }
+    public String getNomEmploye() {
+        return nomEmploye;
+    }
 
-  public void setCodeParametrageDemande(ParametrageDemande codeParametrageDemande) {
-    this.codeParametrageDemande = codeParametrageDemande;
-  }
+    public void setNomEmploye(String nomEmploye) {
+        this.nomEmploye = nomEmploye;
+    }
+
+    public String getDesParametrageDemande() {
+        return desParametrageDemande;
+    }
+
+    public void setDesParametrageDemande(String desParametrageDemande) {
+        this.desParametrageDemande = desParametrageDemande;
+    }
+
+    public String getLogoEtat() {
+        return logoEtat;
+    }
+
+    public void setLogoEtat(String logoEtat) {
+        this.logoEtat = logoEtat;
+    }
+
+    public String getIdEtat() {
+        return idEtat;
+    }
+
+    public void setIdEtat(String idEtat) {
+        this.idEtat = idEtat;
+    }
+
+    public ParametrageDemande getCodeParametrageDemande() {
+        return codeParametrageDemande;
+    }
+
+    public void setCodeParametrageDemande(ParametrageDemande codeParametrageDemande) {
+        this.codeParametrageDemande = codeParametrageDemande;
+    }
 }
-

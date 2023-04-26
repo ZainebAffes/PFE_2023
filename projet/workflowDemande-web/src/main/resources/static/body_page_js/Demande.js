@@ -1,11 +1,11 @@
 $(function () {
-    drawBtnTypeDemande();
-    DrawTableTypeDemande();
+    drawBtnLesDemandes();
+     DrawTableLesDemandes();
     $('#rafresh').unbind('click');
     $('#rafresh').bind('click', function (e) {
         showLoadingNotification();
         setTimeout(function () {
-            DrawTableTypeDemande();
+             DrawTableLesDemandes();
             hideLoadingNotification();
         }, 50);
     });
@@ -13,7 +13,7 @@ $(function () {
     $('#btnMAJDemande').bind('click', function () {
         window.parent.$.loader.open();
         setTimeout(function () {
-            submitMAJTypeDemande();
+            submitMAJLesDemandes();
             window.parent.$.loader.close();
         }, 100);
     });
@@ -28,7 +28,7 @@ $(function () {
     $('#rafresh').bind('click', function (e) {
         showLoadingNotification();
         setTimeout(function () {
-            DrawTableTypeDemande();
+             DrawTableLesDemandes();
             hideLoadingNotification();
         }, 50);
     });

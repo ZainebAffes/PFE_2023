@@ -272,7 +272,7 @@
                             <a class="btn btn-default  pull-left" id="rafresh" > 
                                 <span class="widget-icon"><i class="glyphicon glyphicon-refresh"></i></span>  
                             </a>
-                            <h2><strong id="etat-header">Gestion des TypeDemandes</strong></h2> 
+                            <h2><strong id="etat-header">Gestion des Types des demandes</strong></h2> 
                         </header>
                         <!-- widget div-->
                         <div style="min-height: calc(100vh - 55px);">

@@ -20,7 +20,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <jsp:include page="../body_page/css_declare.jsp"/>  
         
-       <title>TypeDemandes</title>
+       <title>Demandes</title>
 <!--       <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/amcharts/3.21.15/plugins/export/libs/FileSaver.js/FileSaver.min.js"></script>
              <script type="text/javascript" src="https://unpkg.com/exceljs@4.3.0/dist/exceljs.min.js"></script>
               <script type="text/javascript" >
@@ -40,16 +40,16 @@
             .widget-body{
                 z-index: 0;
             }
-            #_grid_ListTypeDemande thead > tr th:nth-child(1),
-            #_grid_ListTypeDemande tbody > tr td:nth-child(1){
+            #_grid_Demandes thead > tr th:nth-child(1),
+            #_grid_Demandes tbody > tr td:nth-child(1){
                 width: 20%!important;
             }
-            #_grid_ListTypeDemande thead > tr th:nth-child(2),
-            #_grid_ListTypeDemande tbody > tr td:nth-child(2){
+            #_grid_Demandes thead > tr th:nth-child(2),
+            #_grid_Demandes tbody > tr td:nth-child(2){
                 width: 30%!important;
             }
           
-            #_grid_ListTypeDemande  tbody {
+            #_grid_Demandes  tbody {
                 flex: 1 1 auto;
                 width: 100%;
                 display: block;
@@ -59,30 +59,30 @@
                 max-height: calc(100vh - 222px);
                 height:auto !important;
             }
-            #_grid_ListTypeDemande {
+            #_grid_Demandes {
                 display: flex;
                 flex-flow: column;
                 height: 100%;
                 width: 100%;
             }
-            #_grid_ListTypeDemande thead, #_grid_ListTypeDemande tbody tr {
+            #_grid_Demandes thead, #_grid_Demandes tbody tr {
                 display: table;
                 table-layout: fixed;
             }
-            #_grid_ListTypeDemande thead {
+            #_grid_Demandes thead {
                 width: calc(100% -  6px) !important;
                 flex: 0 0 auto;
             }
-            #_grid_ListTypeDemande tbody tr {
+            #_grid_Demandes tbody tr {
                 width: 100%;
             }
 
-            #_grid_ListTypeDemande tbody > tr > td,
-            #_grid_ListTypeDemande  tbody > tr > th,
-            #_grid_ListTypeDemande  tfoot > tr > td,
-            #_grid_ListTypeDemande  tfoot > tr > th,
-            #_grid_ListTypeDemande  thead > tr > td,
-            #_grid_ListTypeDemande  thead > tr > th {
+            #_grid_Demandes tbody > tr > td,
+            #_grid_Demandes  tbody > tr > th,
+            #_grid_Demandes  tfoot > tr > td,
+            #_grid_Demandes  tfoot > tr > th,
+            #_grid_Demandes  thead > tr > td,
+            #_grid_Demandes  thead > tr > th {
                 padding: 3px 5px!important;
                 font-size: 12px;
             }
@@ -184,7 +184,7 @@
             }
 
 
-            #filter_TypeDemande{
+            #filter_Demande{
                 z-index: 0 !important;
             }
             td {
@@ -193,7 +193,7 @@
             .bootstrap-tagsinput input {
                 width: 28em;
             }
-            #_grid_ListTypeDemande_filter{
+            #_grid_Demandes_filter{
                 margin-left: -1132px;
 
             }
@@ -265,14 +265,14 @@
                 <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="padding-right: 2px;">
                     <div class="jarviswidget jarviswidget-color-redLight"  data-widget-editbutton="false" data-widget-deletebutton="false">
 
-                        <header class='screen' id="listetid_TypeDemande">
+                        <header class='screen' id="listetid_Demandes">
                             <a class="btn btn-default accessCtrl pull-right" id="btnFermer"> 
                                 <span class="widget-icon"><i class="glyphicon btn-danger glyphicon-log-out"></i> <spring:message code="fb.global.fermer"/></span>
                             </a>
                             <a class="btn btn-default  pull-left" id="rafresh" > 
                                 <span class="widget-icon"><i class="glyphicon glyphicon-refresh"></i></span>  
                             </a>
-                            <h2><strong id="etat-header">Gestion des TypeDemandes</strong></h2> 
+                            <h2><strong id="etat-header">Gestion des Liste des demandes</strong></h2> 
                         </header>
                         <!-- widget div-->
                         <div style="min-height: calc(100vh - 55px);">
@@ -301,7 +301,7 @@
                             <div class="widget-body screen col-md-12">
 
                                 <div class="row">
-                                    <div  id="_grid_ListTypeDemande" >
+                                    <div  id="_grid_Demandes" >
                                     </div>
                                 </div>
                             </div>
@@ -352,18 +352,25 @@
                                 <fieldset >
                                     <div class="row">
                                         <div class="form-group col-md-4">
-                                            <label class="col-md-4 control-label">Code<span class="champOblig">*</span></label>
+                                            <label class="col-md-4 control-label">Numéro demande<span class="champOblig">*</span></label>
                                             <div class="col-md-6 input-group">
-                                                <input maxlength="6" id="codTypeDemande" type="text"  class=" form-control datepicker input-xs"  data-mask-clearifnotmatch="true" >
+                                                <input maxlength="6" id="numeroDemande" type="text"  class=" form-control datepicker input-xs"  data-mask-clearifnotmatch="true" >
                                             </div>
                                         </div>
 
                                         <div class="form-group col-md-8" >
                                             <label class="col-md-4 control-label">Désignation<span class="champOblig">*</span></label>
                                             <div class="col-md-8 input-group">
-                                                <input draggable = "true"  maxlength="100" id="desTypeDemande" type="text"  class=" form-control datepicker input-xs"  data-mask-clearifnotmatch="true" >
+                                                <input draggable = "true"  maxlength="100" id="designation" type="text"  class=" form-control datepicker input-xs"  data-mask-clearifnotmatch="true" >
                                             </div>
-                                        </div> </div>
+                                        </div> 
+                                      <div class="form-group col-md-4">
+                                            <label class="col-md-4 control-label">Date création<span class="champOblig">*</span></label>
+                                            <div class="col-md-6 input-group">
+                                                <input maxlength="6" id="dateCreation" type="text"  class=" form-control datepicker input-xs"  data-mask-clearifnotmatch="true" >
+                                            </div>
+                                        </div>
+                                    </div>
                                 </fieldset>
                             </div>
                         </div>
@@ -373,7 +380,7 @@
                     <div  class="modal-footer" style="padding: 1px 20px 4px;">
                         <div class="row">
                             <div align="right">
-                                <button id="btnMAJTypeDemande" type="button" class="btn btn-default"><i class="fa fa-check"></i>&nbsp; Valider</button>
+                                <button id="btnMAJDemandes" type="button" class="btn btn-default"><i class="fa fa-check"></i>&nbsp; Valider</button>
                                 <button id='btnCloseModalTypeDemande' type="button" class="btn btn-default" onClick="$('#modalAdd').modal('hide');"><i class="fa fa-times"></i>&nbsp; Fermer</button>
                             </div>
                         </div>
@@ -383,7 +390,7 @@
         </div>
 
 
-        <div class="modal fade " id="parametrage" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal fade " id="demandes" tabindex="-1" role="dialog" aria-hidden="true">
             <div class="modal-dialog centre_screen" style="width: 850px;">
                 <div class="modal-content">
                     <div class="modal-header"   >

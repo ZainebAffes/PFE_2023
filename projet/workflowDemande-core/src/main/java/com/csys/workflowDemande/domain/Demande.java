@@ -1,10 +1,7 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.csys.workflowDemande.domain;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -27,13 +24,6 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @Entity
 @Table(name = "Demande")
-@XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = "Demande.findAll", query = "SELECT d FROM Demande d"),
-    @NamedQuery(name = "Demande.findByNumeroDemande", query = "SELECT d FROM Demande d WHERE d.numeroDemande = :numeroDemande"),
-    @NamedQuery(name = "Demande.findByDesignation", query = "SELECT d FROM Demande d WHERE d.designation = :designation"),
-    @NamedQuery(name = "Demande.findByDateCreation", query = "SELECT d FROM Demande d WHERE d.dateCreation = :dateCreation"),
-    @NamedQuery(name = "Demande.findByTypeDemande", query = "SELECT d FROM Demande d WHERE d.typeDemande = :typeDemande")})
 public class Demande implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -47,17 +37,18 @@ public class Demande implements Serializable {
     @Column(name = "designation")
     private String designation;
     @Column(name = "dateCreation")
-    @Temporal(TemporalType.DATE)
-    private Date dateCreation;
-    @Size(max = 50)
-    @Column(name = "type_demande")
-    private String typeDemande;
-    @JoinColumn(name = "id_employe", referencedColumnName = "idEmploye")
+    private LocalDateTime dateCreation;
+       @Column(name = "etat")
+    private String etats;
+    @JoinColumn(name = "id_employe", referencedColumnName = "idEmploye", updatable = false, insertable = false, nullable = true)
     @ManyToOne
     private Empolye idEmploye;
-    @JoinColumn(name = "code_parametrage_demande", referencedColumnName = "code")
+    @JoinColumn(name = "code_parametrage_demande", referencedColumnName = "code", updatable = false, insertable = false, nullable = true)
     @ManyToOne
     private ParametrageDemande codeParametrageDemande;
+    @JoinColumn(name = "etat", referencedColumnName = "id", updatable = false, insertable = false, nullable = true)
+    @ManyToOne
+    private Etat etat;
 
     public Demande() {
     }
@@ -82,21 +73,15 @@ public class Demande implements Serializable {
         this.designation = designation;
     }
 
-    public Date getDateCreation() {
+    public LocalDateTime getDateCreation() {
         return dateCreation;
     }
 
-    public void setDateCreation(Date dateCreation) {
+    public void setDateCreation(LocalDateTime dateCreation) {
         this.dateCreation = dateCreation;
     }
 
-    public String getTypeDemande() {
-        return typeDemande;
-    }
-
-    public void setTypeDemande(String typeDemande) {
-        this.typeDemande = typeDemande;
-    }
+   
 
     public Empolye getIdEmploye() {
         return idEmploye;
@@ -112,6 +97,22 @@ public class Demande implements Serializable {
 
     public void setCodeParametrageDemande(ParametrageDemande codeParametrageDemande) {
         this.codeParametrageDemande = codeParametrageDemande;
+    }
+
+    public Etat getEtat() {
+        return etat;
+    }
+
+    public void setEtat(Etat etat) {
+        this.etat = etat;
+    }
+
+    public String getEtats() {
+        return etats;
+    }
+
+    public void setEtats(String etats) {
+        this.etats = etats;
     }
 
     @Override
@@ -138,5 +139,5 @@ public class Demande implements Serializable {
     public String toString() {
         return "com.csys.workflowDemande.domain.Demande[ numeroDemande=" + numeroDemande + " ]";
     }
-    
+
 }

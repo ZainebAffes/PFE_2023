@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -63,14 +64,20 @@ public class DemandeResource {
     DemandeDTO result =demandeService.update(demandeDTO);
     return ResponseEntity.ok().body(result);
   }
-
+  
+    @PutMapping("/demandes/validation")
+    public ResponseEntity<String> validation(@RequestParam String[] validation, @RequestParam String user) throws URISyntaxException, MethodArgumentNotValidException {
+        String result = demandeService.validation(validation, user);
+        return ResponseEntity.created(new URI("/api/demandes/")).body(result);
+    }
+  
   @GetMapping("/demandes/{id}")
   public ResponseEntity<DemandeDTO> getDemande(@PathVariable String id) {
     log.debug("Request to get Demande: {}",id);
-    DemandeDTO dto = demandeService.findOne(id);
+    DemandeDTO dto = demandeService.findById(id);
     return ResponseEntity.ok().body(dto);
   }
-
+@GetMapping("/demandes/filter")
   public Collection<DemandeDTO> getAllDemandes() {
     log.debug("Request to get all  Demandes : {}");
     return demandeService.findAll();

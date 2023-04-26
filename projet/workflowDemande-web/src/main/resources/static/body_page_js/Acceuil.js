@@ -100,7 +100,7 @@ function eventbtn() {
    
     $("#30").unbind("click");
     $("#30").bind("click", function (e) {
-        ouvrirOnglet("ListeDemande", false, 'fils', '', 'ListeDemande');
+        ouvrirOnglet("Liste des demandes","Demande", false, 'fils', '', 'Demande');
     });
 }
 

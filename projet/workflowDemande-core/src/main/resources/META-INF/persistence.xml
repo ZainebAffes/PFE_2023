@@ -3,31 +3,6 @@
   <persistence-unit name="com.example_workflowDemande-core_jar_0.0.1-SNAPSHOTPU" transaction-type="RESOURCE_LOCAL">
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
     <class>com.csys.workflowDemande.domain.TypeDemande</class>
-    <class>com.csys.workflowDemande.domain.ParametrageDemande</class>
-    <class>com.csys.workflowDemande.domain.TypeEtiquette</class>
-    <class>com.csys.workflowDemande.domain.Etiquetteparametragedemande</class>
-    <class>com.csys.workflowDemande.domain.OptionEtiquette</class>
-<<<<<<< HEAD
-    <class>com.csys.workflowDemande.GroupeEmploye</class>
-    <class>com.csys.workflowDemande.OptionEtiquette</class>
-    <class>com.csys.workflowDemande.Empolye</class>
-    <class>com.csys.workflowDemande.TypeEmploye</class>
-    <class>com.csys.workflowDemande.EtiquetteParametrageDemande</class>
-    <class>com.csys.workflowDemande.TypeEtiquette</class>
-    <class>com.csys.workflowDemande.domain.Demande</class>
-    <class>com.csys.workflowDemande.domain.Empolye</class>
-    <class>com.csys.workflowDemande.domain.OptionEtiquette_1</class>
-    <class>com.csys.workflowDemande.domain.TypeEtiquette_1</class>
-    <class>com.csys.workflowDemande.domain.EtiquetteParametrageDemande_1</class>
-    <class>com.csys.workflowDemande.domain.TypeEmploye</class>
-    <class>com.csys.workflowDemande.domain.GroupeEmploye</class>
-=======
-    <class>com.csys.workflowDemande.domain.EtatValidation</class>
-    <class>com.csys.workflowDemande.domain.Demande</class>
-    <class>com.csys.workflowDemande.domain.GroupeEmploye</class>
-    <class>com.csys.workflowDemande.domain.TypeEmployé</class>
-    <class>com.csys.workflowDemande.domain.Employe</class>
->>>>>>> cb6ec4a0f331a5625532b92ce6f6e251d271bb2b
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:sqlserver://10.12.12.10:1420;databaseName=gcliniquenew"/>
       <property name="javax.persistence.jdbc.user" value="sa"/>

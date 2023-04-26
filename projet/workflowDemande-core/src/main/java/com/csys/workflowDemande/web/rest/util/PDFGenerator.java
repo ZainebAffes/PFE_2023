@@ -31,7 +31,7 @@ public class PDFGenerator {
 		Document document = new Document(PageSize.A4);
 
 		// Getting instance of PdfWriter
-		PdfWriter.getInstance(document, response.getOutputStream());
+	 	PdfWriter.getInstance(document, response.getOutputStream());
 
 		// Opening the created document to modify it
 		document.open();

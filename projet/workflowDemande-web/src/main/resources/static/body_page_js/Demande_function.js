@@ -1,45 +1,34 @@
-function drawBtnDemande() {
-    DessinerButton('30', '#listetid_Demande');
+function drawBtnLesDemandes() {
+    DessinerButton('30', '#listetid_Demandes');
     ActionBoutton();
 }
 function ActionBoutton() {
     $('#btn_Ajouter').unbind('click');
     $('#btn_Ajouter').bind('click', function (e) {
-        AfficheModalAddDemande();
+        AfficheModalAddLesDemandes();
         $("#typeMode").val("add");
-    });
-
-    $('#btn_Modifier').unbind('click');
-    $('#btn_Modifier').bind('click', function (e) {
-        var rowDde = $('#tableListDemande').find('tr.selectionnee');
-        if (rowDde.length === 0)
-            showNotification('Attention', "Veuillez choisir une demande ", 'error', 3000);
-        else {
-            var code = $('.selectionnee').find('td').eq(0).text();
-            majDemande(code, "update");
-        }
     });
 
     $('#btn_Consulter').unbind('click');
     $('#btn_Consulter').bind('click', function (e) {
-        var rowDde = $('#tableListDemande').find('tr.selectionnee');
+        var rowDde = $('#tableDemandes').find('tr.selectionnee');
         if (rowDde.length === 0)
             showNotification('Attention', "Veuillez choisir une demande ", 'error', 3000);
         else {
-            var code = $('.selectionnee').find('td').eq(0).text();
-            majDemande(code, "consult");
+            var numeroDemande = $('.selectionnee').find('td').eq(0).text();
+            majDemandes(numeroDemande, "consult");
         }
     });
 
     $('#btn_Annuler').unbind('click');
     $('#btn_Annuler').bind('click', function (e) {
-        var rowDde = $('#tableListDemande').find('tr.selectionnee');
+        var rowDde = $('#tableDemandes').find('tr.selectionnee');
         if (rowDde.length === 0)
             showNotification('Attention', "Veuillez choisir une demande ", 'error', 3000);
         else
         {
-            var code = $('.selectionnee').find('td').eq(0).text();
-            majDemande(code, "delete");
+            var numeroDemande = $('.selectionnee').find('td').eq(0).text();
+            majDemandes(numeroDemande, "delete");
         }
     });
 
@@ -47,62 +36,90 @@ function ActionBoutton() {
     $('#btn_Imprimer').bind('click', function (e) {
         $('#search').val("");
         var type = "PDF";
-        var url = `${url_base}/parametragedemandes/print?user=` + window.localStorage.getItem('username') + `&type=` + type;
+        var url = `${url_base}/demandes/print?user=` + window.localStorage.getItem('username') + `&type=` + type;
         impressionListe(url);
     });
 
     $("#btn_Exporter").unbind("click");
     $("#btn_Exporter").bind("click", function (e) {
         var type = "Excel";
-        var url = `${url_base}/parametragedemandes/print?actifs=${varActif}&user=` + window.localStorage.getItem('username') + `&type=` + type;
-        exporterList(url, "demande");
+        var url = `${url_base}/demandes/print?actifs=${varActif}&user=` + window.localStorage.getItem('username') + `&type=` + type;
+        exporterList(url, "demandes");
     });
-
+    $('#btn_Modifier').unbind('click');
+    $('#btn_Modifier').bind('click', function (e) {
+        var liste = [];
+        $("#tableDemandes > tbody > tr").each(function () {
+            if ($(this).find(".checkBoxClass").is(":checked")) {
+                liste.push($(this).find('td').eq(0).text());
+            }
+        });
+        if (liste.length === 0)
+        {
+            showNotification('Avertissement', "Veuillez choisir une convention", 'error', 3000);
+        } else
+        {
+            validation(liste);
+        }
+    });
 }
-function majDemande(code, action) {
-    var Demande = findDemandeById(code);
+function validation(list) {
+    $.ajax({
+        url: url_base + '/demandes/validation?user=' + window.localStorage.getItem('username') + '&validation=' + list,
+        type: 'PUT',
+        contentType: "application/json; charset=utf-8",
+        async: false,
+        success: function (data)
+        {
+            showNotification('Succès', "Validation effectuée avec succés", 'success', 5000);
+            DrawTableLesDemandes();
+        }
+    });
+}
+
+function majDemande(numeroDemande, action) {
+    var Demande = findDemandeById(numeroDemande);
     $('#modalAdd').modal('show');
-    $('#code').val(code);
+    $('#numeroDemande').val(numeroDemande);
     $('#designation').val(Demande.designation);
-    $('#codeTypeDemande').val(Demande.codeTypeDemande);
-    $('#code').prop("disabled", "disabled");
+    $('#dateCreation').val(Demande.dateCreation);
+    $('#numeroDemande').prop("disabled", "disabled");
 
     if (action === "update") {
         $('#designation').prop("disabled", false);
-        $('#codeTypeDemande').prop("disabled", false);
+        $('#dateCreation').prop("disabled", false);
         $('#modalIconDemande').replaceWith('<i id="modalIconDemande" class="glyphicon glyphicon-edit"></i>');
         $('#labelTitre').text("Modification d'une demande");
         sessionStorage.setItem("Demande", 'modif');
-        $("#btnMAJDemande").show();
+        $("#btnMAJDemandes").show();
     }
     if (action === "delete") {
         $('#modalIconDemande').replaceWith('<i id="modalIconDemande" class="glyphicon glyphicon-trash"></i>');
         $('#labelTitre').text("Annulation d'une demande");
         $('#designation').prop("disabled", "disabled");
-        $('#codeTypeDemande').prop("disabled", true);
+        $('#dateCreation').prop("disabled", true);
         $('#checkboxActif').prop("disabled", "disabled");
         sessionStorage.setItem("Demande", 'delete');
-        $("#btnMAJDemande").show();
+        $("#btnMAJDemandes").show();
     }
     if (action === "consult") {
         $('#modalIconDemande').replaceWith('<i id="modalIconDemande" class="glyphicon glyphicon-list"></i>');
         $('#labelTitre').text("Détail d'une demande");
         $('#designation').prop("disabled", "disabled");
-        $('#codeTypeDemande').prop("disabled", true);
-        $('#checkboxActif').prop("disabled", "disabled");
-        $("#btnMAJDemande").hide();
+        $('#dateCreation').prop("disabled", true);
+        $("#btnMAJDemandes").hide();
     }
 
 }
 
-function DrawTableDemande() {
+function DrawTableLesDemandes() {
     window.parent.$.loader.open();
     setTimeout(function () {
-        DrawListDemande("tableListDemande", '_grid_ListDemande');
+        DrawLesDemandes("tableDemandes", '_grid_Demandes');
         window.parent.$.loader.close();
     }, 100);
 }
-function DrawListDemande(idTable, idContainer) {
+function  DrawLesDemandes(idTable, idContainer) {
     showLoadingNotification();
     var List = [];
 
@@ -124,8 +141,8 @@ function DrawListDemande(idTable, idContainer) {
         "pageLength": pageLength,
         columns: [
             {
-                title: "Code",
-                data: 'code',
+                title: "Numéro demande",
+                data: 'numeroDemande',
                 render: function (data, type, row, meta) {
                     if (data !== null)
                         return data;
@@ -134,8 +151,17 @@ function DrawListDemande(idTable, idContainer) {
                 }
             },
             {
-                title: "désignation",
-                data: 'designation',
+                title: "Désignation du demande",
+                data: 'desParametrageDemande',
+                render: function (data) {
+                    if (data === undefined)
+                        return '';
+                    else
+                        return "<span title='" + data + "'>" + data + "</span>";
+                }
+            }, {
+                title: "Employé",
+                data: 'nomEmploye',
                 render: function (data) {
                     if (data === undefined)
                         return '';
@@ -144,35 +170,55 @@ function DrawListDemande(idTable, idContainer) {
                 }
             },
             {
-                title: "Type Demande",
-                data: 'descriptionTypeDemande',
+                title: "Type de demande",
+                data: 'typeDemande',
                 render: function (data) {
                     if (data === undefined)
                         return '';
                     else
                         return "<span title='" + data + "'>" + data + "</span>";
                 }
+            },
+
+            {
+                data: 'dateCreation',
+                title: 'Date du demande ',
+                render: function (data) {
+                    if (data === null || data === undefined)
+                        return '';
+                    else
+                        return formatCalendarWithTime(data, 'dd/mm/yyyy');
+                }
+            },
+            {
+                title: "Etat",
+                data: 'logoEtat',
+                render: function (data) {
+                    if (data === undefined)
+                        return '';
+                    else
+                        return "<i class='" + data + "'></i>";
+                }
+            },
+            {
+                title: "Etat",
+                data: 'idEtat',
+                render: function (data) {
+                    if (data === undefined)
+                        return '';
+                    else
+                        return "<i class='" + data + "'>" + data + "</i>";
+                }
+            },
+            {
+                data: 'idEtat',
+                title: 'valider',
+                sortable: false,
+                render: function (data, type, row, meta) {
+                    var check = data === "0 " ? "unchecked" : "checked";
+                    return '<form><label style="display: flex;justify-content: center;align-items: center; "><input name="renouv" type="checkbox" class="editor-active checkBoxClass checkbox" ' + check + '><span></span></label></form>';
+                }
             }
-//            ,
-//            {
-//                title: "Créé par",
-//                data: 'userCreation',
-//                render: function (data) {
-//                    if (data === undefined || data === null || data === 'null')
-//                        return '';
-//                    else
-//                        return "<span title='" + data + "'>" + data + "</span>";
-//                }
-//            }, {
-//                data: 'dateCreation',
-//                title: 'Date de création',
-//                render: function (data) {
-//                    if (data === null || data === undefined)
-//                        return '';
-//                    else
-//                        return formatCalendarWithTime(data, 'dd/mm/yyyy');
-//                }
-//            }
         ],
         "aoColumnDefs": [{
                 'bSortable': false,
@@ -180,7 +226,7 @@ function DrawListDemande(idTable, idContainer) {
             }],
         "order": [[0, "asc"]]
     });
-    $('#tableListDemande  tbody').delegate('tr', 'click', function (e) {
+    $('#tableDemandes  tbody').delegate('tr', 'click', function (e) {
         var highlightColor = '#d9edf7';
         var css = $(this).attr('style');
         if ($(this).find('.dataTables_empty').length === 0) {
@@ -199,46 +245,46 @@ function DrawListDemande(idTable, idContainer) {
     $("#search").on("keyup search input paste cut", function () {
         table.search(this.value).draw();
     });
-    $('#tableListDemande > tbody').on('dblclick', function (e) {
-        var rowDde = $('#tableListDemande').find('tr.selectionnee');
+    $('#tableDemandes > tbody').on('dblclick', function (e) {
+        var rowDde = $('#tableDemandes').find('tr.selectionnee');
         if (rowDde.length === 0)
-            showNotification('Attention', 'veuillez Sélectionner un Demande', 'error', 2000);
+            showNotification('Attention', 'veuillez Sélectionner une Demande', 'error', 2000);
         else {
-            var code = $('.selectionnee').find('td').eq(0).text();
-            majDemande(code, 'consult');
+            var numeroDemande = $('.selectionnee').find('td').eq(0).text();
+            majDemandes(numeroDemande, 'consult');
         }
     });
-    $('#tableListDemande_info').css("padding", '0');
-    $('#tableListDemande_filter').hide();
+    $('#tableDemandes_info').css("padding", '0');
+    $('#tableDemandes_filter').hide();
     hideLoadingNotification();
 }
-function AfficheModalAddDemande() {
+function  AfficheModalAddLesDemandes() {
     $('#labelTitre').text("Ajout d'une demande");
-    $('#modal_ajout_Demande_title h2').val("Ajout d'une demande");
+    $('#modal_ajout_Demandes_title h2').val("Ajout d'une demande");
     $('#modalIconDemande').replaceWith('<i id="modalIconDemande" class="glyphicon glyphicon-plus"></i>');
     $('#modalAdd').modal('show');
-    $('#code').val('');
+    $('#numeroDemande').val('');
     $('#designation').val('');
-    $('#codeTypeDemande').val('');
+    $('#dateCreation').val('');
 
     $('#designation').prop("disabled", false);
     $('#checkboxActif').prop("disabled", false);
-    $('#codeTypeDemande').prop("disabled", false);
+    $('#dateCreation').prop("disabled", false);
 
     $('#designation').val('');
-    $("#btnMAJDemande").show();
+    $("#btnMAJDemandes").show();
     sessionStorage.setItem("Demande", 'ajout');
 }
-function submitMAJDemande() {
+function submitMAJLesDemandes() {
     if (sessionStorage.getItem("Demande") === 'delete') {
-        deleteDemande($('#code').val());
+        deleteDemandes($('#numeroDemande').val());
     } else {
-        if (($('#code').val() === '')) {
-            $('#code').addClass('css-error');
-            $('#code').attr('style', 'background-color: #fff0f0;border-color: #A90329;');
+        if (($('#numeroDemande').val() === '')) {
+            $('#numeroDemande').addClass('css-error');
+            $('#numeroDemande').attr('style', 'background-color: #fff0f0;border-color: #A90329;');
         } else {
-            $('#code').removeClass('css-error');
-            $('#code').attr('style', '');
+            $('#numeroDemande').removeClass('css-error');
+            $('#numeroDemande').attr('style', '');
         }
         if (($('#designation').val() === '')) {
             $('#designation').addClass('css-error');
@@ -247,20 +293,20 @@ function submitMAJDemande() {
             $('#designation').removeClass('css-error');
             $('#designation').attr('style', '');
         }
-        if (($('#codeTypeDemande').val() === '')) {
-            $('#codeTypeDemande').addClass('css-error');
-            $('#codeTypeDemande').attr('style', 'border-width: 1px;background-color: #fff0f0;border-color: #A90329;');
+        if (($('#dateCreation').val() === '')) {
+            $('#dateCreation').addClass('css-error');
+            $('#dateCreation').attr('style', 'border-width: 1px;background-color: #fff0f0;border-color: #A90329;');
         } else {
-            $('#codeTypeDemande').removeClass('css-error');
-            $('#codeTypeDemande').attr('style', '');
+            $('#dateCreation').removeClass('css-error');
+            $('#dateCreation').attr('style', '');
         }
         if ($('.css-error').length > 0) {
             showNotification('Avertissement', "Veuillez vérifier le(s) champ(s) saisi(s) ! ", 'error', 3000);
         } else {
 
-            var payload = payloadDemande();
+            var payload = payloadLesDemandes();
             if (sessionStorage.getItem("Demande") === 'ajout') {
-                var spec = findDemande(undefined, $('#codeTypeDemande').val());
+                var spec = findDemande(undefined, $('#dateCreation').val());
                 if (spec.length > 0) {
                     DrawListRassemblant('tableListRassemblant', '_grid_ListRassemblant', spec);
                     $('#add_msg').html("<h6>designation(s)de règlement(s) ressemblante(s): </h6>");
@@ -283,9 +329,9 @@ function submitMAJDemande() {
         }
     }
 }
-function addDemande(list) {
+function addLesDemandes(list) {
     $.ajax({
-        url: `${url_base}/parametragedemandes`,
+        url: `${url_base}/demandes`,
         type: 'POST',
         contentType: "application/json; charset=utf-8",
         data: JSON.stringify(list),
@@ -301,7 +347,7 @@ function addDemande(list) {
             $('#modalAdd').modal('hide');
             showLoadingNotification();
             setTimeout(function () {
-                DrawTableDemande();
+                DrawTableLesDemandes();
                 hideLoadingNotification();
             }, 50);
         }
@@ -316,7 +362,7 @@ function addDemande(list) {
 function findDemandeById(id) {
     var response = "";
     $.ajax({
-        url: `${url_base}/parametragedemandes/${id}`,
+        url: `${url_base}/demandes/${id}`,
         type: 'GET',
         async: false,
         dataType: 'json',
@@ -331,9 +377,9 @@ function findDemandeById(id) {
     });
     return response;
 }
-function updateDemande(object) {
+function updateDemandes(object) {
     $.ajax({
-        url: `${url_base}/parametragedemandes?user=` + window.localStorage.getItem('username'),
+        url: `${url_base}/demandes?user=` + window.localStorage.getItem('username'),
         type: 'PUT',
         contentType: "application/json; charset=utf-8",
         data: JSON.stringify(object),
@@ -351,7 +397,7 @@ function updateDemande(object) {
             $('#modalAdd').modal('hide');
             showLoadingNotification();
             setTimeout(function () {
-                DrawTableDemande();
+                DrawTableLesDemandes();
                 hideLoadingNotification();
             }, 50);
         }
@@ -360,10 +406,10 @@ function updateDemande(object) {
         }
     });
 }
-function deleteDemande(code) {
+function deleteDemandes(numeroDemande) {
     var response = "";
     $.ajax({
-        url: `${url_base}/parametragedemandes/${code}`,
+        url: `${url_base}/demandes/${numeroDemande}`,
         contentType: "text/html; charset=utf-8",
         type: 'DELETE',
         async: false,
@@ -375,7 +421,7 @@ function deleteDemande(code) {
             $('#modalAdd').modal('hide');
             showLoadingNotification();
             setTimeout(function () {
-                DrawTableDemande();
+                DrawTableLesDemandes();
                 hideLoadingNotification();
             }, 50);
 
@@ -383,7 +429,7 @@ function deleteDemande(code) {
     });
     return response;
 }
-function payloadDemande() {
+function payloadLesDemandes() {
     var oElements = document.querySelectorAll("[dragged]");
 
     for (i = 0; i < oElements.length; i += 1) {
@@ -392,9 +438,9 @@ function payloadDemande() {
         }
     }
     var payload = {
-        "code": $('#code').val(),
+        "numeroDemande": $('#numeroDemande').val(),
         "designation": $('#designation').val(),
-        "codeTypeDemande": $('#codeTypeDemande').val()
+        "dateCreation": $('#dateCreation').val()
 
     };
     return payload;
@@ -416,8 +462,8 @@ function DrawListRassemblant(idTable, idContainer, list) {
         "pageLength": 15,
         columns: [
             {
-                title: "Code",
-                data: 'code',
+                title: "Numéro demande",
+                data: 'numeroDemande',
                 render: function (data, type, row, meta) {
                     if (data !== null)
                         return data;
@@ -437,8 +483,8 @@ function DrawListRassemblant(idTable, idContainer, list) {
             },
 
             {
-                title: "Type demande",
-                data: 'descriptionTypeDemande',
+                title: "Date création",
+                data: 'dateCreation',
                 render: function (data) {
                     if (data === undefined)
                         return '';
@@ -478,7 +524,31 @@ function DrawListRassemblant(idTable, idContainer, list) {
 }
 
 function findDemande(designation) {
-    var url = url_base + '/parametragedemandes';
+
+    var url = url_base + '/demandes/filter';
+    if (designation !== undefined) {
+        url = url + '?designation=' + designation;
+    }
+    var response = "";
+    $.ajax({
+        url: url,
+        contentType: "text/html; charset=utf-8",
+        type: 'GET',
+        dataType: "json",
+        async: false,
+        success: function (data)
+        {
+            response = data;
+        }
+    });
+    return response;
+}
+function findDemandePDF(designation) {
+
+    var url = url_base + '/pdf/demandes';
+    if (designation !== undefined) {
+        url = url + '?designation=' + designation;
+    }
     var response = "";
     $.ajax({
         url: url,
@@ -494,3 +564,25 @@ function findDemande(designation) {
     return response;
 
 }
+function getDemande(designation) {
+
+    var url = url_base + '/export/demandes';
+    if (designation !== undefined) {
+        url = url + '?designation=' + designation;
+    }
+    var response = "";
+    $.ajax({
+        url: url,
+        contentType: "text/html; charset=utf-8",
+        type: 'GET',
+        dataType: "json",
+        async: false,
+        success: function (data)
+        {
+            response = data;
+        }
+    });
+    return response;
+
+}
+
