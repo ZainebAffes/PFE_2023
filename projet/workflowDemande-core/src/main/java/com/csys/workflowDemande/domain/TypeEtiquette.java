@@ -45,6 +45,10 @@ public class TypeEtiquette implements Serializable {
         this.code = code;
     }
 
+    public TypeEtiquette(String type) {
+        this.type = type;
+    }
+
     public Integer getCode() {
         return code;
     }

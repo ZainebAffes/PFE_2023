@@ -213,6 +213,10 @@
             #tableListRassemblant  tbody > tr td:nth-child(2){
                 width: 70%!important;
             }
+            #tableListRassemblant  thead > tr th:nth-child(3),
+            #tableListRassemblant  tbody > tr td:nth-child(3){
+                width: 70%!important;
+            }
             #tableListRassemblant  tbody {
                 flex: 1 1 auto;
                 width: 100%;
@@ -280,16 +284,18 @@
 
             .tag {
                 /*              display: inline-block;*/
-                border: hidden;
-
-                position: relative;
-
-                padding: 10px;
+                border: 1px;
+                border-style: solid ;
+                font-size:15px;
+                padding: 20px;
                 margin-bottom: 10px;
+                margin-inline: 10px;
+
                 box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
                 transition: 0.3s;
-                width:100%;
+                width:36%;
                 border-radius: 5px;
+
 
             }
 
@@ -299,6 +305,7 @@
                 height: 90%;
                 border: 1px;
                 border-style: solid ;
+                overflow: scroll;
             }
             .dropped-tag {
                 background-color: transparent;
@@ -313,12 +320,12 @@
                 line-height: 1.42857;
                 font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
             }
-            
+
             .dropped-tag:hover{
                 color: blue;
             }
             .dropped-nom{
-/*               background-color: transparent;*/
+                /*               background-color: transparent;*/
                 border: 0px;
                 box-sizing: border-box;
                 color: inherit;
@@ -331,12 +338,12 @@
                 font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
             }
             .dropped-nom:hover{
-                 border: 1px solid blue;
+                border: 1px solid blue;
             }
             .delete-tag{
                 padding: 5px 15px;
                 border: none;
-                border-radius: 4px;               
+                border-radius: 4px;
                 cursor: pointer;
                 text-align: center;
                 position: relative;
@@ -351,19 +358,41 @@
                 background-color: #cccccc;
             }
 
-
-
+            .dropped-tagDate{
+                display: block;
+                width: 20%;
+                    font-size: 13px;
+            }
+            .dropped-tagDate:hover{
+                color: blue;
+            }
             .tag:hover {
                 box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
             }
 
-            .etiquettes {
-                display: inline-block;
-                width: 30%;
-                margin-right: 3%;
-                margin-bottom: 10px;
-            }
+            .dragging{
+                border: hidden;
 
+                padding: 20px;
+
+                margin-inline: 2px;
+
+                box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+                transition: 0.3s;
+
+
+            }
+            .etiquettes{
+                margin: 20px;
+            }
+            .etiq{
+                display: flex;
+
+                text-align: center;
+                margin-right: -4px;
+                height: 32%;
+                width: 91%;
+            }
 
 
         </style>
@@ -382,7 +411,7 @@
                             <a class="btn btn-default  pull-left" id="rafresh" > 
                                 <span class="widget-icon"><i class="glyphicon glyphicon-refresh"></i></span>  
                             </a>
-                            <h2><strong id="etat-header">Gestion des demandes</strong></h2> 
+                            <h2><strong id="etat-header">Paramétrage des types de demandes</strong></h2> 
                         </header>
                         <!-- widget div-->
                         <div style="min-height: calc(100vh - 55px);">
@@ -450,7 +479,7 @@
                                 <fieldset>
                                     <div class="row">
                                         <div class="form-group col-md-3">
-                                            <div class="col-md-4 control-drag">Code<span class="champOblig">*</span></div>
+                                            <div class="col-md-4 control-drag" id="codeParam">Code<span class="champOblig">*</span></div>
                                             <div class="col-md-6 input-group">
                                                 <input maxlength="6" id="code" type="text"  class=" form-control datepicker input-xs"  data-mask-clearifnotmatch="true" >
                                             </div>
@@ -499,7 +528,7 @@
                                             <div class="tags-list">
                                                 <h4>Champs</h4>
                                                 <div id="divLegendServ"  >
-                                                    <legend style="font-size: 0.8em ;">
+                                                    <legend style="font-size: 0.9em ;">
                                                         <p class="p1">CRÉER UN CHAMP</p>
                                                         <p>
                                                             Faites glisser un type de champ vers l'une des sections de gauche
@@ -508,25 +537,35 @@
                                                 </div>  
 
                                                 <div class="etiquettes">
-                                                    <div class="tag" id="texte" draggable="true"data-type="text" name="text">                                                        
-                                                        <span class="glyphicon glyphicon-text-width" ><i> Description courte : </i></span>
-                                                       
+                                                    <div class="etiq">
+
+                                                        <div class="tag" id="texte" draggable="true"data-type="text" name="text">                                                        
+                                                            <span class="glyphicon glyphicon-text-width"><i> Texte</i></span>
+
+                                                        </div>
+                                                        <div class="tag" id="temps"  draggable="true" data-type="time">
+                                                            <span class="glyphicon glyphicon-time"></span>
+                                                            <i> Temps </i>
+                                                        </div>
+
                                                     </div>
-                                                    <div class="tag" id="temps"  draggable="true"data-type="temps">
-                                                        <span class="glyphicon glyphicon-time"><i> Temps :</i></span>
+                                                    <div class="etiq">
+                                                        <div class="tag" id="date" draggable="true"data-type="date">
+                                                            <span class="glyphicon glyphicon-calendar"></span> <i> Date  </i>                                                       
+                                                        </div>
+                                                        <div class="tag" id="nombre"draggable="true"data-type="nombre" min="3">
+                                                            <i> Nombre </i>
+                                                        </div>
                                                     </div>
-                                                    <div class="tag" id="date" draggable="true"data-type="date">
-                                                        <span class="fa fa-calendar"><i> Date : </i></span>                                                        
-                                                    </div>
-                                                    <div class="tag" id="nombre"draggable="true"data-type="nombre" min="3">
-                                                        <i> Nombre :</i>
-                                                    </div>
-                                                    
-                                                    <div class="tag" draggable="true"data-type="caseCocher">
-                                                        <span class="glyphicon glyphicon-time"><i> Case à cocher :</i></span>
-                                                    
-                                                    </div>
-                                                    
+                                                    <div class="etiq">
+                                                        <div class="tag"id="checkbox" draggable="true"data-type="checkbox">
+                                                            <span class="glyphicon glyphicon-check"></span><i> Case à cocher </i>
+                                                        </div>
+                                                        <div class="tag"id="listeDeroulante" draggable="true"data-type="listeDeroulante">
+                                                            <span class="glyphicon glyphicon-chevron-down"><i> Liste déroulante</i></span>
+                                                        </div>
+                                                    </div>    
+
                                                 </div>  
                                                 <!--                                                <span class="glyphicon glyphicon-text-width"><i> Description courte : </i></span>
                                                                                                 <div class="tag"><input draggable="true" type="text"class=" form-control datepicker input-xs"  data-mask-clearifnotmatch="true" placeholder="text"></div>

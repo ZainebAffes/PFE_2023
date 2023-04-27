@@ -12,7 +12,7 @@ import javax.validation.constraints.Size;
 
 public class EtiquetteparametragedemandeDTO {
 
-    @NotNull
+
     private Integer code;
 
     @Size(
@@ -58,34 +58,14 @@ public class EtiquetteparametragedemandeDTO {
     private List<OptionEtiquetteDTO> optionEtiquetteDTOs;
 
     private TypeEtiquetteDTO typeEtiquetteDTO;
-
-    private ParametrageDemandeDTO parametrageDemande;
+    private String typeEtiquette;
+    private ParametrageDemandeDTO parametrageDemandeDTO;
     private Integer codeTypeEtiquette;
-    private Integer code_parametrage_etiquette;
+    private Integer codeParametrageEtiquette;
 
-    public EtiquetteparametragedemandeDTO(Integer code, String description, Double min, Double max, String isRequired, String position, String defultValue, String visible, String multiple, List<OptionEtiquetteDTO> optionEtiquetteDTOs, TypeEtiquetteDTO typeEtiquetteDTO, ParametrageDemandeDTO parametrageDemande, Integer codeTypeEtiquette, Integer code_parametrage_etiquette) {
-        this.code = code;
-        this.description = description;
-        this.min = min;
-        this.max = max;
-        this.isRequired = isRequired;
-        this.position = position;
-        this.defultValue = defultValue;
-        this.visible = visible;
-        this.multiple = multiple;
-        this.optionEtiquetteDTOs = optionEtiquetteDTOs;
-        this.typeEtiquetteDTO = typeEtiquetteDTO;
-        this.parametrageDemande = parametrageDemande;
-        this.codeTypeEtiquette = codeTypeEtiquette;
-        this.code_parametrage_etiquette = code_parametrage_etiquette;
-    }
-
-    public EtiquetteparametragedemandeDTO() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-    
-    
-    
+//    public EtiquetteparametragedemandeDTO() {
+//        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+//    }
     public Integer getCode() {
         return code;
     }
@@ -175,11 +155,11 @@ public class EtiquetteparametragedemandeDTO {
     }
 
     public ParametrageDemandeDTO getParametrageDemande() {
-        return parametrageDemande;
+        return parametrageDemandeDTO;
     }
 
     public void setParametrageDemande(ParametrageDemandeDTO parametrageDemande) {
-        this.parametrageDemande = parametrageDemande;
+        this.parametrageDemandeDTO = parametrageDemande;
     }
 
     public Integer getCodeTypeEtiquette() {
@@ -190,12 +170,22 @@ public class EtiquetteparametragedemandeDTO {
         this.codeTypeEtiquette = codeTypeEtiquette;
     }
 
-    public Integer getCode_parametrage_etiquette() {
-        return code_parametrage_etiquette;
+    public Integer getCodeParametrageEtiquette() {
+        return codeParametrageEtiquette;
     }
 
-    public void setCode_parametrage_etiquette(Integer code_parametrage_etiquette) {
-        this.code_parametrage_etiquette = code_parametrage_etiquette;
+    public void setCodeParametrageEtiquette(Integer codeParametrageEtiquette) {
+        this.codeParametrageEtiquette = codeParametrageEtiquette;
     }
-    
+
+
+
+    public String getTypeEtiquette() {
+        return typeEtiquette;
+    }
+
+    public void setTypeEtiquette(String typeEtiquette) {
+        this.typeEtiquette = typeEtiquette;
+    }
+
 }

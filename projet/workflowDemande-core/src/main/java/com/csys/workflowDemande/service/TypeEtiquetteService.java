@@ -63,10 +63,10 @@ public class TypeEtiquetteService {
   @Transactional(
       readOnly = true
   )
-  public List<TypeEtiquetteDTO> findAll() {
+  public List<TypeEtiquette> findAll() {
     log.debug("Request to get All TypeEtiquettes");
     List<TypeEtiquette> result= typeetiquetteRepository.findAll();
-    return TypeEtiquetteFactory.typeetiquetteToTypeEtiquetteDTOs(result);
+    return result;
   }
 
   public void delete(Integer id) {

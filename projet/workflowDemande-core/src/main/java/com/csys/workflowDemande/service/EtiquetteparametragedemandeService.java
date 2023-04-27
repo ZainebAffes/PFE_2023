@@ -1,7 +1,9 @@
 package com.csys.workflowDemande.service;
 
 import com.csys.workflowDemande.domain.Etiquetteparametragedemande;
+import com.csys.workflowDemande.domain.TypeEtiquette;
 import com.csys.workflowDemande.dto.EtiquetteparametragedemandeDTO;
+import com.csys.workflowDemande.dto.TypeEtiquetteDTO;
 import com.csys.workflowDemande.factory.EtiquetteparametragedemandeFactory;
 import com.csys.workflowDemande.repository.EtiquetteparametragedemandeRepository;
 import com.google.common.base.Preconditions;
@@ -15,63 +17,71 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional
 public class EtiquetteparametragedemandeService {
-  private final Logger log = LoggerFactory.getLogger(EtiquetteparametragedemandeService.class);
 
-  private final EtiquetteparametragedemandeRepository etiquetteparametragedemandeRepository;
+    private final Logger log = LoggerFactory.getLogger(EtiquetteparametragedemandeService.class);
 
-  public EtiquetteparametragedemandeService(EtiquetteparametragedemandeRepository etiquetteparametragedemandeRepository) {
-    this.etiquetteparametragedemandeRepository=etiquetteparametragedemandeRepository;
-  }
+    private final EtiquetteparametragedemandeRepository etiquetteparametragedemandeRepository;
+    private final TypeEtiquetteService typeEtiquetteService;
 
-  public EtiquetteparametragedemandeDTO save(EtiquetteparametragedemandeDTO etiquetteparametragedemandeDTO) {
-    log.debug("Request to save Etiquetteparametragedemande: {}",etiquetteparametragedemandeDTO);
-    Etiquetteparametragedemande etiquetteparametragedemande = EtiquetteparametragedemandeFactory.etiquetteparametragedemandeDTOToEtiquetteparametragedemande(etiquetteparametragedemandeDTO);
-    etiquetteparametragedemande = etiquetteparametragedemandeRepository.save(etiquetteparametragedemande);
-    EtiquetteparametragedemandeDTO resultDTO = EtiquetteparametragedemandeFactory.etiquetteparametragedemandeToEtiquetteparametragedemandeDTO(etiquetteparametragedemande);
-    return resultDTO;
-  }
+    public EtiquetteparametragedemandeService(EtiquetteparametragedemandeRepository etiquetteparametragedemandeRepository, TypeEtiquetteService typeEtiquetteService) {
+        this.etiquetteparametragedemandeRepository = etiquetteparametragedemandeRepository;
+        this.typeEtiquetteService = typeEtiquetteService;
+    }
 
-  public EtiquetteparametragedemandeDTO update(EtiquetteparametragedemandeDTO etiquetteparametragedemandeDTO) {
-    log.debug("Request to update Etiquetteparametragedemande: {}",etiquetteparametragedemandeDTO);
-    Etiquetteparametragedemande inBase= etiquetteparametragedemandeRepository.findByCode(etiquetteparametragedemandeDTO.getCode());
-    Preconditions.checkArgument(inBase != null, "Etiquetteparametragedemande does not exist");
-    EtiquetteparametragedemandeDTO result= save(etiquetteparametragedemandeDTO);
-    return result;
-  }
+    public Etiquetteparametragedemande save(EtiquetteparametragedemandeDTO etiquetteparametragedemandeDTO) {
 
-  @Transactional(
-      readOnly = true
-  )
-  public EtiquetteparametragedemandeDTO findOne(Integer id) {
-    log.debug("Request to get Etiquetteparametragedemande: {}",id);
-    Etiquetteparametragedemande etiquetteparametragedemande= etiquetteparametragedemandeRepository.findByCode(id);
-    Preconditions.checkArgument(etiquetteparametragedemande != null, "Etiquetteparametragedemande does not exist");
-    EtiquetteparametragedemandeDTO dto = EtiquetteparametragedemandeFactory.etiquetteparametragedemandeToEtiquetteparametragedemandeDTO(etiquetteparametragedemande);
-    return dto;
-  }
+        List<TypeEtiquette> typeEtiquetteDTOs = typeEtiquetteService.findAll();
+        for (TypeEtiquette typeEtiquetteDTO : typeEtiquetteDTOs) {
+            if (etiquetteparametragedemandeDTO.getTypeEtiquette().equals(typeEtiquetteDTO.getType())) {
+                etiquetteparametragedemandeDTO.setCodeTypeEtiquette(1);
+            }
+        }
+        Etiquetteparametragedemande etiquetteparametragedemande = EtiquetteparametragedemandeFactory.etiquetteparametragedemandeDTOToEtiquetteparametragedemande(etiquetteparametragedemandeDTO);
+        etiquetteparametragedemande = etiquetteparametragedemandeRepository.save(etiquetteparametragedemande);
+        Etiquetteparametragedemande resultDTO = EtiquetteparametragedemandeFactory.etiquetteparametragedemandeDTOToEtiquetteparametragedemande(etiquetteparametragedemandeDTO);
+        return resultDTO;
+    }
 
-  @Transactional(
-      readOnly = true
-  )
-  public Etiquetteparametragedemande findEtiquetteparametragedemande(Integer id) {
-    log.debug("Request to get Etiquetteparametragedemande: {}",id);
-    Etiquetteparametragedemande etiquetteparametragedemande= etiquetteparametragedemandeRepository.findByCode(id);
-    Preconditions.checkArgument(etiquetteparametragedemande != null, "Etiquetteparametragedemande does not exist");
-    return etiquetteparametragedemande;
-  }
+    public Etiquetteparametragedemande update(EtiquetteparametragedemandeDTO etiquetteparametragedemandeDTO) {
+        log.debug("Request to update Etiquetteparametragedemande: {}", etiquetteparametragedemandeDTO);
+        Etiquetteparametragedemande inBase = etiquetteparametragedemandeRepository.findByCode(etiquetteparametragedemandeDTO.getCode());
+        Preconditions.checkArgument(inBase != null, "Etiquetteparametragedemande does not exist");
+        Etiquetteparametragedemande result = save(etiquetteparametragedemandeDTO);
+        return result;
+    }
 
-  @Transactional(
-      readOnly = true
-  )
-  public List<EtiquetteparametragedemandeDTO> findAll() {
-    log.debug("Request to get All Etiquetteparametragedemandes");
-    List<Etiquetteparametragedemande> result= etiquetteparametragedemandeRepository.findAll();
-    return EtiquetteparametragedemandeFactory.etiquetteparametragedemandeToEtiquetteparametragedemandeDTOs(result);
-  }
+    @Transactional(
+            readOnly = true
+    )
+    public EtiquetteparametragedemandeDTO findOne(Integer id) {
+        log.debug("Request to get Etiquetteparametragedemande: {}", id);
+        Etiquetteparametragedemande etiquetteparametragedemande = etiquetteparametragedemandeRepository.findByCode(id);
+        Preconditions.checkArgument(etiquetteparametragedemande != null, "Etiquetteparametragedemande does not exist");
+        EtiquetteparametragedemandeDTO dto = EtiquetteparametragedemandeFactory.etiquetteparametragedemandeToEtiquetteparametragedemandeDTO(etiquetteparametragedemande);
+        return dto;
+    }
 
-  public void delete(Integer id) {
-    log.debug("Request to delete Etiquetteparametragedemande: {}",id);
-    etiquetteparametragedemandeRepository.deleteById(id);
-  }
+    @Transactional(
+            readOnly = true
+    )
+    public Etiquetteparametragedemande findEtiquetteparametragedemande(Integer id) {
+        log.debug("Request to get Etiquetteparametragedemande: {}", id);
+        Etiquetteparametragedemande etiquetteparametragedemande = etiquetteparametragedemandeRepository.findByCode(id);
+        Preconditions.checkArgument(etiquetteparametragedemande != null, "Etiquetteparametragedemande does not exist");
+        return etiquetteparametragedemande;
+    }
+
+    @Transactional(
+            readOnly = true
+    )
+    public List<EtiquetteparametragedemandeDTO> findAll() {
+        log.debug("Request to get All Etiquetteparametragedemandes");
+        List<Etiquetteparametragedemande> result = etiquetteparametragedemandeRepository.findAll();
+        return EtiquetteparametragedemandeFactory.etiquetteparametragedemandeToEtiquetteparametragedemandeDTOs(result);
+    }
+
+    public void delete(Integer id) {
+        log.debug("Request to delete Etiquetteparametragedemande: {}", id);
+        etiquetteparametragedemandeRepository.deleteById(id);
+    }
 }
-

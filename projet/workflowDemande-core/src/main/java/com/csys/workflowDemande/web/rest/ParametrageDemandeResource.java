@@ -40,30 +40,19 @@ public class ParametrageDemandeResource {
     }
 
     @PostMapping("/parametragedemandes")
-    public ResponseEntity<ParametrageDemandeDTO> createParametrageDemande(@Valid @RequestBody ParametrageDemandeDTO parametragedemandeDTO, BindingResult bindingResult) throws URISyntaxException, MethodArgumentNotValidException {
+    public ResponseEntity<String> createParametrageDemande(@Valid @RequestBody ParametrageDemandeDTO parametragedemandeDTO, BindingResult bindingResult) throws URISyntaxException, MethodArgumentNotValidException {
         log.debug("REST request to save ParametrageDemande : {}", parametragedemandeDTO);
         if (bindingResult.hasErrors()) {
             throw new MethodArgumentNotValidException(null, bindingResult);
         }
-        if (parametragedemandeDTO.getCode() != null) {
-            bindingResult.addError(new FieldError("ParametrageDemandeDTO", "code", "POST method does not accepte " + ENTITY_NAME + " with code"));
-            throw new MethodArgumentNotValidException(null, bindingResult);
-        }
-        ParametrageDemandeDTO result = parametragedemandeService.save(parametragedemandeDTO);
-        return ResponseEntity.created(new URI("/api/parametragedemandes/" + result.getCode())).body(result);
+        String result = parametragedemandeService.save(parametragedemandeDTO);
+        return ResponseEntity.created(new URI("/api/parametragedemandes/")).body(result);
     }
 
     @PutMapping("/parametragedemandes")
-    public ResponseEntity<ParametrageDemandeDTO> updateParametrageDemande(@Valid @RequestBody ParametrageDemandeDTO parametragedemandeDTO, BindingResult bindingResult) throws MethodArgumentNotValidException {
-        log.debug("Request to update ParametrageDemande: {}", parametragedemandeDTO);
-        if (bindingResult.hasErrors()) {
-            throw new MethodArgumentNotValidException(null, bindingResult);
-        }
-        if (parametragedemandeDTO.getCode() == null) {
-            bindingResult.addError(new FieldError("ParametrageDemandeDTO", "code", "PUT method does not accepte " + ENTITY_NAME + " with code"));
-            throw new MethodArgumentNotValidException(null, bindingResult);
-        }
-        ParametrageDemandeDTO result = parametragedemandeService.update(parametragedemandeDTO);
+    public ResponseEntity<String> updateParametrageDemande(@Valid @RequestBody ParametrageDemandeDTO parametragedemandeDTO, @RequestParam String user) throws MethodArgumentNotValidException {
+
+        String result = parametragedemandeService.update(parametragedemandeDTO);
         return ResponseEntity.ok().body(result);
     }
 

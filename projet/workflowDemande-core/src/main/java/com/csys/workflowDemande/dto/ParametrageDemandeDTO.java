@@ -15,7 +15,7 @@ public class ParametrageDemandeDTO {
 
     @Size(
             min = 0,
-            max = 10
+            max = 50
     )
     private String designation;
     private String descriptionTypeDemande;

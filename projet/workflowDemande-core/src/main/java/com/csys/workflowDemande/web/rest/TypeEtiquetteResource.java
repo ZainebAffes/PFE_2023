@@ -1,5 +1,6 @@
 package com.csys.workflowDemande.web.rest;
 
+import com.csys.workflowDemande.domain.TypeEtiquette;
 import com.csys.workflowDemande.dto.TypeEtiquetteDTO;
 import com.csys.workflowDemande.service.TypeEtiquetteService;
 import java.lang.Integer;
@@ -71,8 +72,9 @@ public class TypeEtiquetteResource {
     TypeEtiquetteDTO dto = typeetiquetteService.findOne(id);
     return ResponseEntity.ok().body(dto);
   }
-
-  public List<TypeEtiquetteDTO> getAllTypeEtiquettes() {
+  
+@GetMapping("/typeetiquettes")
+  public List<TypeEtiquette> getAllTypeEtiquettes() {
     log.debug("Request to get all  TypeEtiquettes : {}");
     return typeetiquetteService.findAll();
   }

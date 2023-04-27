@@ -220,7 +220,7 @@ function AfficheModalAddDemande() {
     $('#code').val('');
     $('#designation').val('');
     $('#codeTypeDemande').val('');
-
+ $('#code').prop("disabled", false);
     $('#designation').prop("disabled", false);
     $('#checkboxActif').prop("disabled", false);
     $('#codeTypeDemande').prop("disabled", false);
@@ -260,7 +260,7 @@ function submitMAJDemande() {
 
             var payload = payloadDemande();
             if (sessionStorage.getItem("Demande") === 'ajout') {
-                var spec = findDemande(undefined, $('#codeTypeDemande').val());
+                var spec = findDemande($('#designation').val());
                 if (spec.length > 0) {
                     DrawListRassemblant('tableListRassemblant', '_grid_ListRassemblant', spec);
                     $('#add_msg').html("<h6>designation(s)de règlement(s) ressemblante(s): </h6>");
@@ -384,38 +384,72 @@ function deleteDemande(code) {
     return response;
 }
 function payloadDemande() {
-  var oElements = document.querySelectorAll(".dropped-tag");
-  var noms = document.querySelectorAll(".nom");
-  if (oElements !== null) {
-    var etiquettes = [];
-    for (var j = 0; j < noms.length; j++) {
-      var etiquette = {};
-      etiquette["nom"] = noms[j].value;
-      //etiquette["type"] = oElements[j].getAttribute('data-type'); 
-      etiquette["min"] = oElements[j].getAttribute('min');
-      etiquette["max"] = oElements[j].getAttribute('max');
-      etiquette["isRequired"] = oElements[j].parentElement.querySelector('#requiredCheckbox').checked;
-      etiquette["position"] = j;
-      etiquette["defaultValue"] = oElements[j].parentElement.querySelector('#valeur').value;
-      etiquette["visible"] = oElements[j].style.display !== 'none';
-      etiquette["multiple"] = oElements[j].getAttribute('multiple') !== null;
-      etiquette["type"] = oElements[j].getAttribute('type');
-            
+
+    var oElements = document.querySelectorAll(".dropped-tag");
+    var noms = document.querySelectorAll(".nom");
+    var param = $('#code').val();
+
+
+    if (oElements !== null) {
+        var etiquettes = [];
+        var typeEtiquetteDTOs = [];
+        typeEtiquetteDTOs = findTypeEtiquette();
+        for (var j = 0; j < noms.length; j++) {
+            var etiquette = {};
+            var selectedOptions = [];
+            var checkedOptions = [];
+
+            etiquette["description"] = noms[j].value;
+            etiquette["min"] = oElements[j].getAttribute('min');
+            etiquette["max"] = oElements[j].getAttribute('max');
+            etiquette["isRequired"] = oElements[j].parentElement.querySelector('#requiredCheckbox').checked;
+            etiquette["position"] = j;
+            etiquette["defultValue"] = oElements[j].parentElement.querySelector('#valeur').value;
+            etiquette["visible"] = oElements[j].style.display !== 'none';
+            etiquette["multiple"] = oElements[j].getAttribute('multiple') !== null;
+
+           
+
+            etiquette["codeParametrageEtiquette"] = param;
+ for (var x = 0; x < typeEtiquetteDTOs.length; x++) {
+                if (oElements[j].getAttribute('type') === typeEtiquetteDTOs[x].type) {
+                    etiquette["codeTypeEtiquette"] = typeEtiquetteDTOs[x].code;
+                }
+            }
+            if (oElements[j].getAttribute('type') === 'checkbox') {
+                const optionsContainer = oElements[j].parentElement.querySelector('.options-container');
+                const options = optionsContainer.querySelectorAll('input[type=checkbox]');
+                for (let i = 0; i < options.length; i++) {
+                    if (options[i].checked) {
+                        checkedOptions.push(options[i].parentNode.querySelector('input[type=text]').value);
+
+                    }
+                }
+            } else if (oElements[j].getAttribute('type') === 'listeDeroulante') {
+                const options = oElements[j].querySelectorAll('optionL');
+
+                for (let i = 0; i < options.length; i++) {
+
+                    selectedOptions.push(options[i].value);
+
+                }
+
+            }
+            etiquette["optionEtiquetteDTOs"] = selectedOptions;
+            etiquette["optionEtiquetteDTOs"] = checkedOptions;
             etiquettes.push(etiquette);
+        }
     }
-    
-  }
-
-
-              
     var payload = {
         "code": $('#code').val(),
+
         "designation": $('#designation').val(),
         "codeTypeDemande": $('#codeTypeDemande').val(),
         "etiquetteparametragedemandeDTOs": etiquettes
 
     };
     return payload;
+
 }
 function DrawListRassemblant(idTable, idContainer, list) {
     document.getElementById(idContainer).innerHTML = '';
@@ -464,6 +498,7 @@ function DrawListRassemblant(idTable, idContainer, list) {
                         return "<span title='" + data + "'>" + data + "</span>";
                 }
             }
+
         ],
         "aoColumnDefs": [{
                 'bSortable': false,
@@ -497,6 +532,9 @@ function DrawListRassemblant(idTable, idContainer, list) {
 
 function findDemande(designation) {
     var url = url_base + '/parametragedemandes';
+    if (designation !== undefined) {
+        url = url + '?designation=' + designation;
+    }
     var response = "";
     $.ajax({
         url: url,
@@ -512,3 +550,25 @@ function findDemande(designation) {
     return response;
 
 }
+
+function findTypeEtiquette() {
+    var url = url_base + '/typeetiquettes';
+
+    var response = "";
+    $.ajax({
+        url: url,
+        contentType: "text/html; charset=utf-8",
+        type: 'GET',
+        dataType: "json",
+        async: false,
+        success: function (data)
+        {
+            response = data;
+        }
+    });
+    return response;
+
+}
+
+
+

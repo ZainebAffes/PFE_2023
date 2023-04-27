@@ -89,6 +89,7 @@ $(function () {
     dropzones.addEventListener('drop', e => {
         e.preventDefault();
         if (draggedTag) {
+            draggedTag.classList.add('dragging');
             //input: le nom du champs
             const newInput = document.createElement('input');
             newInput.setAttribute('type', 'text');
@@ -96,7 +97,9 @@ $(function () {
             newInput.classList.add('dropped-nom');
             newInput.classList.add('nom');
             newInput.setAttribute('id', 'nom');
+
             draggedTag.appendChild(newInput);
+            draggedTag.classList.remove('tag');
             if (event.preventDefault)
                 event.preventDefault();
 
@@ -105,21 +108,21 @@ $(function () {
             const newInput2 = document.createElement('input');
             newInput2.classList.add('dropped-tag');
             const draggedType = draggedTag.getAttribute('data-type');
+
             if (draggedType === 'text') {
                 newInput2.setAttribute('type', 'text');
                 newInput2.setAttribute('id', 'text');
                 newInput2.setAttribute('placeholder', 'text');
                 newInput2.setAttribute('for', 'input');
-
             } else if (draggedType === 'date') {
                 newInput2.setAttribute('type', 'date');
-
-                newInput2.setAttribute('class', ' form-control datepicker input-xs');
-                newInput2.setAttribute('data-mask-clearifnotmatch', 'true');
-            } else if (draggedType === 'temps') {
+                 newInput2.setAttribute('id', 'date');
+            } else if (draggedType === 'time') {
                 newInput2.setAttribute('type', 'time');
+                newInput2.setAttribute('id', 'time');
             } else if (draggedType === 'nombre') {
                 newInput2.setAttribute('type', 'number');
+                newInput2.setAttribute('id', 'number');
                 newInput2.setAttribute('placeholder', 'Saisir une valeur numérique');
                 const minValue = 0;
                 const maxValue = 100;
@@ -131,31 +134,101 @@ $(function () {
                         newInput2.value = '';
                     }
                 });
+                //checkbox
+            } else if (draggedType === 'checkbox') {
 
+                const addOptionBtn = document.createElement('button');
+                addOptionBtn.innerHTML = 'Case à cocher';
+                addOptionBtn.classList.add('add-option-btn');
+                draggedTag.appendChild(addOptionBtn);
+
+                const optionsContainer = document.createElement('div');
+                optionsContainer.classList.add('options-container');
+                draggedTag.appendChild(optionsContainer);
+
+                let optionCount = 1;
+
+                addOptionBtn.addEventListener('click', () => {
+                    const newOption = document.createElement('div');
+                    newOption.classList.add('option');
+
+                    const newCheckbox = document.createElement('input');
+                    newCheckbox.setAttribute('type', 'checkbox');
+                    newCheckbox.setAttribute('id', 'checkbox');                   
+                   // newCheckbox.setAttribute('id', `option${optionCount}`);
+                   
+                    newOption.appendChild(newCheckbox);
+
+
+                    const newInputOption = document.createElement('input');
+                    newInputOption.setAttribute('type', 'text');
+                    newInputOption.setAttribute('placeholder', `Option ${optionCount}`);
+                    newInputOption.addEventListener('input', () => {
+
+                    });
+                    newOption.appendChild(newInputOption);
+
+                    optionsContainer.appendChild(newOption);
+
+                    optionCount++;
+                });
+                //Liste deroulante
+            } else if (draggedType === 'listeDeroulante') {
+
+                const optionsContainer = document.createElement('div');
+                optionsContainer.classList.add('options-container');
+                draggedTag.appendChild(optionsContainer);
+
+                const selectContainer = document.createElement('div');
+                selectContainer.classList.add('select-container');
+                optionsContainer.appendChild(selectContainer);
+
+                const select = document.createElement('select');
+                selectContainer.appendChild(select);
+
+                const addOptionBtnContainer = document.createElement('div');
+                addOptionBtnContainer.classList.add('add-option-btn-container');
+                optionsContainer.appendChild(addOptionBtnContainer);
+
+                const addOptionInput = document.createElement('input');
+                addOptionInput.setAttribute('type', 'text');
+                addOptionInput.setAttribute('placeholder', 'Ajouter une option');
+                addOptionInput.classList.add('option-input');
+                addOptionBtnContainer.appendChild(addOptionInput);
+
+                const addOptionBtn2 = document.createElement('button');
+                addOptionBtn2.innerHTML = '+';
+                addOptionBtn2.classList.add('add-option-btn2');
+                addOptionBtnContainer.appendChild(addOptionBtn2);
+
+                let optionCount = 1;
+
+                addOptionBtn2.addEventListener('click', () => {
+                    addOptionInput.focus();
+                });
+
+                addOptionBtn2.addEventListener('click', () => {
+                    const newOption = document.createElement('option');
+                    newOption.setAttribute('value', `option${optionCount}`);
+                     newOption.classList.add('optionL');
+                    newOption.innerHTML = addOptionInput.value;
+                    select.appendChild(newOption);
+                    addOptionInput.value = '';
+                    optionCount++;
+                    
+                });
             }
-            
-const requiredLabel22 = document.createElement('label1');
-requiredLabel22.innerHTML = 'Valeur par défaut';
-newInput2.setAttribute('id', 'valeur');
-requiredLabel22.setAttribute('for', 'input2');
-            //case a cocher
 
-            if (draggedType === 'caseCocher') {
-               const checkboxDiv = document.createElement('div');
-  checkboxDiv.classList.add('checkbox-group');
-  const addCheckboxButton = document.createElement('button');
-  addCheckboxButton.textContent = '+ Ajouter une option';
-  const checkboxInput = document.createElement('input');
-  checkboxInput.setAttribute('type', 'checkbox');
-  checkboxInput.setAttribute('id', 'checkbox');
-  const checkboxLabel = document.createElement('label');
-  checkboxLabel.setAttribute('for', 'checkbox');
-  checkboxLabel.textContent = 'Option 1';
-  checkboxDiv.appendChild(checkboxInput);
-  checkboxDiv.appendChild(checkboxLabel);
-  checkboxDiv.appendChild(addCheckboxButton);
-  newInput2.appendChild(checkboxDiv);
-}
+
+
+            const requiredLabel22 = document.createElement('label1');
+            requiredLabel22.innerHTML = 'Valeur par défaut';
+            newInput2.setAttribute('id', 'valeur');
+            requiredLabel22.setAttribute('for', 'input2');
+            draggedTag.appendChild(requiredLabel22);
+            draggedTag.appendChild(newInput2);
+
+
 
 
             //btn supprimer
@@ -166,7 +239,6 @@ requiredLabel22.setAttribute('for', 'input2');
             deleteButton.addEventListener('click', (e) => {
                 const parentTag = e.target.parentElement;
                 const grandParentTag = parentTag.parentElement;
-                //grandParentTag.removeChild(newInput);
                 grandParentTag.removeChild(parentTag);
             });
             // Add checkbox to make field required
@@ -179,7 +251,6 @@ requiredLabel22.setAttribute('for', 'input2');
             draggedTag.appendChild(requiredCheckbox);
             draggedTag.appendChild(requiredLabel);
 
-            // }
         }
 
     });

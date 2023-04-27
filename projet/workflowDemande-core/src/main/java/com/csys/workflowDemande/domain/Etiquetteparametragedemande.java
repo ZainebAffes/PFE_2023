@@ -51,7 +51,7 @@ public class Etiquetteparametragedemande implements Serializable {
     @Size(max = 10)
     @Column(name = "position")
     private String position;
-    @Size(max = 10)
+    @Size(max = 50)
     @Column(name = "defultValue")
     private String defultValue;
     @Size(max = 10)
@@ -83,9 +83,9 @@ public class Etiquetteparametragedemande implements Serializable {
     public Etiquetteparametragedemande() {
     }
 
-    public Etiquetteparametragedemande(Integer code) {
-        this.code = code;
-    }
+//    public Etiquetteparametragedemande(Integer code) {
+//        this.code = code;
+//    }
 
     public Integer getCode() {
         return code;
