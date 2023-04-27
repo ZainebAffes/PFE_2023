@@ -1,3 +1,4 @@
+
 function pad(num, size) {
     var s = num + "";
     while (s.length < size)
@@ -2411,6 +2412,7 @@ function exportationListWithNotification(url, id, titre) {
     xhr.setRequestHeader("x-auth-token", localStorage.getItem("x-auth-token"));
     xhr.setRequestHeader("Accept-Language", localStorage.getItem("langue"));
     xhr.responseType = 'blob';
+    
     xhr.onreadystatechange = function () {
         if (xhr.readyState === XMLHttpRequest.DONE) {
             if (xhr.status === 200 || xhr.status === 201 || xhr.status === 204) {

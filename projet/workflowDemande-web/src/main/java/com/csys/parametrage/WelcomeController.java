@@ -77,5 +77,10 @@ public class WelcomeController {
         model.put("username", SecurityContextHolder.getContext().getAuthentication().getName());
         return "/WEB-INF/body_page/TypeDemande.jsp";
     }
-
+   @RequestMapping("Demande")
+    public String Demande(Map<String, Object> model, Locale locale, Principal user) {
+        model.put("username", SecurityContextHolder.getContext().getAuthentication().getName());
+        return "/WEB-INF/body_page/Demande.jsp";
+    }
+    
 }

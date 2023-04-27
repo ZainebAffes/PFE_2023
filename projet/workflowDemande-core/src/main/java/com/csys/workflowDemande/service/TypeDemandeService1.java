@@ -20,13 +20,13 @@ import com.csys.workflowDemande.util.WhereClauseBuilder;
 
 @Service
 @Transactional
-public class TypeDemandeService {
+public class TypeDemandeService1 {
 
-    private final Logger log = LoggerFactory.getLogger(TypeDemandeService.class);
+    private final Logger log = LoggerFactory.getLogger(TypeDemandeService1.class);
 
     private final TypeDemandeRepository typedemandeRepository;
 
-    public TypeDemandeService(TypeDemandeRepository typedemandeRepository) {
+    public TypeDemandeService1(TypeDemandeRepository typedemandeRepository) {
         this.typedemandeRepository = typedemandeRepository;
     }
 

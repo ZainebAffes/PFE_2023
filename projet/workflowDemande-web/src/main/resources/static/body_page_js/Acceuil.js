@@ -95,8 +95,15 @@ function eventbtn() {
     $("#20").unbind("click");
     $("#20").bind("click", function (e) {
         ouvrirOnglet("Types des demandes", "TypeDemande", false, 'fils', '', 'TypeDemande');
+   
+   });
+   
+    $("#30").unbind("click");
+    $("#30").bind("click", function (e) {
+        ouvrirOnglet("Liste des demandes","Demande", false, 'fils', '', 'Demande');
     });
 }
+
 
 
 

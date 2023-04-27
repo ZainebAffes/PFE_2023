@@ -17,7 +17,7 @@ function ActionBoutton() {
             var codTypeDemande = $('.selectionnee').find('td').eq(0).text();
             majTypeDemande(codTypeDemande, "update");
 
-          
+
         }
     });
 
@@ -47,36 +47,68 @@ function ActionBoutton() {
     $('#btn_Imprimer').unbind('click');
     $('#btn_Imprimer').bind('click', function (e) {
         $('#search').val("");
-        var varActif;
-        var etatActif = $('.filtreActif').find('.fa-check-circle').parent().find('span').eq(0).text();
-        if (etatActif === "Actif") {
-            varActif = "true";
-        } else if (etatActif === "Non actif") {
-            varActif = "false";
-        } else if (etatActif === "Tous") {
-            varActif = "true,false";
-        }
-        var type = "PDF";
-        var url = `${url_base}/parametrage_typeDemande/print?actifs=${varActif}&user=` + window.localStorage.getItem('username') + `&type=` + type;
+        //var url = url_base + '/pdf/typeDemandes?designation=' + ($('#search').val());
+        var url = url_base + '/pdf/typeDemandes';
+        
         impressionListe(url);
     });
 
     $("#btn_Exporter").unbind("click");
     $("#btn_Exporter").bind("click", function (e) {
-
-        var varActif;
-        var etatActif = $('.filtreActif').find('.fa-check-circle').parent().find('span').eq(0).text();
-        if (etatActif === "Actif") {
-            varActif = "true";
-        } else if (etatActif === "Non actif") {
-            varActif = "false";
-        } else if (etatActif === "Tous") {
-            varActif = "true,false";
-        }
+//    const headers = [
+//    'Code',
+//    'désignation'
+//];
+//      console.log(window); 
+//      const workbook = new window.ExcelJS.Workbook();
+//
+//    const downloadAsExcel = () => {
+//    workbook.xlsx.writeBuffer().then((data) => {
+//    const blob = new Blob([data], {
+//      type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+//    });
+//    saveAs(blob, `typedemandes.xlsx`);
+//  
+//     });
+//};
+//fetch(url_base+"/typedemandes/filter", {
+//method: "GET"
+//}).then(async(response )=> {
+//    const json =  await response.json();
+//  
+//            console.log(json);
+//    const title = 'typedemandes';
+//
+//    const worksheet = workbook.addWorksheet(
+//    `typedemandes`
+//  );
+//
+//worksheet.addRow(headers);
+//json.forEach((typedemande)=>{
+//const newRow = worksheet.addRow([]);
+//newRow.getCell(1).value = typedemande.codeTypeDemande;
+//newRow.getCell(2).value = typedemande.description;});
+//            downloadAsExcel();
+//
+//worksheet.destroy();
+//
+//});
+//  
+        
+//        var varActif;
+//        var etatActif = $('.filtreActif').find('.fa-check-circle').parent().find('span').eq(0).text();
+//        if (etatActif === "Actif") {
+//            varActif = "true";
+//        } else if (etatActif === "Non actif") {
+//            varActif = "false";
+//        } else if (etatActif === "Tous") {
+//            varActif = "true,false";
+//        }
         var type = "Excel";
-        var url = `${url_base}/parametrage_typeDemande/print?actifs=${varActif}&user=` + window.localStorage.getItem('username') + `&type=` + type;
-        exporterList(url, "typeDemande");
+         var url = url_base + '/export/typeDemandes';
+        exporterList(url,"typeDemandes");
     });
+   
 
 }
 function majTypeDemande(codTypeDemande, action) {
@@ -342,7 +374,7 @@ function updateTypeDemande(object) {
 function deleteTypeDemande(codTypeDemande) {
     var response = "";
     $.ajax({
-         url: `${url_base}/typedemandes/${codTypeDemande}`,
+        url: `${url_base}/typedemandes/${codTypeDemande}`,
         contentType: "text/html; charset=utf-8",
         type: 'DELETE',
         async: false,
@@ -457,4 +489,47 @@ function findTypeDemande(desTypeDemande) {
     return response;
 
 }
+function findTypeDemandePDF(desTypeDemande) {
 
+    var url = url_base + '/pdf/typeDemandes';
+    if (desTypeDemande !== undefined) {
+        url = url + '?designation=' + desTypeDemande;
+    }
+    var response = "";
+    $.ajax({
+        url: url,
+        contentType: "text/html; charset=utf-8",
+        type: 'GET',
+        dataType: "json",
+        async: false,
+        success: function (data)
+        {
+            response = data;
+        }
+    });
+    return response;
+
+}
+
+
+function getTypeDemande(desTypeDemande) {
+
+    var url = url_base + '/export/typeDemandes';
+    if (desTypeDemande !== undefined) {
+        url = url + '?designation=' + desTypeDemande;
+    }
+    var response = "";
+    $.ajax({
+        url: url,
+        contentType: "text/html; charset=utf-8",
+        type: 'GET',
+        dataType: "json",
+        async: false,
+        success: function (data)
+        {
+            response = data;
+        }
+    });
+    return response;
+
+}

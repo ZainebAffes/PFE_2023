@@ -19,7 +19,7 @@ spring:
         livereload:
             enabled: true
     datasource: 
-        url: jdbc:sqlserver://ELLOUZE\SQL2019;database=GRH
+        url: jdbc:sqlserver://DESKTOP-84ICKL0\SQL2019;database=PFE
         username: SA
         password: 123    
     jpa:

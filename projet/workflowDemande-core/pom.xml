@@ -63,7 +63,7 @@
             <scope>runtime</scope>
             <optional>true</optional>
         </dependency>
-
+    
         <dependency>
             <groupId>com.microsoft.sqlserver</groupId>
             <artifactId>mssql-jdbc</artifactId>
@@ -184,6 +184,22 @@
             <artifactId>springdoc-openapi-ui</artifactId>
             <version>1.6.14</version>
         </dependency>
+        <dependency>
+            <groupId>com.github.librepdf</groupId>
+            <artifactId>openpdf</artifactId>
+            <version>1.3.26</version>
+        </dependency>
+        <dependency>
+    <groupId>org.apache.poi</groupId>
+    <artifactId>poi</artifactId>
+    <version>5.1.0</version>
+</dependency>
+<dependency>
+    <groupId>org.apache.poi</groupId>
+    <artifactId>poi-ooxml</artifactId>
+    <version>3.13</version>
+    <type>jar</type>
+</dependency>
     </dependencies>
 
     <dependencyManagement>
@@ -365,32 +381,32 @@
 
             <build>
                 <plugins>
-       <plugin>
-                    <groupId>com.mysema.maven</groupId>
-                    <artifactId>apt-maven-plugin</artifactId>
-                    <executions>
-                        <execution>
-                            <goals>
-                                <goal>process</goal>
-                            </goals>
-                            <configuration>
-                                <outputDirectory>target/generated-sources/java</outputDirectory>
-                                <processor>com.querydsl.apt.jpa.JPAAnnotationProcessor</processor>
-                                <options>
-                                    <querydsl.entityAccessors>true</querydsl.entityAccessors>
-                                </options>
-                            </configuration>
-                        </execution>
+                    <plugin>
+                        <groupId>com.mysema.maven</groupId>
+                        <artifactId>apt-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>process</goal>
+                                </goals>
+                                <configuration>
+                                    <outputDirectory>target/generated-sources/java</outputDirectory>
+                                    <processor>com.querydsl.apt.jpa.JPAAnnotationProcessor</processor>
+                                    <options>
+                                        <querydsl.entityAccessors>true</querydsl.entityAccessors>
+                                    </options>
+                                </configuration>
+                            </execution>
 
-                    </executions>
-                    <dependencies>
-                        <dependency>
-                            <groupId>com.querydsl</groupId>
-                            <artifactId>querydsl-apt</artifactId>
-                            <version>4.1.3</version>
-                        </dependency>
-                    </dependencies>
-                </plugin>
+                        </executions>
+                        <dependencies>
+                            <dependency>
+                                <groupId>com.querydsl</groupId>
+                                <artifactId>querydsl-apt</artifactId>
+                                <version>4.1.3</version>
+                            </dependency>
+                        </dependencies>
+                    </plugin>
                     <plugin>
                         <groupId>org.springframework.boot</groupId>
                         <artifactId>spring-boot-maven-plugin</artifactId>
