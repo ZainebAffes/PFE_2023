@@ -1,5 +1,6 @@
 package com.csys.workflowDemande.dto;
 
+import com.csys.workflowDemande.domain.Etiquetteparametragedemande;
 import com.csys.workflowDemande.domain.TypeDemande;
 import java.lang.Integer;
 import java.lang.String;
