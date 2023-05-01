@@ -42,11 +42,11 @@ public class Demande implements Serializable {
     private String etats;
     @JoinColumn(name = "id_employe", referencedColumnName = "idEmploye", updatable = false, insertable = false, nullable = true)
     @ManyToOne
-    private Empolye idEmploye;
+    private Employe idEmploye;
     @JoinColumn(name = "code_parametrage_demande", referencedColumnName = "code", updatable = false, insertable = false, nullable = true)
     @ManyToOne
     private ParametrageDemande codeParametrageDemande;
-    @JoinColumn(name = "etat", referencedColumnName = "id", updatable = false, insertable = false, nullable = true)
+    @JoinColumn(name = "etat", referencedColumnName = "code", updatable = false, insertable = false, nullable = true)
     @ManyToOne
     private Etat etat;
 
@@ -83,11 +83,11 @@ public class Demande implements Serializable {
 
    
 
-    public Empolye getIdEmploye() {
+    public Employe getIdEmploye() {
         return idEmploye;
     }
 
-    public void setIdEmploye(Empolye idEmploye) {
+    public void setIdEmploye(Employe idEmploye) {
         this.idEmploye = idEmploye;
     }
 

@@ -23,17 +23,9 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author win10
  */
 @Entity
-@Table(name = "Empolye")
-@XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = "Empolye.findAll", query = "SELECT e FROM Empolye e"),
-    @NamedQuery(name = "Empolye.findByIdEmploye", query = "SELECT e FROM Empolye e WHERE e.idEmploye = :idEmploye"),
-    @NamedQuery(name = "Empolye.findByNom", query = "SELECT e FROM Empolye e WHERE e.nom = :nom"),
-    @NamedQuery(name = "Empolye.findByPrenom", query = "SELECT e FROM Empolye e WHERE e.prenom = :prenom"),
-    @NamedQuery(name = "Empolye.findByMail", query = "SELECT e FROM Empolye e WHERE e.mail = :mail"),
-    @NamedQuery(name = "Empolye.findByMotdePasse", query = "SELECT e FROM Empolye e WHERE e.motdePasse = :motdePasse"),
-    @NamedQuery(name = "Empolye.findByNumTel", query = "SELECT e FROM Empolye e WHERE e.numTel = :numTel")})
-public class Empolye implements Serializable {
+@Table(name = "Employe")
+
+public class Employe implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -66,10 +58,10 @@ public class Empolye implements Serializable {
     @ManyToOne
     private TypeEmploye typeEmployé;
 
-    public Empolye() {
+    public Employe() {
     }
 
-    public Empolye(String idEmploye) {
+    public Employe(String idEmploye) {
         this.idEmploye = idEmploye;
     }
 
@@ -156,10 +148,10 @@ public class Empolye implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Empolye)) {
+        if (!(object instanceof Employe)) {
             return false;
         }
-        Empolye other = (Empolye) object;
+        Employe other = (Employe) object;
         if ((this.idEmploye == null && other.idEmploye != null) || (this.idEmploye != null && !this.idEmploye.equals(other.idEmploye))) {
             return false;
         }

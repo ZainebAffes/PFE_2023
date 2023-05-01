@@ -83,7 +83,7 @@ public class DemandeService {
         List<Demande> demandes = findAllDemandeByNums(nums);
         for (Demande demande : demandes) {
             
-            int x=Integer.parseInt(demande.getEtat().getId())+1;
+            int x=Integer.parseInt(demande.getEtat().getCode())+1;
             demande.setEtats(String.valueOf(x));
             demandeRepository.save(demande);
         }

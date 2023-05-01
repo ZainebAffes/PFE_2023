@@ -21,7 +21,11 @@ public class ParametrageDemandeDTO {
     private String descriptionTypeDemande;
     private List<EtiquetteparametragedemandeDTO> etiquetteparametragedemandeDTOs;
     private TypeDemande typeDemandes;
-
+ @Size(
+      min = 0,
+      max = 255
+  )
+  private String logo;
     private String codeTypeDemande;
     public Integer getCode() {
         return code;
@@ -71,6 +75,14 @@ public class ParametrageDemandeDTO {
 
     public void setEtiquetteparametragedemandeDTOs(List<EtiquetteparametragedemandeDTO> etiquetteparametragedemandeDTOs) {
         this.etiquetteparametragedemandeDTOs = etiquetteparametragedemandeDTOs;
+    }
+
+    public String getLogo() {
+        return logo;
+    }
+
+    public void setLogo(String logo) {
+        this.logo = logo;
     }
 
 }

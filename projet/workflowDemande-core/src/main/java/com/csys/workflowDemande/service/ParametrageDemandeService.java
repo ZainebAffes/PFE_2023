@@ -29,6 +29,7 @@ public class ParametrageDemandeService {
     public String save(ParametrageDemandeDTO parametragedemandeDTO) {
         log.debug("Request to save ParametrageDemande: {}", parametragedemandeDTO);
         ParametrageDemande parametragedemande = ParametrageDemandeFactory.parametragedemandeDTOToParametrageDemande(parametragedemandeDTO);
+     //   parametragedemande.setLogo("fas fa-cogs");
         parametragedemandeRepository.save(parametragedemande);
         return "true";
     }

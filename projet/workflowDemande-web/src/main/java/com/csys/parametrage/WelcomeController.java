@@ -72,15 +72,22 @@ public class WelcomeController {
     public String reconnect(Map<String, Object> model, Locale locale) {
         return "/WEB-INF/master_page/reconnect.jsp";
     }
+
     @RequestMapping("TypeDemande")
     public String TypeDemande(Map<String, Object> model, Locale locale, Principal user) {
         model.put("username", SecurityContextHolder.getContext().getAuthentication().getName());
         return "/WEB-INF/body_page/TypeDemande.jsp";
     }
-   @RequestMapping("Demande")
+
+    @RequestMapping("Demande")
     public String Demande(Map<String, Object> model, Locale locale, Principal user) {
         model.put("username", SecurityContextHolder.getContext().getAuthentication().getName());
         return "/WEB-INF/body_page/Demande.jsp";
     }
-    
+
+    @RequestMapping("NouvelleDemande")
+    public String NouvelleDemande(Map<String, Object> model, Locale locale, Principal user) {
+        model.put("username", SecurityContextHolder.getContext().getAuthentication().getName());
+        return "/WEB-INF/body_page/NouvelleDemande.jsp";
+    }
 }

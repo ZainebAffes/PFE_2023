@@ -11,6 +11,7 @@ public class ParametrageDemandeFactory {
     public static ParametrageDemandeDTO parametragedemandeToParametrageDemandeDTO(ParametrageDemande parametragedemande) {
         ParametrageDemandeDTO parametragedemandeDTO = new ParametrageDemandeDTO();
         parametragedemandeDTO.setCode(parametragedemande.getCode());
+        parametragedemandeDTO.setLogo(parametragedemande.getLogo());
         parametragedemandeDTO.setDesignation(parametragedemande.getDesignation());
         parametragedemandeDTO.setEtiquetteparametragedemandeDTOs(EtiquetteparametragedemandeFactory.etiquetteparametragedemandeToEtiquetteparametragedemandeDTOs(parametragedemande.getEtiquetteparametragedemandes()));
         parametragedemandeDTO.setCodeTypeDemande(parametragedemande.getCodeTypeDemande());

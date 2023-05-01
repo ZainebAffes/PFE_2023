@@ -43,7 +43,7 @@ public class GroupeEmploye implements Serializable {
     @Column(name = "designation")
     private String designation;
     @OneToMany(mappedBy = "groupeEmploye")
-    private List<Empolye> empolyeList;
+    private List<Employe> empolyeList;
 
     public GroupeEmploye() {
     }
@@ -69,11 +69,11 @@ public class GroupeEmploye implements Serializable {
     }
 
     @XmlTransient
-    public List<Empolye> getEmpolyeList() {
+    public List<Employe> getEmpolyeList() {
         return empolyeList;
     }
 
-    public void setEmpolyeList(List<Empolye> empolyeList) {
+    public void setEmpolyeList(List<Employe> empolyeList) {
         this.empolyeList = empolyeList;
     }
 

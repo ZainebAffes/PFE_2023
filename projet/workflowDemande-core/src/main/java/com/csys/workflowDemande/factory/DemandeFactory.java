@@ -23,7 +23,7 @@ public class DemandeFactory {
         }
         if (demande.getEtat() != null) {
             demandeDTO.setLogoEtat(demande.getEtat().getLogo());
-            demandeDTO.setIdEtat(demande.getEtat().getId());
+            demandeDTO.setIdEtat(demande.getEtat().getCode());
         }
        // demandeDTO.setCodeParametrageDemande(demande.getCodeParametrageDemande());
         return demandeDTO;

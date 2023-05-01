@@ -31,8 +31,8 @@ public class Etat implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 50)
-    @Column(name = "id")
-    private String id;
+    @Column(name = "code")
+    private String code;
     @Size(max = 50)
     @Column(name = "designation")
     private String designation;
@@ -45,13 +45,15 @@ public class Etat implements Serializable {
     public Etat() {
     }
 
-    public String getId() {
-        return id;
+    public String getCode() {
+        return code;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setCode(String code) {
+        this.code = code;
     }
+
+    
 
     public String getDesignation() {
         return designation;

@@ -51,7 +51,9 @@ public class ParametrageDemande implements Serializable {
     @JoinColumn(name = "code_TypeDemande", referencedColumnName = "codeTypeDemande", updatable = false, insertable = false, nullable = true)
     @ManyToOne
     private TypeDemande typeDemande;
-
+    @Size(max = 255)
+    @Column(name = "logo")
+    private String logo;
     public ParametrageDemande() {
     }
 
@@ -95,6 +97,14 @@ public class ParametrageDemande implements Serializable {
 
     public void setTypeDemande(TypeDemande typeDemande) {
         this.typeDemande = typeDemande;
+    }
+
+    public String getLogo() {
+        return logo;
+    }
+
+    public void setLogo(String logo) {
+        this.logo = logo;
     }
 
     @Override

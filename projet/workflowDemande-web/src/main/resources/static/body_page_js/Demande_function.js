@@ -1,7 +1,53 @@
 function drawBtnLesDemandes() {
     DessinerButton('30', '#listetid_Demandes');
     ActionBoutton();
+
 }
+
+function drawBtn() {
+    // Récupérer la div pour les boutons par ID
+    const btnContainer = document.getElementById("btnContainer");
+    // Envoyer une requête AJAX à l'API pour récupérer les données de la base de données
+    const xhr = new XMLHttpRequest();
+    xhr.open("GET", "http://localhost:9011/workflowDemande-core/api/parametragedemandes");
+    xhr.setRequestHeader('Content-Type', 'application/json'); // Ajouter une en-tête pour spécifier le format de la réponse
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            // Convertir la réponse JSON en objet JavaScript
+            const data = JSON.parse(xhr.responseText);
+
+            // Parcourir les données et créer des boutons pour la div
+            for (let i = 0; i < data.length; i++) {
+                const btn = document.createElement("button");
+
+                btn.innerHTML = `<div class="menuS"> <i class="fa ${data[i].logo} icon"></i>`+` <p class="designation">${data[i].designation}</p></div>`;
+
+                btn.value = data[i].code;
+                btn.setAttribute("id", "btnContainer");
+                btn.setAttribute("class", "btnSousMenu");
+                btnContainer.appendChild(btn);
+            }
+             AfficheModalListDemandes();
+        }
+    };
+    xhr.send();
+}
+function  AfficheModalListDemandes() {
+//     $('#modalListDemande').modal('show');    
+//     $("#btnMAJDemandes").show();
+//    sessionStorage.setItem("Demande", 'ajout');
+//    
+    //  model.put("username", SecurityContextHolder.getContext().getAuthentication().getName());
+    $("#btnContainer").unbind("click");
+    $("#btnContainer").bind("click", function (e) {
+      ouvrirOnglet("Nouvelle Demande", "NouvelleDemande", false, 'fils', '', 'NouvelleDemande');
+    });
+
+}
+
+
+
+
 function ActionBoutton() {
     $('#btn_Ajouter').unbind('click');
     $('#btn_Ajouter').bind('click', function (e) {
@@ -585,4 +631,3 @@ function getDemande(designation) {
     return response;
 
 }
-

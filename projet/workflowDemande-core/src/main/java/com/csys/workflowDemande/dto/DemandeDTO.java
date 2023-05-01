@@ -1,6 +1,6 @@
 package com.csys.workflowDemande.dto;
 
-import com.csys.workflowDemande.domain.Empolye;
+import com.csys.workflowDemande.domain.Employe;
 import com.csys.workflowDemande.domain.ParametrageDemande;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -36,7 +36,7 @@ public class DemandeDTO {
     )
     private String typeDemande;
     private String nomEmploye;
-    private Empolye idEmploye;
+    private Employe idEmploye;
     private ParametrageDemande codeParametrageDemande;
     private String desParametrageDemande;
     private String logoEtat;
@@ -74,11 +74,11 @@ public class DemandeDTO {
         this.typeDemande = typeDemande;
     }
 
-    public Empolye getIdEmploye() {
+    public Employe getIdEmploye() {
         return idEmploye;
     }
 
-    public void setIdEmploye(Empolye idEmploye) {
+    public void setIdEmploye(Employe idEmploye) {
         this.idEmploye = idEmploye;
     }
 

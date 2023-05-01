@@ -1,9 +1,18 @@
 $(function () {
-    drawBtnLesDemandes();
-     DrawTableLesDemandes();
+     drawBtn();
+      $('#btnContainer').bind('click', function () {
+           window.parent.$.loader.open();
+           setTimeout(function () {
+       //     AfficheModalListDemandes();
+            window.parent.$.loader.close();
+        }, 100);
+        
+        });  
+   
+  
     $('#rafresh').unbind('click');
-    $('#rafresh').bind('click', function (e) {
-        showLoadingNotification();
+   $('#rafresh').bind('click', function (e) {
+       showLoadingNotification();
         setTimeout(function () {
              DrawTableLesDemandes();
             hideLoadingNotification();
@@ -17,7 +26,7 @@ $(function () {
             window.parent.$.loader.close();
         }, 100);
     });
-
+   
     $('#btnFermer').unbind('click');
     $('#btnFermer').bind('click', function (e) {
         window.parent.$('ul.ui-tabs-nav .active .closeRad').click();
@@ -32,5 +41,5 @@ $(function () {
             hideLoadingNotification();
         }, 50);
     });
+    
       });
-//zaineb
