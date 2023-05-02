@@ -1,13 +1,21 @@
 package com.csys.workflowDemande.web.rest;
 
 import com.csys.workflowDemande.dto.ParametrageDemandeDTO;
+import com.csys.workflowDemande.dto.TypeDemandeDTO;
 import com.csys.workflowDemande.service.ParametrageDemandeService;
+import com.csys.workflowDemande.web.rest.util.PDFGeneratorparametrage;
+import com.lowagie.text.DocumentException;
+import java.io.IOException;
 import java.lang.Integer;
 import java.lang.String;
 import java.lang.Void;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,7 +63,9 @@ public class ParametrageDemandeResource {
         String result = parametragedemandeService.update(parametragedemandeDTO);
         return ResponseEntity.ok().body(result);
     }
-
+    
+ 
+    
     @GetMapping("/parametragedemandes/{id}")
     public ResponseEntity<ParametrageDemandeDTO> getParametrageDemande(@PathVariable Integer id) {
         log.debug("Request to get ParametrageDemande: {}", id);
@@ -75,4 +85,21 @@ public class ParametrageDemandeResource {
         parametragedemandeService.delete(id);
         return ResponseEntity.ok().build();
     }
+     @GetMapping("/pdf/parametragedemandes")
+	public void generatePdf(HttpServletResponse response,@RequestParam(required = false) String designation) throws DocumentException, IOException {
+		
+		response.setContentType("application/pdf");
+		       DateFormat dateFormat = new SimpleDateFormat("YYYY-MM-DD:HH:MM:SS");
+		String currentDateTime = dateFormat.format(new Date() );
+		String headerkey = "Content-Disposition";
+		String headervalue = "attachment; filename=pdf_" + currentDateTime + ".pdf";
+		response.setHeader(headerkey, headervalue);
+		
+		List<ParametrageDemandeDTO> parametrageDemandeList = parametragedemandeService.findAll(designation);
+		
+		       PDFGeneratorparametrage generator = new PDFGeneratorparametrage();
+		generator.setParametrageDemandeList(parametrageDemandeList);
+		generator.generate(response);
+                
+}
 }

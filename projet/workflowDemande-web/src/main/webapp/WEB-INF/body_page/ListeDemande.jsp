@@ -19,7 +19,14 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <jsp:include page="../body_page/css_declare.jsp"/> 
-        <title>Demandes</title>
+        <title>ParametrageDemandes</title>
+        
+       <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/amcharts/3.21.15/plugins/export/libs/FileSaver.js/FileSaver.min.js"></script>
+             <script type="text/javascript" src="https://unpkg.com/exceljs@4.3.0/dist/exceljs.min.js"></script>
+              <script type="text/javascript" >
+                  console.log('loadet');
+              </script>
+
         <style>
 
             tbody > tr td{

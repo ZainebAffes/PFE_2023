@@ -2,7 +2,8 @@ package com.csys.workflowDemande.web.rest.util;
 
 
 import com.csys.workflowDemande.domain.TypeDemande;
-import com.csys.workflowDemande.dto.TypeDemandeDTO;
+import com.csys.workflowDemande.dto.ParametrageDemandeDTO;
+import com.csys.workflowDemande.dto.ParametrageDemandeDTO;
 import java.io.IOException;
 import java.util.List;
 
@@ -20,10 +21,10 @@ import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfWriter;
 
-public class PDFGenerator {
+public class PDFGeneratorparametrage {
 
 	// List to hold all TypeDemandes
-	private List<TypeDemandeDTO> typeDemandeList;
+	private List<ParametrageDemandeDTO> parametrageDemandeList;
 
 	public void generate(HttpServletResponse response) throws DocumentException, IOException {
 
@@ -51,11 +52,11 @@ public class PDFGenerator {
 		document.add(paragraph);
 
 		// Creating a table of 3 columns
-		PdfPTable table = new PdfPTable(2);
+		PdfPTable table = new PdfPTable(3);
 
 		// Setting width of table, its columns and spacing
 		table.setWidthPercentage(100f);
-		table.setWidths(new int[] { 3, 3});
+		table.setWidths(new int[] { 3, 3,3});
 		table.setSpacingBefore(5);
 
 		// Create Table Cells for table header
@@ -75,13 +76,16 @@ public class PDFGenerator {
 		cell.setPhrase(new Phrase("Code", font));
 		table.addCell(cell);
 		cell.setPhrase(new Phrase("Désignation", font));
-		table.addCell(cell);	
-		// Iterating over the list of typeDemandes
-		for (TypeDemandeDTO typeDemande : typeDemandeList) {
-			// Adding typeDemande id
-			table.addCell(String.valueOf(typeDemande.getCodeTypeDemande()));
-			// Adding typeDemande name
-			table.addCell(typeDemande.getDescription());
+		table.addCell(cell);
+                cell.setPhrase(new Phrase("Type Demande", font));
+		table.addCell(cell);
+		// Iterating over the list of parametrageDemandes
+		for (ParametrageDemandeDTO parametrageDemande : parametrageDemandeList) {
+			// Adding parametrageDemande id
+			table.addCell(String.valueOf(parametrageDemande.getCode()));
+			// Adding parametrageDemande name
+			table.addCell(parametrageDemande.getDesignation());
+                        table.addCell(parametrageDemande.getDescriptionTypeDemande());
 		}
 		// Adding the created table to document
 		document.add(table);
@@ -91,14 +95,13 @@ public class PDFGenerator {
 
 	}
 
-    public List<TypeDemandeDTO> getTypeDemandeList() {
-        return typeDemandeList;
+    public List<ParametrageDemandeDTO> getParametrageDemandeList() {
+        return parametrageDemandeList;
     }
 
-    public void setTypeDemandeList(List<TypeDemandeDTO> typeDemandeList) {
-        this.typeDemandeList = typeDemandeList;
+    public void setParametrageDemandeList(List<ParametrageDemandeDTO> parametrageDemandeList) {
+        this.parametrageDemandeList = parametrageDemandeList;
     }
 
    
-        
 }

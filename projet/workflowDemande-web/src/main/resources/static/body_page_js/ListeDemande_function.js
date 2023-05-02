@@ -43,19 +43,64 @@ function ActionBoutton() {
         }
     });
 
-    $('#btn_Imprimer').unbind('click');
+   $('#btn_Imprimer').unbind('click');
     $('#btn_Imprimer').bind('click', function (e) {
-        $('#search').val("");
-        var type = "PDF";
-        var url = `${url_base}/parametragedemandes/print?user=` + window.localStorage.getItem('username') + `&type=` + type;
+        var url = url_base + '/pdf/parametragedemandes';
+        if ($('#search').val() !== "undefined") {
+            url = url + '?designation=' + $('#search').val();
+        }
         impressionListe(url);
     });
 
     $("#btn_Exporter").unbind("click");
     $("#btn_Exporter").bind("click", function (e) {
-        var type = "Excel";
-        var url = `${url_base}/parametragedemandes/print?actifs=${varActif}&user=` + window.localStorage.getItem('username') + `&type=` + type;
-        exporterList(url, "demande");
+        const headers = [
+            'Code',
+            'Désignation',
+            '	Type Demande '
+            
+        ];
+        console.log(window);
+        const workbook = new window.ExcelJS.Workbook();
+
+        const downloadAsExcel = () => {
+            workbook.xlsx.writeBuffer().then((data) => {
+                const blob = new Blob([data], {
+                    type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                });
+                saveAs(blob, `parametragedemandes.xlsx`);
+
+            });
+        };
+        var url = url_base + '/parametragedemandes/';
+        if ($('#search').val() !== "undefined") {
+            url = url + '?designation=' + $('#search').val();
+        }
+        fetch(url, {
+            method: "GET"
+        }).then(async(response) => {
+            const json = await response.json();
+
+            console.log(json);
+            const title = 'parametragedemandes';
+
+            const worksheet = workbook.addWorksheet(
+                    `parametragedemandes`
+                    );
+
+            worksheet.addRow(headers);
+            json.forEach((parametragedemandes) => {
+                const newRow = worksheet.addRow([]);
+                newRow.getCell(1).value = parametragedemandes.code;
+                newRow.getCell(2).value = parametragedemandes.designation;
+                newRow.getCell(3).value = parametragedemandes.descriptionTypeDemande;
+            });
+            downloadAsExcel();
+
+            worksheet.destroy();
+
+        });
+
     });
 
 }

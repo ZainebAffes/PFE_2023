@@ -1,5 +1,6 @@
 package com.csys.workflowDemande.service;
 
+import com.csys.workflowDemande.domain.QTypeDemande;
 import com.csys.workflowDemande.domain.TypeDemande;
 import com.csys.workflowDemande.dto.TypeDemandeDTO;
 import com.csys.workflowDemande.factory.TypeDemandeFactory;
@@ -70,39 +71,26 @@ public class TypeDemandeService {
     @Transactional(
             readOnly = true
     )
-    /*public TypeDemande findTypeDemande(String id) {
-    log.debug("Request to get TypeDemande: {}",id);
-     Optional<TypeDemande> typedemande= typedemandeRepository.findById(id);
-    Preconditions.checkBusinessLogique(typedemande != null, "TypeDemande does not exist");
-    return typedemande.get();
-  }
-
-  @Transactional(
-      readOnly = true
-  )*/
     public List<TypeDemandeDTO> findAll(String designation) {
         log.debug("Request to get AllfindAll TypeDemandes");
         List<TypeDemande> result;
-        if (designation != null) {
-            result = typedemandeRepository.findByDescription(designation);
-        } else {
-            result = typedemandeRepository.findAll();
-        }
+        result = findAllTypeDemandes(designation);
         return TypeDemandeFactory.typedemandeToTypeDemandeDTOs(result);
     }
-//private List<TypeDemande> findAllTypeDemandes( String designation) {
-//        QTypeDemande qTypeDemande = QTypeDemande.motifAnnulationAdmission;
-//        WhereClauseBuilder builder = new WhereClauseBuilder()
-//                .optionalAnd(designation, () -> qTypeDemande.designation.like("%" + designation + "%"));
-//        List<TypeDemande> result = typedemandeRepository.findAll(builder);
-//        return result;
-//    }
+
+    private List<TypeDemande> findAllTypeDemandes(String designation) {
+        QTypeDemande qTypeDemande = QTypeDemande.typeDemande;
+        WhereClauseBuilder builder = new WhereClauseBuilder()
+                .optionalAnd(designation, () -> qTypeDemande.description.like("%" + designation + "%"));
+        List<TypeDemande> result = (List<TypeDemande>) typedemandeRepository.findAll(builder);
+        return result;
+    }
 
     public void delete(String id) {
         log.debug("Request to delete type-demande devis: {}", id);
         TypeDemande inBase = findTypeDemande(id);
-        
-          Preconditions.checkBusinessLogique(inBase != null, "type-demande.NotFound");
+
+        Preconditions.checkBusinessLogique(inBase != null, "type-demande.NotFound");
 
         Preconditions.checkBusinessLogique(inBase != null, "type-demande.NotFound");
 
@@ -116,7 +104,5 @@ public class TypeDemandeService {
     public List<TypeDemandeDTO> getAll() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
-    
 
- }
-
+}

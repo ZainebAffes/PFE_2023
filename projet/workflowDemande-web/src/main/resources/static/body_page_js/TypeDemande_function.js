@@ -46,70 +46,60 @@ function ActionBoutton() {
 
     $('#btn_Imprimer').unbind('click');
     $('#btn_Imprimer').bind('click', function (e) {
-        $('#search').val("");
-        //var url = url_base + '/pdf/typeDemandes?designation=' + ($('#search').val());
         var url = url_base + '/pdf/typeDemandes';
-        
+        if ($('#search').val() !== "undefined") {
+            url = url + '?designation=' + $('#search').val();
+        }
         impressionListe(url);
     });
 
     $("#btn_Exporter").unbind("click");
     $("#btn_Exporter").bind("click", function (e) {
-//    const headers = [
-//    'Code',
-//    'désignation'
-//];
-//      console.log(window); 
-//      const workbook = new window.ExcelJS.Workbook();
-//
-//    const downloadAsExcel = () => {
-//    workbook.xlsx.writeBuffer().then((data) => {
-//    const blob = new Blob([data], {
-//      type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-//    });
-//    saveAs(blob, `typedemandes.xlsx`);
-//  
-//     });
-//};
-//fetch(url_base+"/typedemandes/filter", {
-//method: "GET"
-//}).then(async(response )=> {
-//    const json =  await response.json();
-//  
-//            console.log(json);
-//    const title = 'typedemandes';
-//
-//    const worksheet = workbook.addWorksheet(
-//    `typedemandes`
-//  );
-//
-//worksheet.addRow(headers);
-//json.forEach((typedemande)=>{
-//const newRow = worksheet.addRow([]);
-//newRow.getCell(1).value = typedemande.codeTypeDemande;
-//newRow.getCell(2).value = typedemande.description;});
-//            downloadAsExcel();
-//
-//worksheet.destroy();
-//
-//});
-//  
-        
-//        var varActif;
-//        var etatActif = $('.filtreActif').find('.fa-check-circle').parent().find('span').eq(0).text();
-//        if (etatActif === "Actif") {
-//            varActif = "true";
-//        } else if (etatActif === "Non actif") {
-//            varActif = "false";
-//        } else if (etatActif === "Tous") {
-//            varActif = "true,false";
-//        }
-        var type = "Excel";
-         var url = url_base + '/export/typeDemandes';
-        exporterList(url,"typeDemandes");
-    });
-   
+        const headers = [
+            'Code',
+            'désignation'
+        ];
+        console.log(window);
+        const workbook = new window.ExcelJS.Workbook();
 
+        const downloadAsExcel = () => {
+            workbook.xlsx.writeBuffer().then((data) => {
+                const blob = new Blob([data], {
+                    type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                });
+                saveAs(blob, `typedemandes.xlsx`);
+
+            });
+        };
+        var url = url_base + '/typedemandes/filter';
+        if ($('#search').val() !== "undefined") {
+            url = url + '?designation=' + $('#search').val();
+        }
+        fetch(url, {
+            method: "GET"
+        }).then(async(response) => {
+            const json = await response.json();
+
+            console.log(json);
+            const title = 'typedemandes';
+
+            const worksheet = workbook.addWorksheet(
+                    `typedemandes`
+                    );
+
+            worksheet.addRow(headers);
+            json.forEach((typedemande) => {
+                const newRow = worksheet.addRow([]);
+                newRow.getCell(1).value = typedemande.codeTypeDemande;
+                newRow.getCell(2).value = typedemande.description;
+            });
+            downloadAsExcel();
+
+            worksheet.destroy();
+
+        });
+
+    });
 }
 function majTypeDemande(codTypeDemande, action) {
     var TypeDemande = findTypeDemandeById(codTypeDemande);
@@ -269,7 +259,7 @@ function submitMAJTypeDemande() {
         } else {
             var payload = payloadTypeDemande();
             if (sessionStorage.getItem("TypeDemande") === 'ajout') {
-                var Type = findTypeDemande(undefined, $('#desTypeDemande').val());
+                var Type = findTypeDemande($('#desTypeDemande').val());
                 if (Type.length > 0) {
                     DrawListRassemblant('tableListRassemblant', '_grid_ListRassemblant', Type);
                     $('#add_msg').html("<h6>des Types de demande(s) ressemblante(s): </h6>");

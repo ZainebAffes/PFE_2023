@@ -21,11 +21,11 @@
         <jsp:include page="../body_page/css_declare.jsp"/>  
         
        <title>TypeDemandes</title>
-<!--       <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/amcharts/3.21.15/plugins/export/libs/FileSaver.js/FileSaver.min.js"></script>
+       <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/amcharts/3.21.15/plugins/export/libs/FileSaver.js/FileSaver.min.js"></script>
              <script type="text/javascript" src="https://unpkg.com/exceljs@4.3.0/dist/exceljs.min.js"></script>
               <script type="text/javascript" >
                   console.log('loadet');
-              </script>-->
+              </script>
 
         <style>
 
@@ -284,7 +284,20 @@
                                     </div>
                                 </label>
                             </div>
-                            
+                            <div class="col-md-3 " style="">
+                                <label class="btn btn-default active filtreActif" style="">
+                                    <i class="fa fa-search" style="/*font-size: 1.5em;*/"></i>
+                                    <span>Tous</span>
+                                </label>
+                                <label class="btn btn-success filtreActif" style="font-size:12px;">
+                                    <i class="fa fa-check-circle" style="/*font-size: 1.5em;*/"></i>
+                                    <span>Actif</span>
+                                </label>
+                                <label class="btn btn-info filtreActif" style="font-size:12px;">
+                                    <i class="fa fa-search" style="/*font-size: 1.5em;*/"></i>
+                                    <span>Non actif</span>
+                                </label>
+                            </div>
                             <div class="widget-body screen col-md-12">
 
                                 <div class="row">
