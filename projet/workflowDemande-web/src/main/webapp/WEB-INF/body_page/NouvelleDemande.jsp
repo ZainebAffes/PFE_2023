@@ -256,6 +256,8 @@
                 padding: 5px;
                 font-size: 12px;
             }
+            
+            
         </style>
     </head>
     <body id="my_body" class="styleCsys">
@@ -324,7 +326,7 @@
             </div>
         </div>
         <div class="modal fade screen" id="modalAdd" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-            <div class="modal-dialog centre_screen" style="width: 60%;">
+            <div class="modal-dialog centre_screen" style="width: 90%;">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h4 style="font-size: 20px;color: #3276b1;" class="modal-title">
@@ -333,21 +335,14 @@
                         </h4>
                     </div>      
                     <!-- widget div-->
-                    <div id="popup_div" class="modal-body">
+                    <div id="popup_div" class="modal-body" style="padding:5px;border-style: solid;border-width: 1px;margin: 5px">
                         <div class="row">
                             <div class="widget-body screen col-md-12">
-                                <fieldset >
-                                    <div class="form-group col-md-6" >
-                                            <div class="col-md-4 control-drag">Type de demande <span class="champOblig">*</span></div>
-                                            <div class="col-md-6 input-group">
-                                                <select id="codeTypeDemande"class=" form-control datepicker input-xs"  data-mask-clearifnotmatch="true">
-
-                                                </select>
-                                            </div>
-                                        </div>
+                             
+                                    <div id="parametrage-demande">
                                        
                                     </div>
-                                </fieldset>
+                               
                             </div>
                         </div>
 
@@ -378,7 +373,7 @@
                         </h4>
                     </div>
 
-                    <div id="parametragebody" class="modal-body" style="  overflow-x: auto;overflow-y: auto;max-height: 200px;">
+                    <div id="Demandebody" class="modal-body" style="  overflow-x: auto;overflow-y: auto;max-height: 100px;">
                     </div>
 
                     <div class="modal-footer" >

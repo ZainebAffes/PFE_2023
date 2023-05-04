@@ -30,8 +30,7 @@ import javax.validation.constraints.Size;
 @Table(name = "parametrage_demande")
 public class ParametrageDemande implements Serializable {
 
-     @GeneratedValue(strategy = GenerationType.IDENTITY)
-     private static final long serialVersionUID = 1L;
+    
     @Id
     @Basic(optional = false)
     @NotNull
@@ -54,10 +53,14 @@ public class ParametrageDemande implements Serializable {
     @Size(max = 255)
     @Column(name = "logo")
     private String logo;
+    @JoinColumn(name = "etat", referencedColumnName = "code", updatable = false, insertable = false, nullable = true)
+    @ManyToOne
+    private Etat etat;
+    @Column(name = "etat")
+    private String etats;
+
     public ParametrageDemande() {
     }
-
-   
 
     public Integer getCode() {
         return code;
@@ -66,7 +69,7 @@ public class ParametrageDemande implements Serializable {
     public void setCode(Integer code) {
         this.code = code;
     }
-
+   
     public String getDesignation() {
         return designation;
     }
@@ -105,6 +108,22 @@ public class ParametrageDemande implements Serializable {
 
     public void setLogo(String logo) {
         this.logo = logo;
+    }
+
+    public Etat getEtat() {
+        return etat;
+    }
+
+    public void setEtat(Etat etat) {
+        this.etat = etat;
+    }
+
+    public String getEtats() {
+        return etats;
+    }
+
+    public void setEtats(String etats) {
+        this.etats = etats;
     }
 
     @Override

@@ -1,16 +1,13 @@
 package com.csys.workflowDemande.dto;
 
-import com.csys.workflowDemande.domain.Etiquetteparametragedemande;
 import com.csys.workflowDemande.domain.TypeDemande;
 import java.lang.Integer;
 import java.lang.String;
 import java.util.List;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 public class ParametrageDemandeDTO {
 
-    @NotNull
     private Integer code;
 
     @Size(
@@ -21,12 +18,16 @@ public class ParametrageDemandeDTO {
     private String descriptionTypeDemande;
     private List<EtiquetteparametragedemandeDTO> etiquetteparametragedemandeDTOs;
     private TypeDemande typeDemandes;
- @Size(
-      min = 0,
-      max = 255
-  )
-  private String logo;
+    @Size(
+            min = 0,
+            max = 255
+    )
+    private String logo;
     private String codeTypeDemande;
+    private String logoEtat;
+    private String idEtat;
+    private String etats;
+
     public Integer getCode() {
         return code;
     }
@@ -59,8 +60,6 @@ public class ParametrageDemandeDTO {
         this.codeTypeDemande = codeTypeDemande;
     }
 
-  
-
     public String getDescriptionTypeDemande() {
         return descriptionTypeDemande;
     }
@@ -83,6 +82,30 @@ public class ParametrageDemandeDTO {
 
     public void setLogo(String logo) {
         this.logo = logo;
+    }
+
+    public String getLogoEtat() {
+        return logoEtat;
+    }
+
+    public void setLogoEtat(String logoEtat) {
+        this.logoEtat = logoEtat;
+    }
+
+    public String getIdEtat() {
+        return idEtat;
+    }
+
+    public void setIdEtat(String idEtat) {
+        this.idEtat = idEtat;
+    }
+
+    public String getEtats() {
+        return etats;
+    }
+
+    public void setEtats(String etats) {
+        this.etats = etats;
     }
 
 }

@@ -34,7 +34,6 @@ public class Etiquetteparametragedemande implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Basic(optional = false)
-    @NotNull
     @Column(name = "code")
     private Integer code;
     @Size(max = 50)

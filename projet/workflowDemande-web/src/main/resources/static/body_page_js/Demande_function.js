@@ -86,27 +86,58 @@ function ActionBoutton() {
         impressionListe(url);
     });
 
-    $("#btn_Exporter").unbind("click");
+   $("#btn_Exporter").unbind("click");
     $("#btn_Exporter").bind("click", function (e) {
-        var type = "Excel";
-        var url = `${url_base}/demandes/print?actifs=${varActif}&user=` + window.localStorage.getItem('username') + `&type=` + type;
-        exporterList(url, "demandes");
-    });
-    $('#btn_Modifier').unbind('click');
-    $('#btn_Modifier').bind('click', function (e) {
-        var liste = [];
-        $("#tableDemandes > tbody > tr").each(function () {
-            if ($(this).find(".checkBoxClass").is(":checked")) {
-                liste.push($(this).find('td').eq(0).text());
-            }
-        });
-        if (liste.length === 0)
-        {
-            showNotification('Avertissement', "Veuillez choisir une convention", 'error', 3000);
-        } else
-        {
-            validation(liste);
+        const headers = [
+            'Numéro demande',
+            'Désignation du demande',
+             '	Employé',
+             'Type de demande',
+             	'Date du demande'
+        ];
+        console.log(window);
+        const workbook = new window.ExcelJS.Workbook();
+
+        const downloadAsExcel = () => {
+            workbook.xlsx.writeBuffer().then((data) => {
+                const blob = new Blob([data], {
+                    type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                });
+                saveAs(blob, `demandes.xlsx`);
+
+            });
+        };
+        var url = url_base + '/typedemandes/filter';
+        if ($('#search').val() !== "undefined") {
+            url = url + '?designation=' + $('#search').val();
         }
+        fetch(url, {
+            method: "GET"
+        }).then(async(response) => {
+            const json = await response.json();
+
+            console.log(json);
+            const title = 'demandes';
+
+            const worksheet = workbook.addWorksheet(
+                    `demandes`
+                    );
+
+            worksheet.addRow(headers);
+            json.forEach((demandes) => {
+                const newRow = worksheet.addRow([]);
+                newRow.getCell(1).value = demandes. numeroDemande;
+                newRow.getCell(2).value = demandes.designation;
+                newRow.getCell(3).value = demandes.nomEmploye;
+                newRow.getCell(4).value = demandes.typeDemande;
+                newRow.getCell(5).value = demandes.dateCreation;
+            });
+            downloadAsExcel();
+
+            worksheet.destroy();
+
+        });
+
     });
 }
 function validation(list) {

@@ -2,28 +2,6 @@ function drawBtnLesDemandes() {
     DessinerButton('30', '#listetid_Demandes');
     ActionBoutton();
 }
-function afficherParametresDemande() {
-     ////select les etats 
-    // Récupérer la liste déroulante par ID
-    var selectList = document.getElementById("code");
-// Envoyer une requête AJAX à l'API pour récupérer les données de la base de données
-    var xhr = new XMLHttpRequest();
-    xhr.open("GET", "http://localhost:9011/workflowDemande-core/api/etats", true);
-    xhr.onreadystatechange = function () {
-        if (xhr.readyState === 4 && xhr.status === 200) {
-            // Convertir la réponse JSON en objet JavaScript
-            var data = JSON.parse(xhr.responseText);
-            // Parcourir les données et créer des options pour la liste déroulante
-            for (var i = 0; i < data.length; i++) {
-                var option = document.createElement("option");
-                option.value = data[i].code;
-                option.text = data[i].designation;
-                selectList.appendChild(option);
-            }
-        }
-    };
-    xhr.send();
-}
 
 function ActionBoutton() {
     $('#btn_Ajouter').unbind('click');
@@ -285,8 +263,7 @@ function  AfficheModalAddLesDemandes() {
     $('#labelTitre').text("Ajout d'une demande");
     $('#modal_ajout_Demandes_title h2').val("Ajout d'une demande");
     $('#modalIconDemande').replaceWith('<i id="modalIconDemande" class="glyphicon glyphicon-plus"></i>');
-    $('#modalAdd').modal('show');
-     afficherParametresDemande();
+    $('#modalAdd').modal('show');    
    
     $("#btnMAJDemandes").show();
     sessionStorage.setItem("Demande", 'ajout');

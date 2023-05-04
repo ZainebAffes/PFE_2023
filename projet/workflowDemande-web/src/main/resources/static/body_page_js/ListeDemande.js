@@ -1,6 +1,8 @@
 $(function () {
     drawBtnDemande();
     DrawTableDemande();
+    findEtats();
+    findTypesDemandes();
     $('#rafresh').unbind('click');
     $('#rafresh').bind('click', function (e) {
         showLoadingNotification();
@@ -29,46 +31,7 @@ $(function () {
             hideLoadingNotification();
         }, 50);
     });
-      ////select les etats 
-    // Récupérer la liste déroulante par ID
-    var selectList = document.getElementById("code");
-// Envoyer une requête AJAX à l'API pour récupérer les données de la base de données
-    var xhr = new XMLHttpRequest();
-    xhr.open("GET", "http://localhost:9011/workflowDemande-core/api/etats", true);
-    xhr.onreadystatechange = function () {
-        if (xhr.readyState === 4 && xhr.status === 200) {
-            // Convertir la réponse JSON en objet JavaScript
-            var data = JSON.parse(xhr.responseText);
-            // Parcourir les données et créer des options pour la liste déroulante
-            for (var i = 0; i < data.length; i++) {
-                var option = document.createElement("option");
-                option.value = data[i].code;
-                option.text = data[i].designation;
-                selectList.appendChild(option);
-            }
-        }
-    };
-    xhr.send();
-    ////select
-    // Récupérer la liste déroulante par ID
-    var selectList = document.getElementById("codeTypeDemande");
-// Envoyer une requête AJAX à l'API pour récupérer les données de la base de données
-    var xhr = new XMLHttpRequest();
-    xhr.open("GET", "http://localhost:9011/workflowDemande-core/api/typedemandes/filter", true);
-    xhr.onreadystatechange = function () {
-        if (xhr.readyState === 4 && xhr.status === 200) {
-            // Convertir la réponse JSON en objet JavaScript
-            var data = JSON.parse(xhr.responseText);
-            // Parcourir les données et créer des options pour la liste déroulante
-            for (var i = 0; i < data.length; i++) {
-                var option = document.createElement("option");
-                option.value = data[i].codeTypeDemande;
-                option.text = data[i].description;
-                selectList.appendChild(option);
-            }
-        }
-    };
-    xhr.send();
+
     ///////////// drag and drop 
     const tags = document.querySelectorAll('.tag');
     const dropzones = document.querySelector('.dropzones');
@@ -136,7 +99,7 @@ $(function () {
                 newInput2.setAttribute('for', 'input');
             } else if (draggedType === 'date') {
                 newInput2.setAttribute('type', 'date');
-                 newInput2.setAttribute('id', 'date');
+                newInput2.setAttribute('id', 'date');
             } else if (draggedType === 'time') {
                 newInput2.setAttribute('type', 'time');
                 newInput2.setAttribute('id', 'time');
@@ -174,9 +137,9 @@ $(function () {
 
                     const newCheckbox = document.createElement('input');
                     newCheckbox.setAttribute('type', 'checkbox');
-                    newCheckbox.setAttribute('id', 'checkbox');                   
-                   // newCheckbox.setAttribute('id', `option${optionCount}`);
-                   
+                    newCheckbox.setAttribute('id', 'checkbox');
+                    // newCheckbox.setAttribute('id', `option${optionCount}`);
+
                     newOption.appendChild(newCheckbox);
 
 
@@ -230,12 +193,12 @@ $(function () {
                 addOptionBtn2.addEventListener('click', () => {
                     const newOption = document.createElement('option');
                     newOption.setAttribute('value', `option${optionCount}`);
-                     newOption.classList.add('optionL');
+                    newOption.classList.add('optionL');
                     newOption.innerHTML = addOptionInput.value;
                     select.appendChild(newOption);
                     addOptionInput.value = '';
                     optionCount++;
-                    
+
                 });
             }
 

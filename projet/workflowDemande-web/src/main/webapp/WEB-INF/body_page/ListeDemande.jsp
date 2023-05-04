@@ -482,35 +482,34 @@
                     <div class="modal-body" style="padding-bottom: 7px;height: 600px;">
                         <div class="row" >
                             <div class="col-md-12">
-
                                 <fieldset>
                                     <div class="row">
-                                        <div class="form-group col-md-3">
+                                        <div class="form-group col-md-2">
                                             <div class="col-md-4 control-drag" id="codeParam">Code<span class="champOblig">*</span></div>
-                                            <div class="col-md-6 input-group">
+                                            <div class="col-md-4 input-group">
                                                 <input maxlength="6" id="code" type="text"  class=" form-control datepicker input-xs"  data-mask-clearifnotmatch="true" >
                                             </div>
                                         </div>
 
                                         <div class="form-group col-md-3" >
                                             <div class="col-md-4 control-drag">Désignation <span class="champOblig">*</span></div>
-                                            <div class="col-md-6 input-group">
+                                            <div class="col-md-5 input-group">
                                                 <input maxlength="100" id="designation" type="text"  class=" form-control datepicker input-xs"  data-mask-clearifnotmatch="true" >
                                             </div>
                                         </div>
 
-                                        <div class="form-group col-md-6" >
+                                        <div class="form-group col-md-4" >
                                             <div class="col-md-4 control-drag">Type de demande <span class="champOblig">*</span></div>
-                                            <div class="col-md-6 input-group">
+                                            <div class="col-md-5 input-group">
                                                 <select id="codeTypeDemande"class=" form-control datepicker input-xs"  data-mask-clearifnotmatch="true">
 
                                                 </select>
                                             </div>
                                         </div>
-                                         <div class="form-group col-md-6" >
-                                            <div class="col-md-4 control-drag">Etat de demande <span class="champOblig">*</span></div>
+                                         <div class="form-group col-md-3" >
+                                            <div class="col-md-5 control-drag">Etat de demande <span class="champOblig">*</span></div>
                                             <div class="col-md-6 input-group">
-                                                <select id="code"class=" form-control datepicker input-xs"  data-mask-clearifnotmatch="true">
+                                                <select id="selectEtat"class=" form-control datepicker input-xs"  data-mask-clearifnotmatch="true">
 
                                                 </select>
                                             </div>

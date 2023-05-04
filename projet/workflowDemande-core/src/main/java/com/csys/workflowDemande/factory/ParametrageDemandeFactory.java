@@ -16,6 +16,10 @@ public class ParametrageDemandeFactory {
         parametragedemandeDTO.setEtiquetteparametragedemandeDTOs(EtiquetteparametragedemandeFactory.etiquetteparametragedemandeToEtiquetteparametragedemandeDTOs(parametragedemande.getEtiquetteparametragedemandes()));
         parametragedemandeDTO.setCodeTypeDemande(parametragedemande.getCodeTypeDemande());
         parametragedemandeDTO.setDescriptionTypeDemande(parametragedemande.getTypeDemande().getDescription());
+        if (parametragedemande.getEtat() != null) {
+            parametragedemandeDTO.setLogoEtat(parametragedemande.getEtat().getLogo());
+            parametragedemandeDTO.setIdEtat(parametragedemande.getEtat().getCode());
+        }
         return parametragedemandeDTO;
     }
 
@@ -24,6 +28,8 @@ public class ParametrageDemandeFactory {
         parametragedemande.setCode(parametragedemandeDTO.getCode());
         parametragedemande.setDesignation(parametragedemandeDTO.getDesignation());
         parametragedemande.setCodeTypeDemande(parametragedemandeDTO.getCodeTypeDemande());
+
+        parametragedemande.setEtats(parametragedemandeDTO.getEtats());
         List<Etiquetteparametragedemande> etiquetteparametragedemandesLists = new ArrayList<>();
         parametragedemandeDTO.getEtiquetteparametragedemandeDTOs().forEach(x -> {
             x.setCode(parametragedemandeDTO.getCode());

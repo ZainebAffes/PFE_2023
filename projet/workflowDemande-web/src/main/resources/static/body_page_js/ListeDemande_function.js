@@ -1,3 +1,5 @@
+var listTypesDemandes = [];
+var listEtats = [];
 function drawBtnDemande() {
     DessinerButton('10', '#listetid_Demande');
     ActionBoutton();
@@ -27,7 +29,9 @@ function ActionBoutton() {
             showNotification('Attention', "Veuillez choisir une demande ", 'error', 3000);
         else {
             var code = $('.selectionnee').find('td').eq(0).text();
+             
             majDemande(code, "consult");
+            
         }
     });
 
@@ -43,7 +47,7 @@ function ActionBoutton() {
         }
     });
 
-   $('#btn_Imprimer').unbind('click');
+    $('#btn_Imprimer').unbind('click');
     $('#btn_Imprimer').bind('click', function (e) {
         var url = url_base + '/pdf/parametragedemandes';
         if ($('#search').val() !== "undefined") {
@@ -58,7 +62,7 @@ function ActionBoutton() {
             'Code',
             'Désignation',
             '	Type Demande '
-            
+
         ];
         console.log(window);
         const workbook = new window.ExcelJS.Workbook();
@@ -134,7 +138,8 @@ function majDemande(code, action) {
         $('#labelTitre').text("Détail d'une demande");
         $('#designation').prop("disabled", "disabled");
         $('#codeTypeDemande').prop("disabled", true);
-        $('#checkboxActif').prop("disabled", "disabled");
+        $('#selectEtat').prop("disabled", "disabled");
+        $('#zone').show();
         $("#btnMAJDemande").hide();
     }
 
@@ -265,12 +270,13 @@ function AfficheModalAddDemande() {
     $('#code').val('');
     $('#designation').val('');
     $('#codeTypeDemande').val('');
- $('#code').prop("disabled", false);
+    $('#code').prop("disabled", false);
     $('#designation').prop("disabled", false);
     $('#checkboxActif').prop("disabled", false);
     $('#codeTypeDemande').prop("disabled", false);
-
     $('#designation').val('');
+    createSelectTypesDemandes();
+    createSelectEtats();
     $("#btnMAJDemande").show();
     sessionStorage.setItem("Demande", 'ajout');
 }
@@ -453,10 +459,10 @@ function payloadDemande() {
             etiquette["visible"] = oElements[j].style.display !== 'none';
             etiquette["multiple"] = oElements[j].getAttribute('multiple') !== null;
 
-           
+
 
             etiquette["codeParametrageEtiquette"] = param;
- for (var x = 0; x < typeEtiquetteDTOs.length; x++) {
+            for (var x = 0; x < typeEtiquetteDTOs.length; x++) {
                 if (oElements[j].getAttribute('type') === typeEtiquetteDTOs[x].type) {
                     etiquette["codeTypeEtiquette"] = typeEtiquetteDTOs[x].code;
                 }
@@ -490,6 +496,7 @@ function payloadDemande() {
 
         "designation": $('#designation').val(),
         "codeTypeDemande": $('#codeTypeDemande').val(),
+        "etats": $('#selectEtat').val(),
         "etiquetteparametragedemandeDTOs": etiquettes
 
     };
@@ -617,3 +624,68 @@ function findTypeEtiquette() {
 
 
 
+function findEtats() {
+
+    $.ajax({
+        url: url_base + '/etats',
+        contentType: "text/html; charset=utf-8",
+        type: 'GET',
+        dataType: "json",
+        async: false,
+        success: function (data)
+        {
+            listEtats = data;
+        }
+    });
+
+}
+function findTypesDemandes() {
+
+    $.ajax({
+        url: url_base + '/typedemandes/filter',
+        contentType: "text/html; charset=utf-8",
+        type: 'GET',
+        dataType: "json",
+        async: false,
+        success: function (data)
+        {
+            listTypesDemandes = data;
+        }
+    });
+
+}
+function createSelectTypesDemandes() {
+    var listType = listTypesDemandes;
+    var select_html1 = "<select id='listSelectFamFourniss' class='select2' style='' >";
+    select_html1 += "<option  selected='selected' value='' >" + " Choisir un type de demande " + "</option>";
+    $.each(listType, function (i, item) {
+        var code = listType[i].codeTypeDemande;
+        var libelle = listType[i].description;
+        select_html1 += "<option value='" + code + "'>" + libelle + "</option>";
+    });
+    select_html1 += "</select>";
+    $('#codeTypeDemande').html(select_html1).trigger('create');
+    $("#listSelectType").select2({
+        placeholder: "Choisir Type",
+        width: '100%',
+        allowClear: true
+    });
+}
+
+function createSelectEtats() {
+    var listEtat = listEtats;
+    var select_html1 = "<select id='listSelectEtat' class='select2' style='' >";
+    select_html1 += "<option  selected='selected' value='' >" + " Choisir une état " + "</option>";
+    $.each(listEtat, function (i, item) {
+        var code = listEtat[i].code;
+        var libelle = listEtat[i].designation;
+        select_html1 += "<option value='" + code + "'>" + libelle + "</option>";
+    });
+    select_html1 += "</select>";
+    $('#selectEtat').html(select_html1).trigger('create');
+    $("#listSelectEtat").select2({
+        placeholder: "Choisir une état",
+        width: '100%',
+        allowClear: true
+    });
+}

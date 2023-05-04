@@ -2,8 +2,7 @@ $(function () {
      drawBtn();
       $('#btnContainer').bind('click', function () {
            window.parent.$.loader.open();
-           setTimeout(function () {
-       //     AfficheModalListDemandes();
+           setTimeout(function () {       
             window.parent.$.loader.close();
         }, 100);
         
