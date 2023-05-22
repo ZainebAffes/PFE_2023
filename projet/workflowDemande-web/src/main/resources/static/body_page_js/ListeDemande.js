@@ -73,6 +73,7 @@ $(function () {
         e.preventDefault();
         if (draggedTag) {
             draggedTag.classList.add('dragging');
+            draggedTag.setAttribute('id', 'dragDrop');
             //input: le nom du champs
             const newInput = document.createElement('input');
             newInput.setAttribute('type', 'text');

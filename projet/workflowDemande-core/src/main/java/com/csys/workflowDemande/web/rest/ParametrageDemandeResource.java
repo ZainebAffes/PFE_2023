@@ -58,14 +58,11 @@ public class ParametrageDemandeResource {
     }
 
     @PutMapping("/parametragedemandes")
-    public ResponseEntity<String> updateParametrageDemande(@Valid @RequestBody ParametrageDemandeDTO parametragedemandeDTO, @RequestParam String user) throws MethodArgumentNotValidException {
-
+    public ResponseEntity<String> updateParametrageDemande(@Valid @RequestBody ParametrageDemandeDTO parametragedemandeDTO, BindingResult bindingResult) throws URISyntaxException, MethodArgumentNotValidException {
         String result = parametragedemandeService.update(parametragedemandeDTO);
         return ResponseEntity.ok().body(result);
     }
-    
- 
-    
+
     @GetMapping("/parametragedemandes/{id}")
     public ResponseEntity<ParametrageDemandeDTO> getParametrageDemande(@PathVariable Integer id) {
         log.debug("Request to get ParametrageDemande: {}", id);
@@ -85,21 +82,22 @@ public class ParametrageDemandeResource {
         parametragedemandeService.delete(id);
         return ResponseEntity.ok().build();
     }
-     @GetMapping("/pdf/parametragedemandes")
-	public void generatePdf(HttpServletResponse response,@RequestParam(required = false) String designation) throws DocumentException, IOException {
-		
-		response.setContentType("application/pdf");
-		       DateFormat dateFormat = new SimpleDateFormat("YYYY-MM-DD:HH:MM:SS");
-		String currentDateTime = dateFormat.format(new Date() );
-		String headerkey = "Content-Disposition";
-		String headervalue = "attachment; filename=pdf_" + currentDateTime + ".pdf";
-		response.setHeader(headerkey, headervalue);
-		
-		List<ParametrageDemandeDTO> parametrageDemandeList = parametragedemandeService.findAll(designation);
-		
-		       PDFGeneratorparametrage generator = new PDFGeneratorparametrage();
-		generator.setParametrageDemandeList(parametrageDemandeList);
-		generator.generate(response);
-                
-}
+
+    @GetMapping("/pdf/parametragedemandes")
+    public void generatePdf(HttpServletResponse response, @RequestParam(required = false) String designation) throws DocumentException, IOException {
+
+        response.setContentType("application/pdf");
+        DateFormat dateFormat = new SimpleDateFormat("YYYY-MM-DD:HH:MM:SS");
+        String currentDateTime = dateFormat.format(new Date());
+        String headerkey = "Content-Disposition";
+        String headervalue = "attachment; filename=pdf_" + currentDateTime + ".pdf";
+        response.setHeader(headerkey, headervalue);
+
+        List<ParametrageDemandeDTO> parametrageDemandeList = parametragedemandeService.findAll(designation);
+
+        PDFGeneratorparametrage generator = new PDFGeneratorparametrage();
+        generator.setParametrageDemandeList(parametrageDemandeList);
+        generator.generate(response);
+
+    }
 }

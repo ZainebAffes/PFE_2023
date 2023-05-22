@@ -40,16 +40,16 @@
             .widget-body{
                 z-index: 0;
             }
-            #_grid_Demandes thead > tr th:nth-child(1),
-            #_grid_Demandes tbody > tr td:nth-child(1){
+            #_grid_NouvelleDemandes thead > tr th:nth-child(1),
+            #_grid_NouvelleDemandes tbody > tr td:nth-child(1){
                 width: 20%!important;
             }
-            #_grid_Demandes thead > tr th:nth-child(2),
-            #_grid_Demandes tbody > tr td:nth-child(2){
+            #_grid_NouvelleDemandes thead > tr th:nth-child(2),
+            #_grid_NouvelleDemandes tbody > tr td:nth-child(2){
                 width: 30%!important;
             }
           
-            #_grid_Demandes  tbody {
+            #_grid_NouvelleDemandes  tbody {
                 flex: 1 1 auto;
                 width: 100%;
                 display: block;
@@ -59,30 +59,30 @@
                 max-height: calc(100vh - 222px);
                 height:auto !important;
             }
-            #_grid_Demandes {
+            #_grid_NouvelleDemandes {
                 display: flex;
                 flex-flow: column;
                 height: 100%;
                 width: 100%;
             }
-            #_grid_Demandes thead, #_grid_Demandes tbody tr {
+            #_grid_NouvelleDemandes thead, #_grid_NouvelleDemandes tbody tr {
                 display: table;
                 table-layout: fixed;
             }
-            #_grid_Demandes thead {
+            #_grid_NouvelleDemandes thead {
                 width: calc(100% -  6px) !important;
                 flex: 0 0 auto;
             }
-            #_grid_Demandes tbody tr {
+            #_grid_NouvelleDemandes tbody tr {
                 width: 100%;
             }
 
-            #_grid_Demandes tbody > tr > td,
-            #_grid_Demandes  tbody > tr > th,
-            #_grid_Demandes  tfoot > tr > td,
-            #_grid_Demandes  tfoot > tr > th,
-            #_grid_Demandes  thead > tr > td,
-            #_grid_Demandes  thead > tr > th {
+            #_grid_NouvelleDemandes tbody > tr > td,
+            #_grid_NouvelleDemandes  tbody > tr > th,
+            #_grid_NouvelleDemandes  tfoot > tr > td,
+            #_grid_NouvelleDemandes  tfoot > tr > th,
+            #_grid_NouvelleDemandes  thead > tr > td,
+            #_grid_NouvelleDemandes  thead > tr > th {
                 padding: 3px 5px!important;
                 font-size: 12px;
             }
@@ -193,7 +193,7 @@
             .bootstrap-tagsinput input {
                 width: 28em;
             }
-            #_grid_Demandes_filter{
+            #_grid_NouvelleDemandes_filter{
                 margin-left: -1132px;
 
             }
@@ -290,7 +290,7 @@
                             <div class="widget-body screen col-md-12">
 
                                 <div class="row">
-                                    <div  id="_grid_Demandes" >
+                                    <div  id="_grid_NouvelleDemandes" >
                                     </div>
                                 </div>
                             </div>

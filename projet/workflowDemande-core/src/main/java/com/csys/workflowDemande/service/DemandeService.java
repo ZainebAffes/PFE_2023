@@ -68,9 +68,9 @@ public class DemandeService {
     @Transactional(
             readOnly = true
     )
-    public Collection<DemandeDTO> findAll() {
+    public Collection<DemandeDTO> findAll(Integer codeParametrage) {
         log.debug("Request to get All Demandes");
-        Collection<Demande> result = demandeRepository.findAll();
+        Collection<Demande> result = findAllDemandeByNums(null, codeParametrage);
         return DemandeFactory.demandeToDemandeDTOs(result);
     }
 
@@ -80,10 +80,10 @@ public class DemandeService {
     }
 
     public String validation(String[] nums, String user) {
-        List<Demande> demandes = findAllDemandeByNums(nums);
+        List<Demande> demandes = findAllDemandeByNums(nums, null);
         for (Demande demande : demandes) {
-            
-            int x=Integer.parseInt(demande.getEtat().getCode())+1;
+
+            int x = Integer.parseInt(demande.getEtat().getCode()) + 1;
             demande.setEtats(String.valueOf(x));
             demandeRepository.save(demande);
         }
@@ -91,14 +91,16 @@ public class DemandeService {
         return "true";
     }
 //
+
     @Transactional(
             readOnly = true
     )
-    public List<Demande> findAllDemandeByNums(String[] nums) {
+    public List<Demande> findAllDemandeByNums(String[] nums, Integer codeParametrage) {
         QDemande qDemande = QDemande.demande;
         WhereClauseBuilder builder = new WhereClauseBuilder()
-                .optionalAnd(nums, () -> qDemande.numeroDemande.in(nums));
-        return  (List<Demande>) demandeRepository.findAll(builder);
-   
+                .optionalAnd(nums, () -> qDemande.numeroDemande.in(nums))
+                .optionalAnd(codeParametrage, () -> qDemande.codeParametrageDemande().code.eq(codeParametrage));
+        return (List<Demande>) demandeRepository.findAll(builder);
+
     }
 }

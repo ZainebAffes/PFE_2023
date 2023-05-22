@@ -10,7 +10,6 @@ function ActionBoutton() {
         AfficheModalAddDemande();
         $("#typeMode").val("add");
     });
-
     $('#btn_Modifier').unbind('click');
     $('#btn_Modifier').bind('click', function (e) {
         var rowDde = $('#tableListDemande').find('tr.selectionnee');
@@ -21,7 +20,6 @@ function ActionBoutton() {
             majDemande(code, "update");
         }
     });
-
     $('#btn_Consulter').unbind('click');
     $('#btn_Consulter').bind('click', function (e) {
         var rowDde = $('#tableListDemande').find('tr.selectionnee');
@@ -29,12 +27,9 @@ function ActionBoutton() {
             showNotification('Attention', "Veuillez choisir une demande ", 'error', 3000);
         else {
             var code = $('.selectionnee').find('td').eq(0).text();
-             
             majDemande(code, "consult");
-            
         }
     });
-
     $('#btn_Annuler').unbind('click');
     $('#btn_Annuler').bind('click', function (e) {
         var rowDde = $('#tableListDemande').find('tr.selectionnee');
@@ -46,7 +41,6 @@ function ActionBoutton() {
             majDemande(code, "delete");
         }
     });
-
     $('#btn_Imprimer').unbind('click');
     $('#btn_Imprimer').bind('click', function (e) {
         var url = url_base + '/pdf/parametragedemandes';
@@ -55,7 +49,6 @@ function ActionBoutton() {
         }
         impressionListe(url);
     });
-
     $("#btn_Exporter").unbind("click");
     $("#btn_Exporter").bind("click", function (e) {
         const headers = [
@@ -66,14 +59,12 @@ function ActionBoutton() {
         ];
         console.log(window);
         const workbook = new window.ExcelJS.Workbook();
-
         const downloadAsExcel = () => {
             workbook.xlsx.writeBuffer().then((data) => {
                 const blob = new Blob([data], {
                     type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
                 });
                 saveAs(blob, `parametragedemandes.xlsx`);
-
             });
         };
         var url = url_base + '/parametragedemandes/';
@@ -84,14 +75,11 @@ function ActionBoutton() {
             method: "GET"
         }).then(async(response) => {
             const json = await response.json();
-
             console.log(json);
             const title = 'parametragedemandes';
-
             const worksheet = workbook.addWorksheet(
                     `parametragedemandes`
                     );
-
             worksheet.addRow(headers);
             json.forEach((parametragedemandes) => {
                 const newRow = worksheet.addRow([]);
@@ -100,25 +88,27 @@ function ActionBoutton() {
                 newRow.getCell(3).value = parametragedemandes.descriptionTypeDemande;
             });
             downloadAsExcel();
-
             worksheet.destroy();
-
         });
-
     });
-
 }
+
 function majDemande(code, action) {
     var Demande = findDemandeById(code);
     $('#modalAdd').modal('show');
-    $('#code').val(code);
     $('#designation').val(Demande.designation);
+    $('#code').val(code);
+    createSelectEtats();
+    $('#listSelectEtat').select2("val", Demande.etats);
+    createSelectTypesDemandes();
+    $('#listSelectType').select2("val", Demande.codeTypeDemande);
     $('#codeTypeDemande').val(Demande.codeTypeDemande);
-    $('#code').prop("disabled", "disabled");
+    $('#selectEtat').val(Demande.idEtat);
 
     if (action === "update") {
         $('#designation').prop("disabled", false);
         $('#codeTypeDemande').prop("disabled", false);
+        $('#selectEtat').prop("disabled", false);
         $('#modalIconDemande').replaceWith('<i id="modalIconDemande" class="glyphicon glyphicon-edit"></i>');
         $('#labelTitre').text("Modification d'une demande");
         sessionStorage.setItem("Demande", 'modif');
@@ -129,7 +119,6 @@ function majDemande(code, action) {
         $('#labelTitre').text("Annulation d'une demande");
         $('#designation').prop("disabled", "disabled");
         $('#codeTypeDemande').prop("disabled", true);
-        $('#checkboxActif').prop("disabled", "disabled");
         sessionStorage.setItem("Demande", 'delete');
         $("#btnMAJDemande").show();
     }
@@ -139,12 +128,108 @@ function majDemande(code, action) {
         $('#designation').prop("disabled", "disabled");
         $('#codeTypeDemande').prop("disabled", true);
         $('#selectEtat').prop("disabled", "disabled");
-        $('#zone').show();
         $("#btnMAJDemande").hide();
     }
+    DessinerEtiquette($('#code').val(), action);
+}
+function DessinerEtiquette(code) {
+    var Demande = findDemandeById(code);
+    for (let i = 0; i < Demande.etiquetteparametragedemandeDTOs.length; i++) {
+        var etiquette = Demande.etiquetteparametragedemandeDTOs[i];
+        $.ajax({
+            url: url_base + '/etiquetteparametragedemandes/' + etiquette.code,
+            method: "GET",
+            success: function (etiquetteData) {
+                const dropzones = document.getElementById("dropzones");
+                const newInput = document.createElement('input');
+                const newInput2 = document.createElement('input');
+
+                newInput2.classList.add('dropped-tag');
+                dropzones.classList.add('dragging');
+                switch (etiquetteData.typeEtiquetteDTO.type) {
+                    //selon type 
+                    case "text":
+                        var logo = "<div id='texte' draggable='true'data-type='text' name='text'><span class='glyphicon glyphicon-text-width'><i> Texte</i></span></div>";
+                        newInput.setAttribute('type', 'text');
+                        newInput.setAttribute('value', etiquetteData.description);
+                        newInput.classList.add('dropped-nom');
+
+
+                        newInput2.setAttribute('type', 'text');
+                        newInput2.setAttribute('id', 'text');
+                        newInput2.setAttribute('placeholder', etiquetteData.defultValue);
+                        newInput2.setAttribute('for', 'input');
+                        break;
+                    case "number":
+                        var logo = "<div id='number' draggable='true'data-type='number' name='number'><i> nombre</i></div>";
+                        newInput.setAttribute('type', 'number');
+                        newInput.setAttribute('value', etiquetteData.description);
+                        newInput.classList.add('dropped-nom');
+
+
+                        newInput2.setAttribute('type', 'text');
+                        newInput2.setAttribute('id', 'text');
+                        newInput2.setAttribute('placeholder', etiquetteData.defultValue);
+                        newInput2.setAttribute('for', 'input');
+                        break;
+                    case "date":
+                        inputType = "<input type='date'>";
+                        break;
+                    case "time":
+                        inputType = "<input type='time'/>";
+                        break;
+                    default:
+                        inputType = "<input type='text'/>";
+                        break;
+                }
+                
+                document.getElementById("zone").innerHTML = logo;
+                dropzones.appendChild(newInput);
+
+                //etiquetteData.defultValue;
+                const requiredLabel22 = document.createElement('label1');
+                requiredLabel22.innerHTML = 'Valeur par défaut';
+                newInput2.setAttribute('id', 'valeur');
+                requiredLabel22.setAttribute('for', 'input2');
+
+
+                dropzones.appendChild(requiredLabel22);
+                dropzones.appendChild(newInput2);
+
+
+                //btn supprimer
+
+                const deleteButton = document.createElement('button');
+                deleteButton.innerHTML = 'Supprimer';
+                deleteButton.classList.add('delete-tag');
+
+                dropzones.appendChild(deleteButton);
+                deleteButton.addEventListener('click', (e) => {
+                    const parentTag = e.target.parentElement;
+                    const grandParentTag = parentTag.parentElement;
+                    grandParentTag.removeChild(parentTag);
+                });
+                // Add checkbox to make field required
+                const requiredCheckbox = document.createElement('input');
+                requiredCheckbox.setAttribute('type', 'checkbox');
+                requiredCheckbox.setAttribute('id', 'requiredCheckbox');
+                $('#requiredCheckbox').prop("checked", etiquetteData.isRequired);
+                const requiredLabel = document.createElement('label');
+                requiredLabel.innerHTML = 'Champ obligatoire';
+                requiredLabel.setAttribute('for', 'requiredCheckbox');
+
+                dropzones.appendChild(requiredCheckbox);
+                dropzones.appendChild(requiredLabel);
+//                        
+
+
+            }
+        });
+    }
+
+
 
 }
-
 function DrawTableDemande() {
     window.parent.$.loader.open();
     setTimeout(function () {
@@ -155,7 +240,6 @@ function DrawTableDemande() {
 function DrawListDemande(idTable, idContainer) {
     showLoadingNotification();
     var List = [];
-
     List = findDemande(undefined);
     document.getElementById(idContainer).innerHTML = '';
     var table_list = "<table id='" + idTable + "' class='display dataTable projects-table table table-striped table-bordered table-hover' cellspacing='0'  width='100%' align='center'>";
@@ -272,7 +356,6 @@ function AfficheModalAddDemande() {
     $('#codeTypeDemande').val('');
     $('#code').prop("disabled", false);
     $('#designation').prop("disabled", false);
-    $('#checkboxActif').prop("disabled", false);
     $('#codeTypeDemande').prop("disabled", false);
     $('#designation').val('');
     createSelectTypesDemandes();
@@ -284,13 +367,6 @@ function submitMAJDemande() {
     if (sessionStorage.getItem("Demande") === 'delete') {
         deleteDemande($('#code').val());
     } else {
-        if (($('#code').val() === '')) {
-            $('#code').addClass('css-error');
-            $('#code').attr('style', 'background-color: #fff0f0;border-color: #A90329;');
-        } else {
-            $('#code').removeClass('css-error');
-            $('#code').attr('style', '');
-        }
         if (($('#designation').val() === '')) {
             $('#designation').addClass('css-error');
             $('#designation').attr('style', 'border-width: 1px;background-color: #fff0f0;border-color: #A90329;');
@@ -346,7 +422,6 @@ function addDemande(list) {
             'x-auth-token': localStorage.getItem("x-auth-token"),
             'Accept-Language': localStorage.getItem("langue")
         },
-
         success: function (data, textStatus, jqXHR) {
             showNotification('Succès', 'Ajout effectuée', 'success', 3000);
             $('#modalAdd').modal('hide');
@@ -361,7 +436,6 @@ function addDemande(list) {
 
         }
     });
-
 }
 
 function findDemandeById(id) {
@@ -384,7 +458,7 @@ function findDemandeById(id) {
 }
 function updateDemande(object) {
     $.ajax({
-        url: `${url_base}/parametragedemandes?user=` + window.localStorage.getItem('username'),
+        url: `${url_base}/parametragedemandes`,
         type: 'PUT',
         contentType: "application/json; charset=utf-8",
         data: JSON.stringify(object),
@@ -394,9 +468,7 @@ function updateDemande(object) {
             'x-auth-token': localStorage.getItem("x-auth-token"),
             'Accept-Language': localStorage.getItem("langue")
         },
-
         success: function (data, textStatus, jqXHR) {
-
             showNotification('Succès', 'Modification effectuée', 'success', 3000);
             $('#addConfirm').modal('hide');
             $('#modalAdd').modal('hide');
@@ -408,9 +480,11 @@ function updateDemande(object) {
         }
         ,
         complete: function (jqXHR, textStatus) {
+
         }
     });
 }
+
 function deleteDemande(code) {
     var response = "";
     $.ajax({
@@ -429,7 +503,6 @@ function deleteDemande(code) {
                 DrawTableDemande();
                 hideLoadingNotification();
             }, 50);
-
         }
     });
     return response;
@@ -439,8 +512,6 @@ function payloadDemande() {
     var oElements = document.querySelectorAll(".dropped-tag");
     var noms = document.querySelectorAll(".nom");
     var param = $('#code').val();
-
-
     if (oElements !== null) {
         var etiquettes = [];
         var typeEtiquetteDTOs = [];
@@ -449,7 +520,6 @@ function payloadDemande() {
             var etiquette = {};
             var selectedOptions = [];
             var checkedOptions = [];
-
             etiquette["description"] = noms[j].value;
             etiquette["min"] = oElements[j].getAttribute('min');
             etiquette["max"] = oElements[j].getAttribute('max');
@@ -458,9 +528,6 @@ function payloadDemande() {
             etiquette["defultValue"] = oElements[j].parentElement.querySelector('#valeur').value;
             etiquette["visible"] = oElements[j].style.display !== 'none';
             etiquette["multiple"] = oElements[j].getAttribute('multiple') !== null;
-
-
-
             etiquette["codeParametrageEtiquette"] = param;
             for (var x = 0; x < typeEtiquetteDTOs.length; x++) {
                 if (oElements[j].getAttribute('type') === typeEtiquetteDTOs[x].type) {
@@ -473,16 +540,13 @@ function payloadDemande() {
                 for (let i = 0; i < options.length; i++) {
                     if (options[i].checked) {
                         checkedOptions.push(options[i].parentNode.querySelector('input[type=text]').value);
-
                     }
                 }
             } else if (oElements[j].getAttribute('type') === 'listeDeroulante') {
                 const options = oElements[j].querySelectorAll('optionL');
-
                 for (let i = 0; i < options.length; i++) {
 
                     selectedOptions.push(options[i].value);
-
                 }
 
             }
@@ -493,15 +557,13 @@ function payloadDemande() {
     }
     var payload = {
         "code": $('#code').val(),
-
         "designation": $('#designation').val(),
         "codeTypeDemande": $('#codeTypeDemande').val(),
-        "etats": $('#selectEtat').val(),
+        "idEtat": $('#selectEtat').val(),
         "etiquetteparametragedemandeDTOs": etiquettes
 
     };
     return payload;
-
 }
 function DrawListRassemblant(idTable, idContainer, list) {
     document.getElementById(idContainer).innerHTML = '';
@@ -539,7 +601,6 @@ function DrawListRassemblant(idTable, idContainer, list) {
                         return "<span title='" + data + "'>" + data + "</span>";
                 }
             },
-
             {
                 title: "Type demande",
                 data: 'descriptionTypeDemande',
@@ -600,12 +661,10 @@ function findDemande(designation) {
         }
     });
     return response;
-
 }
 
 function findTypeEtiquette() {
     var url = url_base + '/typeetiquettes';
-
     var response = "";
     $.ajax({
         url: url,
@@ -619,7 +678,6 @@ function findTypeEtiquette() {
         }
     });
     return response;
-
 }
 
 
@@ -637,7 +695,6 @@ function findEtats() {
             listEtats = data;
         }
     });
-
 }
 function findTypesDemandes() {
 
@@ -652,7 +709,6 @@ function findTypesDemandes() {
             listTypesDemandes = data;
         }
     });
-
 }
 function createSelectTypesDemandes() {
     var listType = listTypesDemandes;
@@ -683,6 +739,7 @@ function createSelectEtats() {
     });
     select_html1 += "</select>";
     $('#selectEtat').html(select_html1).trigger('create');
+    $('#listSelectEtat').empty();
     $("#listSelectEtat").select2({
         placeholder: "Choisir une état",
         width: '100%',

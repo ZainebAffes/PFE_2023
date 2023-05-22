@@ -23,17 +23,19 @@ public class ParametrageDemandeFactory {
         return parametragedemandeDTO;
     }
 
-    public static ParametrageDemande parametragedemandeDTOToParametrageDemande(ParametrageDemandeDTO parametragedemandeDTO) {
-        ParametrageDemande parametragedemande = new ParametrageDemande();
-        parametragedemande.setCode(parametragedemandeDTO.getCode());
+    public static ParametrageDemande parametragedemandeDTOToParametrageDemande(ParametrageDemandeDTO parametragedemandeDTO, ParametrageDemande parametragedemande) {
+        if (parametragedemande == null) {
+            parametragedemande = new ParametrageDemande();
+        }
+
         parametragedemande.setDesignation(parametragedemandeDTO.getDesignation());
         parametragedemande.setCodeTypeDemande(parametragedemandeDTO.getCodeTypeDemande());
+        parametragedemande.setEtats(parametragedemandeDTO.getIdEtat());
 
-        parametragedemande.setEtats(parametragedemandeDTO.getEtats());
         List<Etiquetteparametragedemande> etiquetteparametragedemandesLists = new ArrayList<>();
         parametragedemandeDTO.getEtiquetteparametragedemandeDTOs().forEach(x -> {
-            x.setCode(parametragedemandeDTO.getCode());
             Etiquetteparametragedemande etiquetteparametragedemande = EtiquetteparametragedemandeFactory.etiquetteparametragedemandeDTOToEtiquetteparametragedemande(x);
+
             etiquetteparametragedemandesLists.add(etiquetteparametragedemande);
         });
         if (parametragedemande.getEtiquetteparametragedemandes() != null) {

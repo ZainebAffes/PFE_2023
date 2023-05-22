@@ -78,9 +78,9 @@ public class DemandeResource {
     return ResponseEntity.ok().body(dto);
   }
 @GetMapping("/demandes/filter")
-  public Collection<DemandeDTO> getAllDemandes() {
+  public Collection<DemandeDTO> getAllDemandes(@RequestParam Integer codeParametrage) {
     log.debug("Request to get all  Demandes : {}");
-    return demandeService.findAll();
+    return demandeService.findAll(codeParametrage);
   }
 
   @DeleteMapping("/demandes/{id}")

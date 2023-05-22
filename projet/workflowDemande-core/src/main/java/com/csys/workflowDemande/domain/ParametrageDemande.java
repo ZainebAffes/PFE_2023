@@ -32,8 +32,8 @@ public class ParametrageDemande implements Serializable {
 
     
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @NotNull
     @Column(name = "code")
     private Integer code;
     @Size(max = 50)
@@ -44,7 +44,7 @@ public class ParametrageDemande implements Serializable {
     @Column(name = "code_TypeDemande")
     private String codeTypeDemande;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "code_parametrage_etiquette", referencedColumnName = "code")
     private List<Etiquetteparametragedemande> etiquetteparametragedemandes;
     @JoinColumn(name = "code_TypeDemande", referencedColumnName = "codeTypeDemande", updatable = false, insertable = false, nullable = true)

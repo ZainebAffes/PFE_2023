@@ -15,33 +15,27 @@ function drawBtn() {
         if (xhr.readyState === 4 && xhr.status === 200) {
             // Convertir la réponse JSON en objet JavaScript
             const data = JSON.parse(xhr.responseText);
-
             // Parcourir les données et créer des boutons pour la div
             for (let i = 0; i < data.length; i++) {
                 const btn = document.createElement("button");
-
-                btn.innerHTML = `<div class="menuS"> <i class="fa ${data[i].logo} icon"></i>`+` <p class="designation">${data[i].designation}</p></div>`;
-
+                btn.innerHTML = `<div class="menuS"> <i class="fa ${data[i].logo} icon"></i>` + ` <p class="designation" id=${data[i].code}>${data[i].designation}</p></div>`;
                 btn.value = data[i].code;
                 btn.setAttribute("id", "btnContainer");
                 btn.setAttribute("class", "btnSousMenu");
+                btn.setAttribute("id", "btnContainer");
                 btnContainer.appendChild(btn);
             }
-             AfficheModalListDemandes();
+            AfficheModalListDemandes();
         }
     };
     xhr.send();
 }
 function  AfficheModalListDemandes() {
-//     $('#modalListDemande').modal('show');    
-//     $("#btnMAJDemandes").show();
-//    sessionStorage.setItem("Demande", 'ajout');
-//    
-    //  model.put("username", SecurityContextHolder.getContext().getAuthentication().getName());
-    $("#btnContainer").unbind("click");
-    $("#btnContainer").bind("click", function (e) {
-      ouvrirOnglet("Nouvelle Demande", "NouvelleDemande", false, 'fils', '', 'NouvelleDemande');
+  $(".btnSousMenu").on('click', function() {
+        var value = ($(this).val());
+        ouvrirOnglet("Nouvelle Demande", "NouvelleDemande", false, 'fils', '?op=' + value, 'NouvelleDemande');
     });
+
 
 }
 
@@ -86,14 +80,14 @@ function ActionBoutton() {
         impressionListe(url);
     });
 
-   $("#btn_Exporter").unbind("click");
+    $("#btn_Exporter").unbind("click");
     $("#btn_Exporter").bind("click", function (e) {
         const headers = [
             'Numéro demande',
             'Désignation du demande',
-             '	Employé',
-             'Type de demande',
-             	'Date du demande'
+            '	Employé',
+            'Type de demande',
+            'Date du demande'
         ];
         console.log(window);
         const workbook = new window.ExcelJS.Workbook();
@@ -126,7 +120,7 @@ function ActionBoutton() {
             worksheet.addRow(headers);
             json.forEach((demandes) => {
                 const newRow = worksheet.addRow([]);
-                newRow.getCell(1).value = demandes. numeroDemande;
+                newRow.getCell(1).value = demandes.numeroDemande;
                 newRow.getCell(2).value = demandes.designation;
                 newRow.getCell(3).value = demandes.nomEmploye;
                 newRow.getCell(4).value = demandes.typeDemande;
@@ -199,8 +193,16 @@ function DrawTableLesDemandes() {
 function  DrawLesDemandes(idTable, idContainer) {
     showLoadingNotification();
     var List = [];
-
-    List = findDemande(undefined);
+     let id;
+    let url = window.location.search;
+    if (url !== '') {
+        var e = [];
+        e = url.split('?');
+        var t = [];
+        t = e[1].split('&');
+        id = t[0].split('=')[1];
+    }
+    List = findDemande(id);
     document.getElementById(idContainer).innerHTML = '';
     var table_list = "<table id='" + idTable + "' class='display dataTable projects-table table table-striped table-bordered table-hover' cellspacing='0'  width='100%' align='center'>";
     table_list += "</table>";

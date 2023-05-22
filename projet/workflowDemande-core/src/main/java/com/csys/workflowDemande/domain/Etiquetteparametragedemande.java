@@ -16,6 +16,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.MapsId;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
@@ -63,15 +64,16 @@ public class Etiquetteparametragedemande implements Serializable {
     @NotNull
     @Column(name = "code_type_etiquette")
     private Integer codeTypeEtiquette;
-    @NotNull
-    @Column(name = "code_parametrage_etiquette")
-    private Integer codeParametrageEtiquette;
+//    @NotNull
+//    @Column(name = "code_parametrage_etiquette")
+//    private Integer codeParametrageEtiquette;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @JoinColumn(name = "code_option", referencedColumnName = "code", updatable = false, insertable = false, nullable = true)
     private List<OptionEtiquette> optionEtiquettes;
 
-    @JoinColumn(name = "code_parametrage_etiquette", referencedColumnName = "code", updatable = false, insertable = false, nullable = true)
+    @JoinColumn(name = "code_parametrage_etiquette", referencedColumnName = "code")
+    @MapsId("code")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private ParametrageDemande parametrageDemande;
 
@@ -190,13 +192,13 @@ public class Etiquetteparametragedemande implements Serializable {
         this.typeEtiquette = typeEtiquette;
     }
 
-    public Integer getCodeParametrageEtiquette() {
-        return codeParametrageEtiquette;
-    }
-
-    public void setCodeParametrageEtiquette(Integer codeParametrageEtiquette) {
-        this.codeParametrageEtiquette = codeParametrageEtiquette;
-    }
+//    public Integer getCodeParametrageEtiquette() {
+//        return codeParametrageEtiquette;
+//    }
+//
+//    public void setCodeParametrageEtiquette(Integer codeParametrageEtiquette) {
+//        this.codeParametrageEtiquette = codeParametrageEtiquette;
+//    }
 
     @Override
     public int hashCode() {

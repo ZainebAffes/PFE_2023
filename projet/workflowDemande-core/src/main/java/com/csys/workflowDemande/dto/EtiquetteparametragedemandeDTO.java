@@ -61,8 +61,7 @@ public class EtiquetteparametragedemandeDTO {
     private String typeEtiquette;
     private ParametrageDemandeDTO parametrageDemandeDTO;
     private Integer codeTypeEtiquette;
-    private Integer codeParametrageEtiquette;
-
+  
 //    public EtiquetteparametragedemandeDTO() {
 //        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
 //    }
@@ -170,13 +169,6 @@ public class EtiquetteparametragedemandeDTO {
         this.codeTypeEtiquette = codeTypeEtiquette;
     }
 
-    public Integer getCodeParametrageEtiquette() {
-        return codeParametrageEtiquette;
-    }
-
-    public void setCodeParametrageEtiquette(Integer codeParametrageEtiquette) {
-        this.codeParametrageEtiquette = codeParametrageEtiquette;
-    }
 
 
 

@@ -12,7 +12,7 @@ function ActionBoutton() {
 
     $('#btn_Consulter').unbind('click');
     $('#btn_Consulter').bind('click', function (e) {
-        var rowDde = $('#tableDemandes').find('tr.selectionnee');
+        var rowDde = $('#tableNouvelleDemandes').find('tr.selectionnee');
         if (rowDde.length === 0)
             showNotification('Attention', "Veuillez choisir une demande ", 'error', 3000);
         else {
@@ -23,7 +23,7 @@ function ActionBoutton() {
 
     $('#btn_Annuler').unbind('click');
     $('#btn_Annuler').bind('click', function (e) {
-        var rowDde = $('#tableDemandes').find('tr.selectionnee');
+        var rowDde = $('#tableNouvelleDemandes').find('tr.selectionnee');
         if (rowDde.length === 0)
             showNotification('Attention', "Veuillez choisir une demande ", 'error', 3000);
         else
@@ -50,14 +50,14 @@ function ActionBoutton() {
     $('#btn_Modifier').unbind('click');
     $('#btn_Modifier').bind('click', function (e) {
         var liste = [];
-        $("#tableDemandes > tbody > tr").each(function () {
+        $("#tableNouvelleDemandes > tbody > tr").each(function () {
             if ($(this).find(".checkBoxClass").is(":checked")) {
                 liste.push($(this).find('td').eq(0).text());
             }
         });
         if (liste.length === 0)
         {
-            showNotification('Avertissement', "Veuillez choisir une convention", 'error', 3000);
+            showNotification('Avertissement', "Veuillez choisir une demande", 'error', 3000);
         } else
         {
             validation(liste);
@@ -116,28 +116,35 @@ function majDemande(numeroDemande, action) {
 function DrawTableLesDemandes() {
     window.parent.$.loader.open();
     setTimeout(function () {
-        DrawLesDemandes("tableDemandes", '_grid_Demandes');
+        DrawLesNouvellesDemandes("tableNouvelleDemandes", "_grid_NouvelleDemandes");
         window.parent.$.loader.close();
     }, 100);
 }
-function  DrawLesDemandes(idTable, idContainer) {
+function  DrawLesNouvellesDemandes(idTable, idContainers) {
     showLoadingNotification();
-    var List = [];
-
-    List = findDemande(undefined);
-    document.getElementById(idContainer).innerHTML = '';
-    var table_list = "<table id='" + idTable + "' class='display dataTable projects-table table table-striped table-bordered table-hover' cellspacing='0'  width='100%' align='center'>";
+    var List2 = [];
+    let id;
+    let url = window.location.search;
+    if (url !== '') {
+        var e = [];
+        e = url.split('?');
+        var t = [];
+        t = e[1].split('&');
+        id = t[0].split('=')[1];
+    }
+    List2 = findAllDemandeByCodeParametrage(id);
+    document.getElementById(idContainers).innerHTML = '';
+    var table_list = "<table id=tableNouvelleDemandes class='display dataTable projects-table table table-striped table-bordered table-hover' cellspacing='0'  width='100%' align='center'>";
     table_list += "</table>";
-    $("#" + idContainer).html(table_list);
-    var colDef = [2];
+    $("#_grid_NouvelleDemandes").html(table_list);
     var pageLength = parseInt(($(document).height() - 220) / 34);
-    table = $('#' + idTable).on('page.dt', function () {}).DataTable({
+    table = $('#tableNouvelleDemandes').on('page.dt', function () {}).DataTable({
         "dom": 'frtip',
         "searching": true,
         destroy: false,
         bPaginate: true,
         sort: false,
-        data: List,
+        data: List2,
         language: dataTablesLang,
         "pageLength": pageLength,
         columns: [
@@ -223,11 +230,11 @@ function  DrawLesDemandes(idTable, idContainer) {
         ],
         "aoColumnDefs": [{
                 'bSortable': false,
-                'aTargets': colDef
+               
             }],
         "order": [[0, "asc"]]
     });
-    $('#tableDemandes  tbody').delegate('tr', 'click', function (e) {
+    $('#tableNouvelleDemandes  tbody').delegate('tr', 'click', function (e) {
         var highlightColor = '#d9edf7';
         var css = $(this).attr('style');
         if ($(this).find('.dataTables_empty').length === 0) {
@@ -246,8 +253,8 @@ function  DrawLesDemandes(idTable, idContainer) {
     $("#search").on("keyup search input paste cut", function () {
         table.search(this.value).draw();
     });
-    $('#tableDemandes > tbody').on('dblclick', function (e) {
-        var rowDde = $('#tableDemandes').find('tr.selectionnee');
+    $('#tableNouvelleDemandes > tbody').on('dblclick', function (e) {
+        var rowDde = $('#tableNouvelleDemandes').find('tr.selectionnee');
         if (rowDde.length === 0)
             showNotification('Attention', 'veuillez Sélectionner une Demande', 'error', 2000);
         else {
@@ -255,16 +262,16 @@ function  DrawLesDemandes(idTable, idContainer) {
             majDemandes(numeroDemande, 'consult');
         }
     });
-    $('#tableDemandes_info').css("padding", '0');
-    $('#tableDemandes_filter').hide();
+    $('#tableNouvelleDemandes_info').css("padding", '0');
+    $('#tableNouvelleDemandes_filter').hide();
     hideLoadingNotification();
 }
 function  AfficheModalAddLesDemandes() {
     $('#labelTitre').text("Ajout d'une demande");
     $('#modal_ajout_Demandes_title h2').val("Ajout d'une demande");
     $('#modalIconDemande').replaceWith('<i id="modalIconDemande" class="glyphicon glyphicon-plus"></i>');
-    $('#modalAdd').modal('show');    
-   
+    $('#modalAdd').modal('show');
+
     $("#btnMAJDemandes").show();
     sessionStorage.setItem("Demande", 'ajout');
 }
@@ -349,6 +356,28 @@ function addLesDemandes(list) {
 
         }
     });
+
+}
+
+function findAllDemandeByCodeParametrage(code) {
+
+    var url = url_base + '/demandes/filter';
+    if (code !== undefined) {
+        url = url + '?codeParametrage=' + code;
+    }
+    var response = "";
+    $.ajax({
+        url: url,
+        contentType: "text/html; charset=utf-8",
+        type: 'GET',
+        dataType: "json",
+        async: false,
+        success: function (data)
+        {
+            response = data;
+        }
+    });
+    return response;
 
 }
 

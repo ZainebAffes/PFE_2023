@@ -35,23 +35,31 @@ $(function () {
 
     ///
     // récupérer l'ID de la demande à partir de l'URL ou d'un clic sur un bouton
-    var demandeId = "11";
 
+    let demandeId;
+    let url = window.location.search;
+    if (url !== '') {
+        var e = [];
+        e = url.split('?');
+        var t = [];
+        t = e[1].split('&');
+        demandeId = t[0].split('=')[1];
+    }
 // faire une requête AJAX pour récupérer les données de la demande
     $.ajax({
-        url: url_base +'/parametragedemandes/' + demandeId,
+        url: url_base + '/parametragedemandes/' + demandeId,
         method: "GET",
         success: function (demandeData) {
 // créer le code HTML dynamique pour afficher le paramétrage de la demande
-            var html = "<h2 style='font-size: 1.2em ;margin: 0px; background-color: #1293b8;color: white;'>"+"<i class='fa fas fa-pen';></i>"
-                    + demandeData.designation 
+            var html = "<h2 style='font-size: 1.2em ;margin: 0px; background-color: #1293b8;color: white;'>" + "<i class='fa fas fa-pen';></i>"
+                    + demandeData.designation
                     + "</h2>";
             html += "<ul>";
             for (var i = 0; i < demandeData.etiquetteparametragedemandeDTOs.length; i++) {
                 var etiquette = demandeData.etiquetteparametragedemandeDTOs[i];
 // faire une requête AJAX pour récupérer les données de l'étiquette
                 $.ajax({
-                    url: url_base +'/etiquetteparametragedemandes/' + etiquette.code,
+                    url: url_base + '/etiquetteparametragedemandes/' + etiquette.code,
                     method: "GET",
                     success: function (etiquetteData) {
 
@@ -63,10 +71,10 @@ $(function () {
                             case "number":
                                 inputType = "<input type='number'/>";
                                 break;
-                                 case "date":
+                            case "date":
                                 inputType = "<input type='date'>";
                                 break;
-                                 case "time":
+                            case "time":
                                 inputType = "<input type='time'/>";
                                 break;
 
@@ -75,15 +83,15 @@ $(function () {
                                 break;
                         }
 // ajouter le code HTML pour afficher l'étiquette et l'input
-                        html += "<div class='col-md-12'><div style='padding:8px ;margin: 8px;'><div class='col-md-4 control-drag'>" + etiquetteData.description 
-                                + ":</div> " + " <div class='col-md-4 input-group'>" + inputType + "</div>" 
+                        html += "<div class='col-md-12'><div style='padding:8px ;margin: 8px;'><div class='col-md-4 control-drag'>" + etiquetteData.description
+                                + ":</div> " + " <div class='col-md-4 input-group'>" + inputType + "</div>"
                                 + etiquetteData.defultValue
-                                +"</div>";
-                        
+                                + "</div>";
+
 // mettre à jour le code HTML affiché sur la page
                         document.getElementById("parametrage-demande").innerHTML = html;
                     },
-                   
+
                     error: function (xhr, status, error) {
                         console.error("Erreur lors de la récupération des données de l'étiquette : " + error);
                     }

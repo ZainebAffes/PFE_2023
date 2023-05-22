@@ -37,7 +37,6 @@ public class EtiquetteparametragedemandeFactory {
         etiquetteparametragedemande.setDefultValue(etiquetteparametragedemandeDTO.getDefultValue());
         etiquetteparametragedemande.setVisible(etiquetteparametragedemandeDTO.getVisible());
         etiquetteparametragedemande.setMultiple(etiquetteparametragedemandeDTO.getMultiple());
-         etiquetteparametragedemande.setCodeParametrageEtiquette(etiquetteparametragedemandeDTO.getCodeParametrageEtiquette());
        
          List<OptionEtiquette> optionEtiquetteLists = new ArrayList<>();
         etiquetteparametragedemandeDTO.getOptionEtiquetteDTOs().forEach(x -> {

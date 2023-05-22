@@ -5,7 +5,7 @@ $(function () {
            setTimeout(function () {       
             window.parent.$.loader.close();
         }, 100);
-        
+    
         });  
    
   

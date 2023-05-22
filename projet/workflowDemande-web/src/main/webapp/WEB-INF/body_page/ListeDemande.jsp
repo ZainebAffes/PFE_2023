@@ -484,7 +484,7 @@
                             <div class="col-md-12">
                                 <fieldset>
                                     <div class="row">
-                                        <div class="form-group col-md-2">
+                                        <div class="form-group col-md-2" style="display:none">
                                             <div class="col-md-4 control-drag" id="codeParam">Code<span class="champOblig">*</span></div>
                                             <div class="col-md-4 input-group">
                                                 <input maxlength="6" id="code" type="text"  class=" form-control datepicker input-xs"  data-mask-clearifnotmatch="true" >
@@ -507,7 +507,7 @@
                                             </div>
                                         </div>
                                          <div class="form-group col-md-3" >
-                                            <div class="col-md-5 control-drag">Etat de demande <span class="champOblig">*</span></div>
+                                            <div class="col-md-5 control-drag">Responsable de validation <span class="champOblig">*</span></div>
                                             <div class="col-md-6 input-group">
                                                 <select id="selectEtat"class=" form-control datepicker input-xs"  data-mask-clearifnotmatch="true">
 
@@ -527,6 +527,7 @@
                                     <div class="container">
                                         <div class="dropzones" id="dropzones">
                                             <div id="zone">
+                                               
 
                                             </div>
                                         </div>
@@ -582,24 +583,7 @@
                                                     </div>    
 
                                                 </div>  
-                                                <!--                                                <span class="glyphicon glyphicon-text-width"><i> Description courte : </i></span>
-                                                                                                <div class="tag"><input draggable="true" type="text"class=" form-control datepicker input-xs"  data-mask-clearifnotmatch="true" placeholder="text"></div>
-                                                
-                                                                                                <span class="glyphicon glyphicon-time"><i> Temps :</i></span>
-                                                                                                <div class="tag"><input draggable="true" type="time"class=" form-control datepicker input-xs"  data-mask-clearifnotmatch="true"></div>
-                                                
-                                                                                                <span class="fa fa-calendar"><i> Date : </i></span>                                                        
-                                                                                                <div class="tag"><input draggable="true" type="date"class=" form-control datepicker input-xs"  data-mask-clearifnotmatch="true"></div>
-                                                
-                                                                                                <i> Nombre :</i>
-                                                                                                <div class="tag" id="nombre"><input draggable="true" type="number"class=" form-control datepicker input-xs"  data-mask-clearifnotmatch="true" placeholder="nombre" >
-                                                                                                   
-                                                                                                </div>
-                                                
-                                                                                                <span class="glyphicon glyphicon-align-left"> <i> Paragraphe :</i></span>
-                                                
-                                                                                                <div class="tag"> <textarea  draggable="true" placeholder="Paragraphe.." class=" form-control datepicker input-xs"  data-mask-clearifnotmatch="true"></textarea></div>
-                                                -->
+                                         
                                             </div>
 
                                         </div>
