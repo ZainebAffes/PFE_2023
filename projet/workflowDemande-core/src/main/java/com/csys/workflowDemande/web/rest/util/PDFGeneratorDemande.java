@@ -86,7 +86,7 @@ public class PDFGeneratorDemande {
 		// Iterating over the list of demandes
 		for (DemandeDTO demande : demandeList) {
 			// Adding demande id
-			table.addCell(String.valueOf(demande.getNumeroDemande()));
+			table.addCell(String.valueOf(demande.getCode()));
 			// Adding demande name
 			table.addCell(demande.getDesignation());
                        

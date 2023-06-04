@@ -2,21 +2,20 @@ package com.csys.workflowDemande.domain;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.Date;
+import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
@@ -28,43 +27,64 @@ public class Demande implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 50)
-    @Column(name = "numeroDemande")
-    private String numeroDemande;
+    @Column(name = "code")
+    private Integer code;
     @Size(max = 50)
     @Column(name = "designation")
     private String designation;
     @Column(name = "dateCreation")
     private LocalDateTime dateCreation;
-       @Column(name = "etat")
+    @Column(name = "etat")
     private String etats;
+
+    @NotNull
+    @Size(min = 1, max = 50)
+    @Column(name = "id_Employe")
+    private String idEmployes;
+    
+   
+    @Column(name = "code_parametrage_demande")
+    private Integer codeParametrageDemandes;
+
     @JoinColumn(name = "id_employe", referencedColumnName = "idEmploye", updatable = false, insertable = false, nullable = true)
     @ManyToOne
     private Employe idEmploye;
+    
     @JoinColumn(name = "code_parametrage_demande", referencedColumnName = "code", updatable = false, insertable = false, nullable = true)
     @ManyToOne
     private ParametrageDemande codeParametrageDemande;
+    
     @JoinColumn(name = "etat", referencedColumnName = "code", updatable = false, insertable = false, nullable = true)
     @ManyToOne
     private Etat etat;
 
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "code_champs", referencedColumnName = "code")
+    private List<Champs> champses;
+
     public Demande() {
     }
 
-    public Demande(String numeroDemande) {
-        this.numeroDemande = numeroDemande;
+    public Integer getCode() {
+        return code;
     }
 
-    public String getNumeroDemande() {
-        return numeroDemande;
+    public void setCode(Integer code) {
+        this.code = code;
     }
 
-    public void setNumeroDemande(String numeroDemande) {
-        this.numeroDemande = numeroDemande;
+    public List<Champs>  getChampses() {
+        return champses;
     }
 
+    public void setChampses(List<Champs> champses) {
+        this.champses = champses;
+    }
+
+
+    
     public String getDesignation() {
         return designation;
     }
@@ -80,8 +100,6 @@ public class Demande implements Serializable {
     public void setDateCreation(LocalDateTime dateCreation) {
         this.dateCreation = dateCreation;
     }
-
-   
 
     public Employe getIdEmploye() {
         return idEmploye;
@@ -115,10 +133,28 @@ public class Demande implements Serializable {
         this.etats = etats;
     }
 
+    public String getIdEmployes() {
+        return idEmployes;
+    }
+
+    public void setIdEmployes(String idEmployes) {
+        this.idEmployes = idEmployes;
+    }
+
+    public Integer getCodeParametrageDemandes() {
+        return codeParametrageDemandes;
+    }
+
+    public void setCodeParametrageDemandes(Integer codeParametrageDemandes) {
+        this.codeParametrageDemandes = codeParametrageDemandes;
+    }
+
+  
+
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (numeroDemande != null ? numeroDemande.hashCode() : 0);
+        hash += (code != null ? code.hashCode() : 0);
         return hash;
     }
 
@@ -129,7 +165,7 @@ public class Demande implements Serializable {
             return false;
         }
         Demande other = (Demande) object;
-        if ((this.numeroDemande == null && other.numeroDemande != null) || (this.numeroDemande != null && !this.numeroDemande.equals(other.numeroDemande))) {
+        if ((this.code == null && other.code != null) || (this.code != null && !this.code.equals(other.code))) {
             return false;
         }
         return true;
@@ -137,7 +173,9 @@ public class Demande implements Serializable {
 
     @Override
     public String toString() {
-        return "com.csys.workflowDemande.domain.Demande[ numeroDemande=" + numeroDemande + " ]";
+        return "com.csys.workflowDemande.domain.Demande[ numeroDemande=" + code + " ]";
     }
+
+    
 
 }

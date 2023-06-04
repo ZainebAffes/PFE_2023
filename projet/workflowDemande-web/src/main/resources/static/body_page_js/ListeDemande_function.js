@@ -14,7 +14,7 @@ function ActionBoutton() {
     $('#btn_Modifier').bind('click', function (e) {
         var rowDde = $('#tableListDemande').find('tr.selectionnee');
         if (rowDde.length === 0)
-            showNotification('Attention', "Veuillez choisir une demande ", 'error', 3000);
+            showNotification('Attention', "Veuillez choisir un paramétrage de type de demande ", 'error', 3000);
         else {
             var code = $('.selectionnee').find('td').eq(0).text();
             majDemande(code, "update");
@@ -24,7 +24,7 @@ function ActionBoutton() {
     $('#btn_Consulter').bind('click', function (e) {
         var rowDde = $('#tableListDemande').find('tr.selectionnee');
         if (rowDde.length === 0)
-            showNotification('Attention', "Veuillez choisir une demande ", 'error', 3000);
+            showNotification('Attention', "Veuillez choisir un paramétrage de type de demande", 'error', 3000);
         else {
             var code = $('.selectionnee').find('td').eq(0).text();
             majDemande(code, "consult");
@@ -34,7 +34,7 @@ function ActionBoutton() {
     $('#btn_Annuler').bind('click', function (e) {
         var rowDde = $('#tableListDemande').find('tr.selectionnee');
         if (rowDde.length === 0)
-            showNotification('Attention', "Veuillez choisir une demande ", 'error', 3000);
+            showNotification('Attention', "Veuillez choisir un paramétrage de type de demande ", 'error', 3000);
         else
         {
             var code = $('.selectionnee').find('td').eq(0).text();
@@ -96,6 +96,7 @@ function ActionBoutton() {
 function majDemande(code, action) {
     var Demande = findDemandeById(code);
     $('#modalAdd').modal('show');
+
     $('#designation').val(Demande.designation);
     $('#code').val(code);
     createSelectEtats();
@@ -109,28 +110,35 @@ function majDemande(code, action) {
         $('#designation').prop("disabled", false);
         $('#codeTypeDemande').prop("disabled", false);
         $('#selectEtat').prop("disabled", false);
+        //  $('#dropzones').empty();
         $('#modalIconDemande').replaceWith('<i id="modalIconDemande" class="glyphicon glyphicon-edit"></i>');
-        $('#labelTitre').text("Modification d'une demande");
+        $('#labelTitre').text("Modification d'un paramétrage de type de demande");
+
         sessionStorage.setItem("Demande", 'modif');
         $("#btnMAJDemande").show();
+
     }
     if (action === "delete") {
         $('#modalIconDemande').replaceWith('<i id="modalIconDemande" class="glyphicon glyphicon-trash"></i>');
-        $('#labelTitre').text("Annulation d'une demande");
+        $('#labelTitre').text("Suppression d'un paramétrage de type de demande");
         $('#designation').prop("disabled", "disabled");
         $('#codeTypeDemande').prop("disabled", true);
         sessionStorage.setItem("Demande", 'delete');
         $("#btnMAJDemande").show();
+
     }
     if (action === "consult") {
         $('#modalIconDemande').replaceWith('<i id="modalIconDemande" class="glyphicon glyphicon-list"></i>');
-        $('#labelTitre').text("Détail d'une demande");
+        $('#labelTitre').text("Détail d'un paramétrage de type de demande");
         $('#designation').prop("disabled", "disabled");
         $('#codeTypeDemande').prop("disabled", true);
         $('#selectEtat').prop("disabled", "disabled");
         $("#btnMAJDemande").hide();
+
     }
+
     DessinerEtiquette($('#code').val(), action);
+
 }
 function DessinerEtiquette(code) {
     var Demande = findDemandeById(code);
@@ -141,95 +149,95 @@ function DessinerEtiquette(code) {
             method: "GET",
             success: function (etiquetteData) {
                 const dropzones = document.getElementById("dropzones");
+
+                const draggedTag = document.createElement('div');
+                draggedTag.classList.add('dragging');
+                draggedTag.setAttribute('draggable', 'true');
+                draggedTag.setAttribute('data-type', etiquetteData.typeEtiquetteDTO.type);
+                draggedTag.innerHTML = `<span class="glyphicon glyphicon-${getGlyphicon(etiquetteData.typeEtiquetteDTO.type)}"><i> ${etiquetteData.typeEtiquetteDTO.type}</i></span>`;
+
                 const newInput = document.createElement('input');
+                newInput.setAttribute('type', 'text');
+                newInput.setAttribute('placeholder', 'Saisir le nom du champ');
+                newInput.classList.add('dropped-nom');
+                newInput.classList.add('nom');
+                newInput.setAttribute('value', etiquetteData.description);
+
+                draggedTag.appendChild(newInput);                
+                dropzones.appendChild(draggedTag);
+
                 const newInput2 = document.createElement('input');
-
                 newInput2.classList.add('dropped-tag');
-                dropzones.classList.add('dragging');
-                switch (etiquetteData.typeEtiquetteDTO.type) {
-                    //selon type 
-                    case "text":
-                        var logo = "<div id='texte' draggable='true'data-type='text' name='text'><span class='glyphicon glyphicon-text-width'><i> Texte</i></span></div>";
-                        newInput.setAttribute('type', 'text');
-                        newInput.setAttribute('value', etiquetteData.description);
-                        newInput.classList.add('dropped-nom');
+                newInput2.setAttribute('id', 'text');
+                newInput2.setAttribute('placeholder', etiquetteData.defultValue);
+                newInput2.setAttribute('for', 'input');
+                newInput2.setAttribute('type', getInputType(etiquetteData.typeEtiquetteDTO.type));
 
-
-                        newInput2.setAttribute('type', 'text');
-                        newInput2.setAttribute('id', 'text');
-                        newInput2.setAttribute('placeholder', etiquetteData.defultValue);
-                        newInput2.setAttribute('for', 'input');
-                        break;
-                    case "number":
-                        var logo = "<div id='number' draggable='true'data-type='number' name='number'><i> nombre</i></div>";
-                        newInput.setAttribute('type', 'number');
-                        newInput.setAttribute('value', etiquetteData.description);
-                        newInput.classList.add('dropped-nom');
-
-
-                        newInput2.setAttribute('type', 'text');
-                        newInput2.setAttribute('id', 'text');
-                        newInput2.setAttribute('placeholder', etiquetteData.defultValue);
-                        newInput2.setAttribute('for', 'input');
-                        break;
-                    case "date":
-                        inputType = "<input type='date'>";
-                        break;
-                    case "time":
-                        inputType = "<input type='time'/>";
-                        break;
-                    default:
-                        inputType = "<input type='text'/>";
-                        break;
-                }
-                
-                document.getElementById("zone").innerHTML = logo;
-                dropzones.appendChild(newInput);
-
-                //etiquetteData.defultValue;
-                const requiredLabel22 = document.createElement('label1');
+                const requiredLabel22 = document.createElement('label');
                 requiredLabel22.innerHTML = 'Valeur par défaut';
-                newInput2.setAttribute('id', 'valeur');
                 requiredLabel22.setAttribute('for', 'input2');
-
-
-                dropzones.appendChild(requiredLabel22);
-                dropzones.appendChild(newInput2);
-
-
-                //btn supprimer
+                newInput2.setAttribute('id', 'valeur');
 
                 const deleteButton = document.createElement('button');
                 deleteButton.innerHTML = 'Supprimer';
                 deleteButton.classList.add('delete-tag');
 
-                dropzones.appendChild(deleteButton);
+                const requiredCheckbox = document.createElement('input');
+                requiredCheckbox.setAttribute('type', 'checkbox');
+                requiredCheckbox.setAttribute('id', 'requiredCheckbox');
+                $('#requiredCheckbox').prop("checked", etiquetteData.isRequired);
+
+                const requiredLabel = document.createElement('label');
+                requiredLabel.innerHTML = 'Champ obligatoire';
+                requiredLabel.setAttribute('for', 'requiredCheckbox');
+
+                draggedTag.appendChild(requiredLabel22);
+                draggedTag.appendChild(newInput2);
+                draggedTag.appendChild(deleteButton);
+                draggedTag.appendChild(requiredCheckbox);
+                draggedTag.appendChild(requiredLabel);
+
                 deleteButton.addEventListener('click', (e) => {
                     const parentTag = e.target.parentElement;
                     const grandParentTag = parentTag.parentElement;
                     grandParentTag.removeChild(parentTag);
                 });
-                // Add checkbox to make field required
-                const requiredCheckbox = document.createElement('input');
-                requiredCheckbox.setAttribute('type', 'checkbox');
-                requiredCheckbox.setAttribute('id', 'requiredCheckbox');
-                $('#requiredCheckbox').prop("checked", etiquetteData.isRequired);
-                const requiredLabel = document.createElement('label');
-                requiredLabel.innerHTML = 'Champ obligatoire';
-                requiredLabel.setAttribute('for', 'requiredCheckbox');
-
-                dropzones.appendChild(requiredCheckbox);
-                dropzones.appendChild(requiredLabel);
-//                        
-
-
             }
         });
     }
-
-
-
 }
+
+function getGlyphicon(type) {
+    switch (type) {
+        case "text":
+            return "text-width";
+        case "number":
+            return "option-horizontal";
+        case "date":
+            return "calendar";
+        case "time":
+            return "time";
+        default:
+            return "question-sign";
+    }
+}
+
+function getInputType(type) {
+    switch (type) {
+        case "text":
+            return "text";
+        case "number":
+            return "text";
+        case "date":
+            return "date";
+        case "time":
+            return "time";
+        default:
+            return "text";
+    }
+}
+
+
 function DrawTableDemande() {
     window.parent.$.loader.open();
     setTimeout(function () {
@@ -287,26 +295,6 @@ function DrawListDemande(idTable, idContainer) {
                         return "<span title='" + data + "'>" + data + "</span>";
                 }
             }
-//            ,
-//            {
-//                title: "Créé par",
-//                data: 'userCreation',
-//                render: function (data) {
-//                    if (data === undefined || data === null || data === 'null')
-//                        return '';
-//                    else
-//                        return "<span title='" + data + "'>" + data + "</span>";
-//                }
-//            }, {
-//                data: 'dateCreation',
-//                title: 'Date de création',
-//                render: function (data) {
-//                    if (data === null || data === undefined)
-//                        return '';
-//                    else
-//                        return formatCalendarWithTime(data, 'dd/mm/yyyy');
-//                }
-//            }
         ],
         "aoColumnDefs": [{
                 'bSortable': false,
@@ -347,8 +335,8 @@ function DrawListDemande(idTable, idContainer) {
     hideLoadingNotification();
 }
 function AfficheModalAddDemande() {
-    $('#labelTitre').text("Ajout d'une demande");
-    $('#modal_ajout_Demande_title h2').val("Ajout d'une demande");
+    $('#labelTitre').text("Ajout d'un paramétrage de type de demande");
+    $('#modal_ajout_Demande_title h2').val("Ajout d'un paramétrage de type de demande");
     $('#modalIconDemande').replaceWith('<i id="modalIconDemande" class="glyphicon glyphicon-plus"></i>');
     $('#modalAdd').modal('show');
     $('#code').val('');
@@ -358,6 +346,7 @@ function AfficheModalAddDemande() {
     $('#designation').prop("disabled", false);
     $('#codeTypeDemande').prop("disabled", false);
     $('#designation').val('');
+    $('#dropzones').empty();
     createSelectTypesDemandes();
     createSelectEtats();
     $("#btnMAJDemande").show();
@@ -381,6 +370,14 @@ function submitMAJDemande() {
             $('#codeTypeDemande').removeClass('css-error');
             $('#codeTypeDemande').attr('style', '');
         }
+        if (($('#selectEtat').val() === '')) {
+            $('#selectEtat').addClass('css-error');
+            $('#selectEtat').attr('style', 'border-width: 1px;background-color: #fff0f0;border-color: #A90329;');
+        } else {
+            $('#selectEtat').removeClass('css-error');
+            $('#selectEtat').attr('style', '');
+        }
+
         if ($('.css-error').length > 0) {
             showNotification('Avertissement', "Veuillez vérifier le(s) champ(s) saisi(s) ! ", 'error', 3000);
         } else {
@@ -423,7 +420,7 @@ function addDemande(list) {
             'Accept-Language': localStorage.getItem("langue")
         },
         success: function (data, textStatus, jqXHR) {
-            showNotification('Succès', 'Ajout effectuée', 'success', 3000);
+            showNotification('succès', 'Ajout effectuée avec Succès', 'success', 3000);
             $('#modalAdd').modal('hide');
             showLoadingNotification();
             setTimeout(function () {
@@ -469,7 +466,7 @@ function updateDemande(object) {
             'Accept-Language': localStorage.getItem("langue")
         },
         success: function (data, textStatus, jqXHR) {
-            showNotification('Succès', 'Modification effectuée', 'success', 3000);
+            showNotification('succès', 'Modification effectuée avec succès', 'success', 3000);
             $('#addConfirm').modal('hide');
             $('#modalAdd').modal('hide');
             showLoadingNotification();
@@ -495,7 +492,7 @@ function deleteDemande(code) {
         success: function (data)
         {
             response = data;
-            showNotification('succès', "Annulation effectuée", 'success', 5000);
+            showNotification('succès', "Suppression effectuée avec succès", 'success', 5000);
             $('#addConfirm').modal('hide');
             $('#modalAdd').modal('hide');
             showLoadingNotification();
@@ -516,6 +513,7 @@ function payloadDemande() {
         var etiquettes = [];
         var typeEtiquetteDTOs = [];
         typeEtiquetteDTOs = findTypeEtiquette();
+
         for (var j = 0; j < noms.length; j++) {
             var etiquette = {};
             var selectedOptions = [];

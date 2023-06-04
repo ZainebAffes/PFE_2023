@@ -10,6 +10,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface EtatRepository extends JpaRepository<Etat, String> {
 
-  public Etat findByCode(String id);
+  
 }
 

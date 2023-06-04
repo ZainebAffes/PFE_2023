@@ -33,13 +33,21 @@ public class ParametrageDemandeFactory {
         parametragedemande.setEtats(parametragedemandeDTO.getIdEtat());
 
         List<Etiquetteparametragedemande> etiquetteparametragedemandesLists = new ArrayList<>();
-        parametragedemandeDTO.getEtiquetteparametragedemandeDTOs().forEach(x -> {
-            Etiquetteparametragedemande etiquetteparametragedemande = EtiquetteparametragedemandeFactory.etiquetteparametragedemandeDTOToEtiquetteparametragedemande(x);
-
-            etiquetteparametragedemandesLists.add(etiquetteparametragedemande);
-        });
         if (parametragedemande.getEtiquetteparametragedemandes() != null) {
-            parametragedemande.getEtiquetteparametragedemandes().clear();
+            parametragedemandeDTO.getEtiquetteparametragedemandeDTOs().forEach(x -> {     
+                x.setCode(parametragedemandeDTO.getCode());
+                Etiquetteparametragedemande etiquetteparametragedemande = EtiquetteparametragedemandeFactory.etiquetteparametragedemandeDTOToEtiquetteparametragedemande(x);
+                etiquetteparametragedemandesLists.add(etiquetteparametragedemande);
+            });
+        } else {
+            parametragedemandeDTO.getEtiquetteparametragedemandeDTOs().forEach(x -> {
+                Etiquetteparametragedemande etiquetteparametragedemande = EtiquetteparametragedemandeFactory.etiquetteparametragedemandeDTOToEtiquetteparametragedemande(x);
+                etiquetteparametragedemandesLists.add(etiquetteparametragedemande);
+            });
+        }
+
+        if (parametragedemande.getEtiquetteparametragedemandes() != null) {
+           parametragedemande.getEtiquetteparametragedemandes().clear();
             parametragedemande.getEtiquetteparametragedemandes().addAll(etiquetteparametragedemandesLists);
         } else {
             parametragedemande.setEtiquetteparametragedemandes(etiquetteparametragedemandesLists);

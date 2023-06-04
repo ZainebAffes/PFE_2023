@@ -1,6 +1,7 @@
 package com.csys.workflowDemande.dto;
 
 import com.csys.workflowDemande.domain.Employe;
+import com.csys.workflowDemande.domain.Champs;
 import com.csys.workflowDemande.domain.ParametrageDemande;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -8,22 +9,13 @@ import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import java.lang.String;
 import java.time.LocalDateTime;
-import javax.validation.constraints.NotNull;
+import java.util.List;
 import javax.validation.constraints.Size;
 
 public class DemandeDTO {
 
-    @NotNull
-    @Size(
-            min = 1,
-            max = 50
-    )
-    private String numeroDemande;
+    private Integer code;
 
-    @Size(
-            min = 0,
-            max = 50
-    )
     private String designation;
 
     @JsonSerialize(using = LocalDateTimeSerializer.class)
@@ -38,16 +30,27 @@ public class DemandeDTO {
     private String nomEmploye;
     private Employe idEmploye;
     private ParametrageDemande codeParametrageDemande;
+    private Integer codeParametrage;
     private String desParametrageDemande;
     private String logoEtat;
     private String idEtat;
-
-    public String getNumeroDemande() {
-        return numeroDemande;
+    private List<ChampsDTO> champsDTOs;
+    private String idEmployes;
+    
+    public Integer getCodeParametrage() {
+        return codeParametrage;
     }
 
-    public void setNumeroDemande(String numeroDemande) {
-        this.numeroDemande = numeroDemande;
+    public void setCodeParametrage(Integer codeParametrage) {
+        this.codeParametrage = codeParametrage;
+    }
+
+    public Integer getCode() {
+        return code;
+    }
+
+    public void setCode(Integer code) {
+        this.code = code;
     }
 
     public String getDesignation() {
@@ -121,4 +124,25 @@ public class DemandeDTO {
     public void setCodeParametrageDemande(ParametrageDemande codeParametrageDemande) {
         this.codeParametrageDemande = codeParametrageDemande;
     }
+
+
+
+    public String getIdEmployes() {
+        return idEmployes;
+    }
+
+    public void setIdEmployes(String idEmployes) {
+        this.idEmployes = idEmployes;
+    }
+
+    public List<ChampsDTO> getChampsDTOs() {
+        return champsDTOs;
+    }
+
+    public void setChampsDTOs(List<ChampsDTO> champsDTOs) {
+        this.champsDTOs = champsDTOs;
+    }
+
+  
+
 }

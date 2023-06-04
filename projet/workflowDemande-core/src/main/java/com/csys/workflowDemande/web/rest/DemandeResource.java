@@ -37,33 +37,22 @@ public class DemandeResource {
     this.demandeService=demandeService;
   }
 
-  @PostMapping("/demandes")
-  public ResponseEntity<DemandeDTO> createDemande(@Valid @RequestBody DemandeDTO demandeDTO, BindingResult bindingResult) throws URISyntaxException, MethodArgumentNotValidException {
-    log.debug("REST request to save Demande : {}", demandeDTO);
-    if (bindingResult.hasErrors()) {
-      throw new MethodArgumentNotValidException(null, bindingResult);
+  
+ @PostMapping("/demandes")
+    public ResponseEntity<String> createDemande(@Valid @RequestBody DemandeDTO demandeDTO, BindingResult bindingResult) throws URISyntaxException, MethodArgumentNotValidException {
+        log.debug("REST request to save Demande : {}", demandeDTO);
+        if (bindingResult.hasErrors()) {
+            throw new MethodArgumentNotValidException(null, bindingResult);
+        }
+        String result = demandeService.save(demandeDTO);
+        return ResponseEntity.created(new URI("/api/demandes/")).body(result);
     }
-    if ( demandeDTO.getNumeroDemande() != null ||  !demandeDTO.getNumeroDemande().isEmpty() ) {
-      bindingResult.addError( new FieldError("DemandeDTO","numeroDemande","POST method does not accepte "+ENTITY_NAME+" with code"));
-      throw new MethodArgumentNotValidException(null, bindingResult);
-    }
-    DemandeDTO result = demandeService.save(demandeDTO);
-    return ResponseEntity.created( new URI("/api/demandes/"+ result.getNumeroDemande())).body(result);
-  }
 
-  @PutMapping("/demandes")
-  public ResponseEntity<DemandeDTO> updateDemande(@Valid @RequestBody DemandeDTO demandeDTO, BindingResult bindingResult) throws MethodArgumentNotValidException {
-    log.debug("Request to update Demande: {}",demandeDTO);
-    if (bindingResult.hasErrors()) {
-      throw new MethodArgumentNotValidException(null, bindingResult);
+    @PutMapping("/demandes/update")
+    public ResponseEntity<String> updateDemande(@Valid @RequestBody DemandeDTO demandeDTO, BindingResult bindingResult) throws URISyntaxException, MethodArgumentNotValidException {
+        String result = demandeService.update(demandeDTO);
+        return ResponseEntity.ok().body(result);
     }
-    if ( demandeDTO.getNumeroDemande() == null ||  demandeDTO.getNumeroDemande().isEmpty() ) {
-      bindingResult.addError( new FieldError("DemandeDTO","numeroDemande","PUT method does not accepte "+ENTITY_NAME+" with code"));
-      throw new MethodArgumentNotValidException(null, bindingResult);
-    }
-    DemandeDTO result =demandeService.update(demandeDTO);
-    return ResponseEntity.ok().body(result);
-  }
   
     @PutMapping("/demandes/validation")
     public ResponseEntity<String> validation(@RequestParam String[] validation, @RequestParam String user) throws URISyntaxException, MethodArgumentNotValidException {
@@ -72,7 +61,7 @@ public class DemandeResource {
     }
   
   @GetMapping("/demandes/{id}")
-  public ResponseEntity<DemandeDTO> getDemande(@PathVariable String id) {
+  public ResponseEntity<DemandeDTO> getDemande(@PathVariable Integer id) {
     log.debug("Request to get Demande: {}",id);
     DemandeDTO dto = demandeService.findById(id);
     return ResponseEntity.ok().body(dto);
@@ -84,7 +73,7 @@ public class DemandeResource {
   }
 
   @DeleteMapping("/demandes/{id}")
-  public ResponseEntity<Void> deleteDemande(@PathVariable String id) {
+  public ResponseEntity<Void> deleteDemande(@PathVariable Integer id) {
     log.debug("Request to delete Demande: {}",id);
     demandeService.delete(id);
     return ResponseEntity.ok().build();

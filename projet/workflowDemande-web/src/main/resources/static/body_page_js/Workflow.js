@@ -1,20 +1,19 @@
 $(function () {
-    drawBtnLesDemandes();
-    DrawTableLesDemandes();
-    findDemande();
+    drawBtnWorkflow();
+    DrawTableWorkflow();
     $('#rafresh').unbind('click');
     $('#rafresh').bind('click', function (e) {
         showLoadingNotification();
         setTimeout(function () {
-            DrawTableLesDemandes();
+            DrawTableWorkflow();
             hideLoadingNotification();
         }, 50);
     });
-    $('#btnMAJDemandes').unbind('click');
-    $('#btnMAJDemandes').bind('click', function () {
+    $('#btnMAJWorkflow').unbind('click');
+    $('#btnMAJWorkflow').bind('click', function () {
         window.parent.$.loader.open();
         setTimeout(function () {
-            submitMAJLesDemandes();
+            submitMAJWorkflow();
             window.parent.$.loader.close();
         }, 100);
     });
@@ -24,16 +23,13 @@ $(function () {
         window.parent.$('ul.ui-tabs-nav .active .closeRad').click();
     });
 
-
+ 
     $('#rafresh').unbind('click');
     $('#rafresh').bind('click', function (e) {
         showLoadingNotification();
         setTimeout(function () {
-            DrawTableLesDemandes();
+            DrawTableWorkflow();
             hideLoadingNotification();
         }, 50);
     });
-
-
-});
-
+      });

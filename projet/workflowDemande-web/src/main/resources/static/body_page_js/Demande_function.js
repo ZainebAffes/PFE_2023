@@ -166,7 +166,7 @@ function majDemande(numeroDemande, action) {
     }
     if (action === "delete") {
         $('#modalIconDemande').replaceWith('<i id="modalIconDemande" class="glyphicon glyphicon-trash"></i>');
-        $('#labelTitre').text("Annulation d'une demande");
+        $('#labelTitre').text("Suppression d'une demande");
         $('#designation').prop("disabled", "disabled");
         $('#dateCreation').prop("disabled", true);
         $('#checkboxActif').prop("disabled", "disabled");
@@ -221,7 +221,7 @@ function  DrawLesDemandes(idTable, idContainer) {
         columns: [
             {
                 title: "Numéro demande",
-                data: 'numeroDemande',
+                data: 'code',
                 render: function (data, type, row, meta) {
                     if (data !== null)
                         return data;
@@ -354,60 +354,7 @@ function  AfficheModalAddLesDemandes() {
     $("#btnMAJDemandes").show();
     sessionStorage.setItem("Demande", 'ajout');
 }
-function submitMAJLesDemandes() {
-    if (sessionStorage.getItem("Demande") === 'delete') {
-        deleteDemandes($('#numeroDemande').val());
-    } else {
-        if (($('#numeroDemande').val() === '')) {
-            $('#numeroDemande').addClass('css-error');
-            $('#numeroDemande').attr('style', 'background-color: #fff0f0;border-color: #A90329;');
-        } else {
-            $('#numeroDemande').removeClass('css-error');
-            $('#numeroDemande').attr('style', '');
-        }
-        if (($('#designation').val() === '')) {
-            $('#designation').addClass('css-error');
-            $('#designation').attr('style', 'border-width: 1px;background-color: #fff0f0;border-color: #A90329;');
-        } else {
-            $('#designation').removeClass('css-error');
-            $('#designation').attr('style', '');
-        }
-        if (($('#dateCreation').val() === '')) {
-            $('#dateCreation').addClass('css-error');
-            $('#dateCreation').attr('style', 'border-width: 1px;background-color: #fff0f0;border-color: #A90329;');
-        } else {
-            $('#dateCreation').removeClass('css-error');
-            $('#dateCreation').attr('style', '');
-        }
-        if ($('.css-error').length > 0) {
-            showNotification('Avertissement', "Veuillez vérifier le(s) champ(s) saisi(s) ! ", 'error', 3000);
-        } else {
 
-            var payload = payloadLesDemandes();
-            if (sessionStorage.getItem("Demande") === 'ajout') {
-                var spec = findDemande(undefined, $('#dateCreation').val());
-                if (spec.length > 0) {
-                    DrawListRassemblant('tableListRassemblant', '_grid_ListRassemblant', spec);
-                    $('#add_msg').html("<h6>designation(s)de règlement(s) ressemblante(s): </h6>");
-                    $('#add_msg_confirm').html("<span>Voulez vous confirmer l'ajout ? </span>");
-                    $('#addConfirm').modal('show');
-                    $('#modalAdd').modal('hide');
-                    $("#submitAdd").unbind('click');
-                    $("#submitAdd").click(function () {
-                        $('#addConfirm').modal('hide');
-                        addDemande(payload);
-                    });
-                } else {
-                    addDemande(payload);
-                }
-            } else {
-                if (sessionStorage.getItem("Demande") === 'modif') {
-                    updateDemande(payload);
-                }
-            }
-        }
-    }
-}
 function addLesDemandes(list) {
     $.ajax({
         url: `${url_base}/demandes`,
@@ -422,7 +369,7 @@ function addLesDemandes(list) {
         },
 
         success: function (data, textStatus, jqXHR) {
-            showNotification('Succès', 'Ajout effectuée', 'success', 3000);
+            showNotification('succès','Ajout effectuée avec succès', 'success', 3000);
             $('#modalAdd').modal('hide');
             showLoadingNotification();
             setTimeout(function () {
@@ -471,7 +418,7 @@ function updateDemandes(object) {
 
         success: function (data, textStatus, jqXHR) {
 
-            showNotification('Succès', 'Modification effectuée', 'success', 3000);
+            showNotification('Modification effectuée avec succès', 'success', 3000);
             $('#addConfirm').modal('hide');
             $('#modalAdd').modal('hide');
             showLoadingNotification();
@@ -495,7 +442,7 @@ function deleteDemandes(numeroDemande) {
         success: function (data)
         {
             response = data;
-            showNotification('succès', "Annulation effectuée", 'success', 5000);
+            showNotification('succès',"Suppression effectuée avec succès", 'success', 5000);
             $('#addConfirm').modal('hide');
             $('#modalAdd').modal('hide');
             showLoadingNotification();
@@ -508,22 +455,7 @@ function deleteDemandes(numeroDemande) {
     });
     return response;
 }
-function payloadLesDemandes() {
-    var oElements = document.querySelectorAll("[dragged]");
 
-    for (i = 0; i < oElements.length; i += 1) {
-        if (oElements[i].parentNode.id) {
-            console.log("%s : %s", oElements[i].parentNode.id, oElements[i].id);
-        }
-    }
-    var payload = {
-        "numeroDemande": $('#numeroDemande').val(),
-        "designation": $('#designation').val(),
-        "dateCreation": $('#dateCreation').val()
-
-    };
-    return payload;
-}
 function DrawListRassemblant(idTable, idContainer, list) {
     document.getElementById(idContainer).innerHTML = '';
     var table_list = "<table id='" + idTable + "' class='display dataTable projects-table table table-striped table-bordered table-hover' cellspacing='0'  width='100%' align='center'>";

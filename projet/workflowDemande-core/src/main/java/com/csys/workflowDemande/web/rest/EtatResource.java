@@ -41,35 +41,31 @@ public class EtatResource {
     log.debug("REST request to save Etat : {}", etatDTO);
     if (bindingResult.hasErrors()) {
       throw new MethodArgumentNotValidException(null, bindingResult);
-    }
-    if ( etatDTO.getCode()!= null ||  !etatDTO.getCode().isEmpty() ) {
-      bindingResult.addError( new FieldError("EtatDTO","id","POST method does not accepte "+ENTITY_NAME+" with code"));
-      throw new MethodArgumentNotValidException(null, bindingResult);
-    }
+    }   
     EtatDTO result = etatService.save(etatDTO);
     return ResponseEntity.created( new URI("/api/etats/"+ result.getCode())).body(result);
   }
 
-//  @PutMapping("/etats")
-//  public ResponseEntity<EtatDTO> updateEtat(@Valid @RequestBody EtatDTO etatDTO, BindingResult bindingResult) throws MethodArgumentNotValidException {
-//    log.debug("Request to update Etat: {}",etatDTO);
-//    if (bindingResult.hasErrors()) {
-//      throw new MethodArgumentNotValidException(null, bindingResult);
-//    }
-//    if ( etatDTO.getCode()== null ||  etatDTO.getCode().isEmpty() ) {
-//      bindingResult.addError( new FieldError("EtatDTO","id","PUT method does not accepte "+ENTITY_NAME+" with code"));
-//      throw new MethodArgumentNotValidException(null, bindingResult);
-//    }
-//    EtatDTO result =etatService.update(etatDTO);
-//    return ResponseEntity.ok().body(result);
-//  }
+  @PutMapping("/etats")
+  public ResponseEntity<EtatDTO> updateEtat(@Valid @RequestBody EtatDTO etatDTO, BindingResult bindingResult) throws MethodArgumentNotValidException {
+    log.debug("Request to update Etat: {}",etatDTO);
+    if (bindingResult.hasErrors()) {
+      throw new MethodArgumentNotValidException(null, bindingResult);
+    }
+    if ( etatDTO.getCode()== null ||  etatDTO.getCode().isEmpty() ) {
+      bindingResult.addError( new FieldError("EtatDTO","id","PUT method does not accepte "+ENTITY_NAME+" with code"));
+      throw new MethodArgumentNotValidException(null, bindingResult);
+    }
+    EtatDTO result =etatService.update(etatDTO);
+    return ResponseEntity.ok().body(result);
+  }
 
-//  @GetMapping("/etats/{id}")
-//  public ResponseEntity<EtatDTO> getEtat(@PathVariable String id) {
-//    log.debug("Request to get Etat: {}",id);
-//    EtatDTO dto = etatService.findById(id);
-//    return ResponseEntity.ok().body(dto);
-//  }
+  @GetMapping("/etats/{id}")
+  public ResponseEntity<EtatDTO> getEtat(@PathVariable String id) {
+    log.debug("Request to get Etat: {}",id);
+    EtatDTO dto = etatService.findOne(id);
+    return ResponseEntity.ok().body(dto);
+  }
      @GetMapping("/etats")
   public Collection<EtatDTO> getAllEtats() {
     log.debug("Request to get all  Etats : {}");

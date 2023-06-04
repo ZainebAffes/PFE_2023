@@ -2,14 +2,26 @@ function drawBtnLesDemandes() {
     DessinerButton('30', '#listetid_Demandes');
     ActionBoutton();
 }
+var Demande = [];
+var Champs = [];
+let demandeId;
+let url = window.location.search;
+if (url !== '') {
+    var e = [];
+    e = url.split('?');
+    var t = [];
+    t = e[1].split('&');
+    demandeId = t[0].split('=')[1];
+}
+
 
 function ActionBoutton() {
     $('#btn_Ajouter').unbind('click');
     $('#btn_Ajouter').bind('click', function (e) {
         AfficheModalAddLesDemandes();
+        sessionStorage.setItem("Demande", 'ajout');
         $("#typeMode").val("add");
     });
-
     $('#btn_Consulter').unbind('click');
     $('#btn_Consulter').bind('click', function (e) {
         var rowDde = $('#tableNouvelleDemandes').find('tr.selectionnee');
@@ -17,10 +29,9 @@ function ActionBoutton() {
             showNotification('Attention', "Veuillez choisir une demande ", 'error', 3000);
         else {
             var numeroDemande = $('.selectionnee').find('td').eq(0).text();
-            majDemandes(numeroDemande, "consult");
+            majNVDemande(numeroDemande, "consult");
         }
     });
-
     $('#btn_Annuler').unbind('click');
     $('#btn_Annuler').bind('click', function (e) {
         var rowDde = $('#tableNouvelleDemandes').find('tr.selectionnee');
@@ -29,10 +40,9 @@ function ActionBoutton() {
         else
         {
             var numeroDemande = $('.selectionnee').find('td').eq(0).text();
-            majDemandes(numeroDemande, "delete");
+            majNVDemande(numeroDemande, "delete");
         }
     });
-
     $('#btn_Imprimer').unbind('click');
     $('#btn_Imprimer').bind('click', function (e) {
         $('#search').val("");
@@ -40,15 +50,14 @@ function ActionBoutton() {
         var url = `${url_base}/demandes/print?user=` + window.localStorage.getItem('username') + `&type=` + type;
         impressionListe(url);
     });
-
     $("#btn_Exporter").unbind("click");
     $("#btn_Exporter").bind("click", function (e) {
         var type = "Excel";
         var url = `${url_base}/demandes/print?actifs=${varActif}&user=` + window.localStorage.getItem('username') + `&type=` + type;
         exporterList(url, "demandes");
     });
-    $('#btn_Modifier').unbind('click');
-    $('#btn_Modifier').bind('click', function (e) {
+    $('#btn_Valider').unbind('click');
+    $('#btn_Valider').bind('click', function (e) {
         var liste = [];
         $("#tableNouvelleDemandes > tbody > tr").each(function () {
             if ($(this).find(".checkBoxClass").is(":checked")) {
@@ -63,6 +72,87 @@ function ActionBoutton() {
             validation(liste);
         }
     });
+    $('#btn_Modifier').unbind('click');
+    $('#btn_Modifier').bind('click', function (e) {
+        var rowDde = $('#tableNouvelleDemandes').find('tr.selectionnee');
+        if (rowDde.length === 0)
+            showNotification('Attention', "Veuillez choisir une demande ", 'error', 3000);
+        else {
+            var numeroDemande = $('.selectionnee').find('td').eq(0).text();
+            findChamps(numeroDemande);
+            majNVDemande(numeroDemande, "update");
+        }
+    });
+}
+
+function majNVDemande(code, action) {
+    $('#modalAdd').modal('show');
+    $('#designation').val(Demande.designation);
+    $('#code').val(code);
+    if (action === "update") {
+        $('#designation').prop("disabled", false);
+        $('#codeTypeDemande').prop("disabled", false);
+        $('#selectEtat').prop("disabled", false);
+        $('#modalIconDemande').replaceWith('<i id="modalIconDemande" class="glyphicon glyphicon-edit"></i>');
+        $('#labelTitre').text("Modification d'une " + Demande.designation);
+        sessionStorage.setItem("Demande", 'modif');
+        $("#btnMAJDemande").show();
+    }
+    if (action === "delete") {
+        $('#modalIconDemande').replaceWith('<i id="modalIconDemande" class="glyphicon glyphicon-trash"></i>');
+        $('#labelTitre').text("Suppression d'une " + Demande.designation);
+        $('#designation').prop("disabled", "disabled");
+        $('#codeTypeDemande').prop("disabled", true);
+        sessionStorage.setItem("Demande", 'delete');
+        $("#btnMAJDemande").show();
+    }
+    if (action === "consult") {
+        $('#modalIconDemande').replaceWith('<i id="modalIconDemande" class="glyphicon glyphicon-list"></i>');
+        $('#labelTitre').text("Détail d'une " + Demande.designation);
+        $('#designation').prop("disabled", "disabled");
+        $('#codeTypeDemande').prop("disabled", true);
+        $('#selectEtat').prop("disabled", "disabled");
+        $("#btnMAJDemande").hide();
+    }
+    DessinerListeDesChamps(code, action);
+}
+
+
+function DessinerListeDesChamps(code, action) {
+    var html = "";
+    for (let i = 0; i < Champs.length; i++) {
+        var etiquette = Champs[i];
+//        success: function (etiquette) {
+        var inputType = "";
+        switch (etiquette.typeEtiquette.type) {
+            case "text":
+                inputType += "<input id='" + etiquette.nomChamp.replace(/\s/g, '') + "s' type='text' value='" + etiquette.valeur + "'>";
+                break;
+            case "number":
+                inputType = "<input id='" + etiquette.nomChamp.replace(/\s/g, '') + "s' value='" + etiquette.valeur + "'type='number'/>";
+                break;
+            case "date":
+                inputType = "<input id='" + etiquette.nomChamp.replace(/\s/g, '') + "s' value='" + etiquette.valeur + "'type='date'>";
+                break;
+            case "time":
+                inputType = "<input id='" + etiquette.nomChamp.replace(/\s/g, '') + "s' value='" + etiquette.valeur + "'type='time'/>";
+                break;
+            default:
+                inputType = "<input id='" + etiquette.nomChamp.replace(/\s/g, '') + "s' value='" + etiquette.valeur + "'type='text'/>";
+                break;
+        }
+// ajouter le code HTML pour afficher l'étiquette et l'input
+        html += "<div class='col-md-12'><div style='padding:8px ;margin: 8px;'><div class='col-md-4 control-drag'>" + etiquette.nomChamp
+                + ":</div> " + " <div class='col-md-4 input-group'>" + inputType + "</div>"
+
+                + "</div>";
+        document.getElementById("parametrage-demande").innerHTML = html;
+
+
+// },
+
+    }
+
 }
 function validation(list) {
     $.ajax({
@@ -78,40 +168,6 @@ function validation(list) {
     });
 }
 
-function majDemande(numeroDemande, action) {
-    var Demande = findDemandeById(numeroDemande);
-    $('#modalAdd').modal('show');
-    $('#numeroDemande').val(numeroDemande);
-    $('#designation').val(Demande.designation);
-    $('#dateCreation').val(Demande.dateCreation);
-    $('#numeroDemande').prop("disabled", "disabled");
-
-    if (action === "update") {
-        $('#designation').prop("disabled", false);
-        $('#dateCreation').prop("disabled", false);
-        $('#modalIconDemande').replaceWith('<i id="modalIconDemande" class="glyphicon glyphicon-edit"></i>');
-        $('#labelTitre').text("Modification d'une demande");
-        sessionStorage.setItem("Demande", 'modif');
-        $("#btnMAJDemandes").show();
-    }
-    if (action === "delete") {
-        $('#modalIconDemande').replaceWith('<i id="modalIconDemande" class="glyphicon glyphicon-trash"></i>');
-        $('#labelTitre').text("Annulation d'une demande");
-        $('#designation').prop("disabled", "disabled");
-        $('#dateCreation').prop("disabled", true);
-        $('#checkboxActif').prop("disabled", "disabled");
-        sessionStorage.setItem("Demande", 'delete');
-        $("#btnMAJDemandes").show();
-    }
-    if (action === "consult") {
-        $('#modalIconDemande').replaceWith('<i id="modalIconDemande" class="glyphicon glyphicon-list"></i>');
-        $('#labelTitre').text("Détail d'une demande");
-        $('#designation').prop("disabled", "disabled");
-        $('#dateCreation').prop("disabled", true);
-        $("#btnMAJDemandes").hide();
-    }
-
-}
 
 function DrawTableLesDemandes() {
     window.parent.$.loader.open();
@@ -150,7 +206,7 @@ function  DrawLesNouvellesDemandes(idTable, idContainers) {
         columns: [
             {
                 title: "Numéro demande",
-                data: 'numeroDemande',
+                data: 'code',
                 render: function (data, type, row, meta) {
                     if (data !== null)
                         return data;
@@ -187,7 +243,6 @@ function  DrawLesNouvellesDemandes(idTable, idContainers) {
                         return "<span title='" + data + "'>" + data + "</span>";
                 }
             },
-
             {
                 data: 'dateCreation',
                 title: 'Date du demande ',
@@ -209,28 +264,26 @@ function  DrawLesNouvellesDemandes(idTable, idContainers) {
                 }
             },
             {
-                title: "Etat",
-                data: 'idEtat',
-                render: function (data) {
-                    if (data === undefined)
-                        return '';
-                    else
-                        return "<i class='" + data + "'>" + data + "</i>";
-                }
-            },
-            {
                 data: 'idEtat',
                 title: 'valider',
                 sortable: false,
                 render: function (data, type, row, meta) {
                     var check = data === "0 " ? "unchecked" : "checked";
-                    return '<form><label style="display: flex;justify-content: center;align-items: center; "><input name="renouv" type="checkbox" class="editor-active checkBoxClass checkbox" ' + check + '><span></span></label></form>';
+                    return '<form><label style="display: flex;justify-content: center;align-items: center; "><input name="renouv" type="checkbox" class="editor-active checkBoxClass checkbox" ' + '><span></span></label></form>';
+                }
+            },
+            {
+                data: 'idEtat',
+                title: 'Refuser',
+                sortable: false,
+                render: function (data, type, row, meta) {
+                    var check = data === "0 " ? "unchecked" : "checked";
+                    return '<form><label style="display: flex;justify-content: center;align-items: center; "><input name="renouv" type="checkbox" class="editor-active checkBoxClass checkbox" ' + '><span></span></label></form>';
                 }
             }
         ],
         "aoColumnDefs": [{
                 'bSortable': false,
-               
             }],
         "order": [[0, "asc"]]
     });
@@ -259,7 +312,7 @@ function  DrawLesNouvellesDemandes(idTable, idContainers) {
             showNotification('Attention', 'veuillez Sélectionner une Demande', 'error', 2000);
         else {
             var numeroDemande = $('.selectionnee').find('td').eq(0).text();
-            majDemandes(numeroDemande, 'consult');
+            majNVDemande(numeroDemande, 'consult');
         }
     });
     $('#tableNouvelleDemandes_info').css("padding", '0');
@@ -267,13 +320,102 @@ function  DrawLesNouvellesDemandes(idTable, idContainers) {
     hideLoadingNotification();
 }
 function  AfficheModalAddLesDemandes() {
-    $('#labelTitre').text("Ajout d'une demande");
-    $('#modal_ajout_Demandes_title h2').val("Ajout d'une demande");
+    var i = 0;
     $('#modalIconDemande').replaceWith('<i id="modalIconDemande" class="glyphicon glyphicon-plus"></i>');
     $('#modalAdd').modal('show');
+    ///
+    // récupérer l'ID de la demande à partir de l'URL ou d'un clic sur un bouton
 
+    let demandeId;
+    let url = window.location.search;
+    if (url !== '') {
+        var e = [];
+        e = url.split('?');
+        var t = [];
+        t = e[1].split('&');
+        demandeId = t[0].split('=')[1];
+    }
+// faire une requête AJAX pour récupérer les données de la demande
+    $.ajax({
+        url: url_base + '/parametragedemandes/' + demandeId,
+        method: "GET",
+        success: function (demandeData) {
+// créer le code HTML dynamique pour afficher le paramétrage de la demande
+            $('#labelTitre').text("Ajout d'une " + demandeData.designation);
+            $('#modal_ajout_Demandes_title h2').val("Ajout d'une " + demandeData.designation);
+            var html = "<ul>";
+            
+            html += "<div class='username'><i class='fa fas fa-duotone fa-user-tie'></i>"+"      " + window.localStorage.getItem('username') + "</div>";
+            html += "<div class='separator'></div>";
+            for (i = 0; i < demandeData.etiquetteparametragedemandeDTOs.length; i++) {
+                var etiquette = demandeData.etiquetteparametragedemandeDTOs[i];
+// faire une requête AJAX pour récupérer les données de l'étiquette
+                $.ajax({
+                    url: url_base + '/etiquetteparametragedemandes/' + etiquette.code,
+                    method: "GET",
+                    success: function (etiquetteData) {
+
+
+                        var inputType = "";
+
+                        switch (etiquetteData.typeEtiquetteDTO.type) {
+
+                            case "text":
+                                inputType = "<input id='" + etiquetteData.description.replace(/\s/g, '') + "s' type='text'/>";
+                                break;
+                            case "number":
+                                inputType = "<input id='" + etiquetteData.description.replace(/\s/g, '') + "s' type='number'/>";
+                                break;
+                            case "date":
+                                var today = new Date();
+                            var minDate = formatDate(today);
+                            var maxDate = formatDate(addMonths(today, 1));
+                            inputType = "<input id='" + etiquetteData.description.replace(/\s/g, '') + "s' type='date' min='" + minDate + "' max='" + maxDate + "'/>";
+                            break;
+                            case "time":
+                                inputType = "<input id='" + etiquetteData.description.replace(/\s/g, '') + "s' type='time'/>";
+                                break;
+                            default:
+                                inputType = "<input id='" + etiquetteData.description.replace(/\s/g, '') + "s' type='text'/>";
+                                break;
+                        }
+                        let x = etiquetteData.description;
+                       
+// ajouter le code HTML pour afficher l'étiquette et l'input
+                        html += "<div class='col-md-12'><div style='padding:8px ;margin: 8px;'><div class='col-md-4 control-drag'>" + x
+                                + ":</div> " + " <div class='col-md-4 input-group'>" + inputType + "</div>"
+                                + etiquetteData.defultValue
+                                + "</div>";
+// mettre à jour le code HTML affiché sur la page
+                        document.getElementById("parametrage-demande").innerHTML = html;
+                    },
+                    error: function (xhr, status, error) {
+                        console.error("Erreur lors de la récupération des données de l'étiquette : " + error);
+                    }
+                });
+            }
+            html += "</ul>";
+        },
+        error: function (xhr, status, error) {
+            console.error("Erreur lors de la récupération des données de la demande : " + error);
+        }
+    });
     $("#btnMAJDemandes").show();
     sessionStorage.setItem("Demande", 'ajout');
+}
+// Fonction utilitaire pour formater une date au format "YYYY-MM-DD"
+function formatDate(date) {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+}
+
+// Fonction utilitaire pour ajouter un nombre de mois à une date
+function addMonths(date, months) {
+    const newDate = new Date(date);
+    newDate.setMonth(date.getMonth() + months);
+    return newDate;
 }
 function submitMAJLesDemandes() {
     if (sessionStorage.getItem("Demande") === 'delete') {
@@ -306,24 +448,10 @@ function submitMAJLesDemandes() {
 
             var payload = payloadLesDemandes();
             if (sessionStorage.getItem("Demande") === 'ajout') {
-                var spec = findDemande(undefined, $('#dateCreation').val());
-                if (spec.length > 0) {
-                    DrawListRassemblant('tableListRassemblant', '_grid_ListRassemblant', spec);
-                    $('#add_msg').html("<h6>designation(s)de règlement(s) ressemblante(s): </h6>");
-                    $('#add_msg_confirm').html("<span>Voulez vous confirmer l'ajout ? </span>");
-                    $('#addConfirm').modal('show');
-                    $('#modalAdd').modal('hide');
-                    $("#submitAdd").unbind('click');
-                    $("#submitAdd").click(function () {
-                        $('#addConfirm').modal('hide');
-                        addDemande(payload);
-                    });
-                } else {
-                    addDemande(payload);
-                }
+                addDemande(payload);
             } else {
                 if (sessionStorage.getItem("Demande") === 'modif') {
-                    updateDemande(payload);
+                    updateDemandes(payload);
                 }
             }
         }
@@ -341,9 +469,8 @@ function addLesDemandes(list) {
             'x-auth-token': localStorage.getItem("x-auth-token"),
             'Accept-Language': localStorage.getItem("langue")
         },
-
         success: function (data, textStatus, jqXHR) {
-            showNotification('Succès', 'Ajout effectuée', 'success', 3000);
+            showNotification('succès', 'Ajout effectuée avec succès', 'success', 3000);
             $('#modalAdd').modal('hide');
             showLoadingNotification();
             setTimeout(function () {
@@ -356,7 +483,6 @@ function addLesDemandes(list) {
 
         }
     });
-
 }
 
 function findAllDemandeByCodeParametrage(code) {
@@ -378,7 +504,6 @@ function findAllDemandeByCodeParametrage(code) {
         }
     });
     return response;
-
 }
 
 function findDemandeById(id) {
@@ -401,7 +526,7 @@ function findDemandeById(id) {
 }
 function updateDemandes(object) {
     $.ajax({
-        url: `${url_base}/demandes?user=` + window.localStorage.getItem('username'),
+        url: `${url_base}/demandes/update?user=` + window.localStorage.getItem('username'),
         type: 'PUT',
         contentType: "application/json; charset=utf-8",
         data: JSON.stringify(object),
@@ -411,10 +536,9 @@ function updateDemandes(object) {
             'x-auth-token': localStorage.getItem("x-auth-token"),
             'Accept-Language': localStorage.getItem("langue")
         },
-
         success: function (data, textStatus, jqXHR) {
 
-            showNotification('Succès', 'Modification effectuée', 'success', 3000);
+            showNotification('succès', 'Modification effectuée avec succès', 'success', 3000);
             $('#addConfirm').modal('hide');
             $('#modalAdd').modal('hide');
             showLoadingNotification();
@@ -438,7 +562,7 @@ function deleteDemandes(numeroDemande) {
         success: function (data)
         {
             response = data;
-            showNotification('succès', "Annulation effectuée", 'success', 5000);
+            showNotification("Suppression effectuée avec succès", 'success', 5000);
             $('#addConfirm').modal('hide');
             $('#modalAdd').modal('hide');
             showLoadingNotification();
@@ -446,103 +570,35 @@ function deleteDemandes(numeroDemande) {
                 DrawTableLesDemandes();
                 hideLoadingNotification();
             }, 50);
-
         }
     });
     return response;
 }
 function payloadLesDemandes() {
-    var oElements = document.querySelectorAll("[dragged]");
+    var etiquettes = [];
 
-    for (i = 0; i < oElements.length; i += 1) {
-        if (oElements[i].parentNode.id) {
-            console.log("%s : %s", oElements[i].parentNode.id, oElements[i].id);
-        }
+    var numeroDemande = $('.selectionnee').find('td').eq(0).text();
+    for (var i = 0; i < Demande.etiquetteparametragedemandeDTOs.length; i++) {
+        var etiquette = {};
+        var etiqu = Demande.etiquetteparametragedemandeDTOs[i];
+        etiquette["nomChamp"] = etiqu.description;
+        etiquette["valeur"] = $('#' + etiqu.description.replace(/\s/g, '') + 's').val();
+        etiquette["codeTypeEtiquette"] = etiqu.typeEtiquetteDTO.code;
+        etiquette["Codedemande"] = numeroDemande;
+        etiquettes.push(etiquette);
     }
-    var payload = {
-        "numeroDemande": $('#numeroDemande').val(),
-        "designation": $('#designation').val(),
-        "dateCreation": $('#dateCreation').val()
 
+    var payload = {
+        "nomEmploye": window.localStorage.getItem('username'),
+        "idEmployes": window.localStorage.getItem('username'),
+        "designation": Demande.designation,
+        "code": numeroDemande,
+        "typeDemande": Demande.codeTypeDemande,
+        "codeParametrage": demandeId,
+        "etat": Demande.etats,
+        "champsDTOs": etiquettes
     };
     return payload;
-}
-function DrawListRassemblant(idTable, idContainer, list) {
-    document.getElementById(idContainer).innerHTML = '';
-    var table_list = "<table id='" + idTable + "' class='display dataTable projects-table table table-striped table-bordered table-hover' cellspacing='0'  width='100%' align='center'>";
-    table_list += "</table>";
-    $("#" + idContainer).html(table_list);
-    var colDef = [2];
-    table = $('#' + idTable).on('page.dt', function () {}).DataTable({
-        "dom": 'frtip',
-        "searching": true,
-        destroy: false,
-        bPaginate: true,
-        sort: false,
-        data: list,
-        language: dataTablesLang,
-        "pageLength": 15,
-        columns: [
-            {
-                title: "Numéro demande",
-                data: 'numeroDemande',
-                render: function (data, type, row, meta) {
-                    if (data !== null)
-                        return data;
-                    else
-                        "";
-                }
-            },
-            {
-                title: "Désignation",
-                data: 'designation',
-                render: function (data) {
-                    if (data === undefined)
-                        return '';
-                    else
-                        return "<span title='" + data + "'>" + data + "</span>";
-                }
-            },
-
-            {
-                title: "Date création",
-                data: 'dateCreation',
-                render: function (data) {
-                    if (data === undefined)
-                        return '';
-                    else
-                        return "<span title='" + data + "'>" + data + "</span>";
-                }
-            }
-        ],
-        "aoColumnDefs": [{
-                'bSortable': false,
-                'aTargets': colDef
-            }],
-        "order": [[0, "asc"]]
-    });
-    $('#tableListRassemblant  tbody').delegate('tr', 'click', function (e) {
-        var highlightColor = '#d9edf7';
-        var css = $(this).attr('style');
-        if ($(this).find('.dataTables_empty').length === 0) {
-            if (css !== 'border-color: rgb(217, 237, 247); background-color: rgb(217, 237, 247)') {
-                $('#' + idTable + ' > tbody > tr').removeAttr('style');
-                $('#' + idTable + ' > tbody > tr').removeClass('selectionnee');
-                $(this).addClass('selectionnee');
-                $(this).css('background-color', highlightColor);
-                $(this).css('border-color', highlightColor);
-            } else {
-                $(this).removeAttr('style');
-            }
-        }
-        $('#' + idTable + ' tbody > tr').focus();
-    });
-    $("#search").on("keyup search input paste cut", function () {
-        table.search(this.value).draw();
-    });
-    $('#tableListRassemblant_info').css("padding", '0');
-    $('#tableListRassemblant_filter').hide();
-    hideLoadingNotification();
 }
 
 function findDemande(designation) {
@@ -584,7 +640,6 @@ function findDemandePDF(designation) {
         }
     });
     return response;
-
 }
 function getDemande(designation) {
 
@@ -605,6 +660,56 @@ function getDemande(designation) {
         }
     });
     return response;
-
 }
 
+function findDemande() {
+    var response = "";
+    $.ajax({
+        url: url_base + '/parametragedemandes/' + demandeId,
+        contentType: "text/html; charset=utf-8",
+        type: 'GET',
+        dataType: "json",
+        async: false,
+        success: function (data)
+        {
+            Demande = data;
+        }
+    });
+    return response;
+}
+function findChamps(num) {
+    var response = "";
+    $.ajax({
+        url: url_base + '/listedeschampss/filter?codeParametrage=' + num,
+        contentType: "text/html; charset=utf-8",
+        type: 'GET',
+        dataType: "json",
+        async: false,
+        success: function (data)
+        {
+            Champs = data;
+        }
+    });
+    return response;
+}
+function addDemande(list) {
+    $.ajax({
+        url: url_base + '/demandes?user=' + window.localStorage.getItem('username'),
+        type: 'POST',
+        data: JSON.stringify(list),
+        contentType: "application/json; charset=utf-8",
+        async: false,
+        success: function () {
+            showNotification('Succès', 'Ajout effectuée', 'success', 3000);
+            $('#modalAdd').modal('hide');
+            showLoadingNotification();
+            setTimeout(function () {
+                DrawLesNouvellesDemandes("tableNouvelleDemandes", "_grid_NouvelleDemandes");
+                hideLoadingNotification();
+            }, 50);
+        }
+        ,
+        complete: function (jqXHR, textStatus) {
+        }
+    });
+}

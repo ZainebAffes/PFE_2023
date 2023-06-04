@@ -1,153 +1,78 @@
-function drawBtnTypeDemande() {
-    DessinerButton('20', '#listetid_TypeDemande');
+function drawBtnWorkflow() {
+    DessinerButton('40', '#listetid_Workflow');
     ActionBoutton();
 }
 function ActionBoutton() {
     $('#btn_Ajouter').unbind('click');
     $('#btn_Ajouter').bind('click', function (e) {
-        AfficheModalAddTypeDemande();
+        AfficheModalAddWorkflow();
     });
 
     $('#btn_Modifier').unbind('click');
     $('#btn_Modifier').bind('click', function (e) {
-        var rowDde = $('#tableListTypeDemande').find('tr.selectionnee');
+        var rowDde = $('#tableListWorkflow').find('tr.selectionnee');
         if (rowDde.length === 0)
-            showNotification('Attention', "Veuillez choisir un type de demande ", 'error', 3000);
+            showNotification('Attention', "Veuillez choisir une état ", 'error', 3000);
         else {
-            var codTypeDemande = $('.selectionnee').find('td').eq(0).text();
-            majTypeDemande(codTypeDemande, "update");
-
-
+            var codWorkflow = $('.selectionnee').find('td').eq(0).text();
+            majWorkflow(codWorkflow, "update");
         }
     });
-
-    $('#btn_Consulter').unbind('click');
-    $('#btn_Consulter').bind('click', function (e) {
-        var rowDde = $('#tableListTypeDemande').find('tr.selectionnee');
-        if (rowDde.length === 0)
-            showNotification('Attention', "Veuillez choisir un type de demande ", 'error', 3000);
-        else {
-            var codTypeDemande = $('.selectionnee').find('td').eq(0).text();
-            majTypeDemande(codTypeDemande, "consult");
-        }
-    });
-
+     
     $('#btn_Annuler').unbind('click');
     $('#btn_Annuler').bind('click', function (e) {
-        var rowDde = $('#tableListTypeDemande').find('tr.selectionnee');
+        var rowDde = $('#tableListWorkflow').find('tr.selectionnee');
         if (rowDde.length === 0)
-            showNotification('Attention', "Veuillez choisir un type de demande ", 'error', 3000);
+            showNotification('Attention', "Veuillez choisir une état ", 'error', 3000);
         else
         {
-            var codTypeDemande = $('.selectionnee').find('td').eq(0).text();
-            majTypeDemande(codTypeDemande, "delete");
+            var codWorkflow = $('.selectionnee').find('td').eq(0).text();
+            majWorkflow(codWorkflow, "delete");
         }
     });
 
-    $('#btn_Imprimer').unbind('click');
-    $('#btn_Imprimer').bind('click', function (e) {
-        var url = url_base + '/pdf/typeDemandes';
-        if ($('#search').val() !== "undefined") {
-            url = url + '?designation=' + $('#search').val();
-        }
-        impressionListe(url);
-    });
-
-    $("#btn_Exporter").unbind("click");
-    $("#btn_Exporter").bind("click", function (e) {
-        const headers = [
-            'Code',
-            'désignation'
-        ];
-        console.log(window);
-        const workbook = new window.ExcelJS.Workbook();
-
-        const downloadAsExcel = () => {
-            workbook.xlsx.writeBuffer().then((data) => {
-                const blob = new Blob([data], {
-                    type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-                });
-                saveAs(blob, `typedemandes.xlsx`);
-
-            });
-        };
-        var url = url_base + '/typedemandes/filter';
-        if ($('#search').val() !== "undefined") {
-            url = url + '?designation=' + $('#search').val();
-        }
-        fetch(url, {
-            method: "GET"
-        }).then(async(response) => {
-            const json = await response.json();
-
-            console.log(json);
-            const title = 'typedemandes';
-
-            const worksheet = workbook.addWorksheet(
-                    `typedemandes`
-                    );
-
-            worksheet.addRow(headers);
-            json.forEach((typedemande) => {
-                const newRow = worksheet.addRow([]);
-                newRow.getCell(1).value = typedemande.codeTypeDemande;
-                newRow.getCell(2).value = typedemande.description;
-            });
-            downloadAsExcel();
-
-            worksheet.destroy();
-
-        });
-
-    });
 }
-function majTypeDemande(codTypeDemande, action) {
-    var TypeDemande = findTypeDemandeById(codTypeDemande);
+function majWorkflow(codWorkflow, action) {
+    var Workflow = findWorkflowById(codWorkflow);
     $('#modalAdd').modal('show');
-    $('#codTypeDemande').val(codTypeDemande);
-    $('#desTypeDemande').val(TypeDemande.description);
-    $('#codTypeDemande').prop("disabled", "disabled");
+    $('#codWorkflow').val(codWorkflow);
+    $('#desWorkflow').val(Workflow.designation);
+    $('#logoWorkflow').val(Workflow.logo);
+    $('#codWorkflow').prop("disabled", "disabled");
+   
     if (action === "update") {
-        $('#desTypeDemande').prop("disabled", false);
-        $('#codTypeDemandeTypeTypeDemande').prop("disabled", false);
-        $('#checkboxActif').prop("disabled", false);
-        $('#modalIconTypeDemande').replaceWith('<i id="modalIconTypeDemande" class="glyphicon glyphicon-edit"></i>');
-        $('#labelTitre').text("Modification d'un type de demande");
-        sessionStorage.setItem("TypeDemande", 'modif');
-        $("#btnMAJTypeDemande").show();
+        $('#desWorkflow').prop("disabled", false);
+        $('#codWorkflowTypeWorkflow').prop("disabled", false);
+         $('#logoWorkflow').prop("disabled", false);       
+        $('#modalIconWorkflow').replaceWith('<i id="modalIconWorkflow" class="glyphicon glyphicon-edit"></i>');
+        $('#labelTitre').text("Modification d'un Workflow");
+        sessionStorage.setItem("Workflow", 'modif');
+        $("#btnMAJWorkflow").show();
     }
     if (action === "delete") {
-        $('#modalIconTypeDemande').replaceWith('<i id="modalIconTypeDemande" class="glyphicon glyphicon-trash"></i>');
-        $('#labelTitre').text("Suppression d'un type de demande");
-        $('#desTypeDemande').prop("disabled", "disabled");
-        $('#codTypeDemandeTypeTypeDemande').prop("disabled", true);
-        $('#checkboxActif').prop("disabled", "disabled");
-        sessionStorage.setItem("TypeDemande", 'delete');
-        $("#btnMAJTypeDemande").show();
-    }
-    if (action === "consult") {
-        $('#modalIconTypeDemande').replaceWith('<i id="modalIconTypeDemande" class="glyphicon glyphicon-list"></i>');
-        $('#labelTitre').text("Détail d'un type de demande");
-        $('#desTypeDemande').prop("disabled", "disabled");
-        $('#codTypeDemandeTypeTypeDemande').prop("disabled", true);
-        $('#checkboxActif').prop("disabled", "disabled");
-        $("#btnMAJTypeDemande").hide();
-    }
-
+        $('#modalIconWorkflow').replaceWith('<i id="modalIconWorkflow" class="glyphicon glyphicon-trash"></i>');
+        $('#labelTitre').text("Suppression d'un Workflow");
+        $('#desWorkflow').prop("disabled", "disabled");
+         $('#logoWorkflow').prop("disabled", "disabled");
+        $('#codWorkflow').prop("disabled", true);
+       
+        sessionStorage.setItem("Etat", 'delete');
+        $("#btnMAJWorkflow").show();
+    }   
 }
 
-function DrawTableTypeDemande() {
+function DrawTableWorkflow() {
     window.parent.$.loader.open();
     setTimeout(function () {
-        DrawListTypeDemande("tableListTypeDemande", '_grid_ListTypeDemande');
+        DrawListWorkflow("tableListWorkflow", '_grid_ListWorkflow');
         window.parent.$.loader.close();
     }, 100);
 }
-function DrawListTypeDemande(idTable, idContainer) {
+function DrawListWorkflow(idTable, idContainer) {
     showLoadingNotification();
     var List = [];
 
-    List = findTypeDemande(undefined);
+    List = findWorkflow(undefined);
     document.getElementById(idContainer).innerHTML = '';
     var table_list = "<table id='" + idTable + "' class='display dataTable projects-table table table-striped table-bordered table-hover' cellspacing='0'  width='100%' align='center'>";
     table_list += "</table>";
@@ -166,7 +91,7 @@ function DrawListTypeDemande(idTable, idContainer) {
         columns: [
             {
                 title: "Code",
-                data: 'codeTypeDemande',
+                data: 'code',
                 render: function (data, type, row, meta) {
                     if (data !== null)
                         return data;
@@ -175,8 +100,8 @@ function DrawListTypeDemande(idTable, idContainer) {
                 }
             },
             {
-                title: "désignation",
-                data: 'description',
+                title: "Responsable de validation",
+                data: 'designation',
                 render: function (data) {
                     if (data === undefined)
                         return '';
@@ -191,7 +116,7 @@ function DrawListTypeDemande(idTable, idContainer) {
             }],
         "order": [[0, "asc"]]
     });
-    $('#tableListTypeDemande  tbody').delegate('tr', 'click', function (e) {
+    $('#tableListWorkflow  tbody').delegate('tr', 'click', function (e) {
         var highlightColor = '#d9edf7';
         var css = $(this).attr('style');
         if ($(this).find('.dataTables_empty').length === 0) {
@@ -210,56 +135,64 @@ function DrawListTypeDemande(idTable, idContainer) {
     $("#search").on("keyup search input paste cut", function () {
         table.search(this.value).draw();
     });
-    $('#tableListTypeDemande > tbody').on('dblclick', function (e) {
-        var rowDde = $('#tableListTypeDemande').find('tr.selectionnee');
+    $('#tableListWorkflow > tbody').on('dblclick', function (e) {
+        var rowDde = $('#tableListWorkflow').find('tr.selectionnee');
         if (rowDde.length === 0)
-            showNotification('Attention', 'veuillez Sélectionner un TypeDemande', 'error', 2000);
+            showNotification('Attention', 'veuillez Sélectionner un Workflow', 'error', 2000);
         else {
-            var codTypeDemande = $('.selectionnee').find('td').eq(0).text();
-            majTypeDemande(codTypeDemande, 'consult');
+            var codWorkflow = $('.selectionnee').find('td').eq(0).text();
+            majWorkflow(codWorkflow, 'consult');
         }
     });
-    $('#tableListTypeDemande_info').css("padding", '0');
-    $('#tableListTypeDemande_filter').hide();
+    $('#tableListWorkflow_info').css("padding", '0');
+    $('#tableListWorkflow_filter').hide();
     hideLoadingNotification();
 }
-function AfficheModalAddTypeDemande() {
-    $('#labelTitre').text("Ajout d'un type de demande");
-    $('#modal_ajout_TypeDemande_title h2').val("Ajout d'un type de Demande");
-    $('#modalIconTypeDemande').replaceWith('<i id="modalIconTypeDemande" class="glyphicon glyphicon-plus"></i>');
+function AfficheModalAddWorkflow() {
+    $('#labelTitre').text("Ajout d'un Workflow");
+    $('#modal_ajout_Workflow_title h2').val("Ajout d'un Workflow");
+    $('#modalIconWorkflow').replaceWith('<i id="modalIconWorkflow" class="glyphicon glyphicon-plus"></i>');
     $('#modalAdd').modal('show');
-    $('#codTypeDemande').val('');
-    $('#desTypeDemande').val('');
-    $('#desTypeDemande').prop("disabled", false);
-    $('#codTypeDemande').prop("disabled", false);
-    $('#checkboxActif').prop("disabled", false);
-    $("#btnMAJTypeDemande").show();
-    sessionStorage.setItem("TypeDemande", 'ajout');
+    $('#codWorkflow').val('');
+    $('#desWorkflow').val('');
+   $('#logoWorkflow').val('');
+    $('#desWorkflow').prop("disabled", false);
+    $('#codWorkflow').prop("disabled", false);   
+    $('#logoWorkflow').prop("disabled", false);
+    $("#btnMAJWorkflow").show();
+    sessionStorage.setItem("Etat", 'ajout');
 }
-function submitMAJTypeDemande() {
-    if (sessionStorage.getItem("TypeDemande") === 'delete') {
-        deleteTypeDemande($('#codTypeDemande').val());
+function submitMAJWorkflow() {
+    if (sessionStorage.getItem("Etat") === 'delete') {
+        deleteWorkflow($('#codWorkflow').val());
     } else {
-        if (($('#codTypeDemande').val() === '')) {
-            $('#codTypeDemande').addClass('css-error');
-            $('#codTypeDemande').attr('style', 'background-color: #fff0f0;border-color: #A90329;');
+        if (($('#codWorkflow').val() === '')) {
+            $('#codWorkflow').addClass('css-error');
+            $('#codWorkflow').attr('style', 'background-color: #fff0f0;border-color: #A90329;');
         } else {
-            $('#codTypeDemande').removeClass('css-error');
-            $('#codTypeDemande').attr('style', '');
+            $('#codWorkflow').removeClass('css-error');
+            $('#codWorkflow').attr('style', '');
         }
-        if (($('#desTypeDemande').val() === '')) {
-            $('#desTypeDemande').addClass('css-error');
-            $('#desTypeDemande').attr('style', 'border-width: 1px;background-color: #fff0f0;border-color: #A90329;');
+        if (($('#desWorkflow').val() === '')) {
+            $('#desWorkflow').addClass('css-error');
+            $('#desWorkflow').attr('style', 'border-width: 1px;background-color: #fff0f0;border-color: #A90329;');
         } else {
-            $('#desTypeDemande').removeClass('css-error');
-            $('#desTypeDemande').attr('style', '');
+            $('#desWorkflow').removeClass('css-error');
+            $('#desWorkflow').attr('style', '');
+        }
+        if (($('#logoWorkflow').val() === '')) {
+            $('#logoWorkflow').addClass('css-error');
+            $('#logoWorkflow').attr('style', 'border-width: 1px;background-color: #fff0f0;border-color: #A90329;');
+        } else {
+            $('#logoWorkflow').removeClass('css-error');
+            $('#logoWorkflow').attr('style', '');
         }
         if ($('.css-error').length > 0) {
             showNotification('Avertissement', "Veuillez vérifier le(s) champ(s) saisi(s) ! ", 'error', 3000);
         } else {
-            var payload = payloadTypeDemande();
-            if (sessionStorage.getItem("TypeDemande") === 'ajout') {
-                var Type = findTypeDemande($('#desTypeDemande').val());
+            var payload = payloadWorkflow();
+            if (sessionStorage.getItem("Workflow") === 'ajout') {
+                var Type = findWorkflow($('#desWorkflow').val());
                 if (Type.length > 0) {
                     DrawListRassemblant('tableListRassemblant', '_grid_ListRassemblant', Type);
                     $('#add_msg').html("<h6>des Types de demande(s) ressemblante(s): </h6>");
@@ -269,23 +202,23 @@ function submitMAJTypeDemande() {
                     $("#submitAdd").unbind('click');
                     $("#submitAdd").click(function () {
                         $('#addConfirm').modal('hide');
-                        addTypeDemande(payload);
+                        addWorkflow(payload);
                     });
                 } else {
-                    addTypeDemande(payload);
+                    addWorkflow(payload);
                 }
             } else {
-                if (sessionStorage.getItem("TypeDemande") === 'modif') {
-                    updateTypeDemande(payload);
+                if (sessionStorage.getItem("Workflow") === 'modif') {
+                    updateWorkflow(payload);
                 }
             }
         }
     }
 }
-function addTypeDemande(list) {
+function addWorkflow(list) {
     $.ajax({
-        url: `${url_base}/typedemandes`,
-//          url: `${url_base}//typedemandes?user=` + window.localStorage.getItem('username'),
+        url: `${url_base}/etats`,
+      //    url: `${url_base}//etats?user=` + window.localStorage.getItem('username'),
         type: 'POST',
         contentType: "application/json; charset=utf-8",
         data: JSON.stringify(list),
@@ -301,7 +234,7 @@ function addTypeDemande(list) {
             $('#modalAdd').modal('hide');
             showLoadingNotification();
             setTimeout(function () {
-                DrawTableTypeDemande();
+                DrawTableWorkflow();
                 hideLoadingNotification();
             }, 50);
         }
@@ -313,11 +246,11 @@ function addTypeDemande(list) {
 
 }
 
-function findTypeDemandeById(id) {
+function findWorkflowById(id) {
 
     var response = "";
     $.ajax({
-        url: `${url_base}/typedemandes/${id}`,
+        url: `${url_base}/etats/${id}`,
         type: 'GET',
         async: false,
         dataType: 'json',
@@ -332,9 +265,9 @@ function findTypeDemandeById(id) {
     });
     return response;
 }
-function updateTypeDemande(object) {
+function updateWorkflow(object) {
     $.ajax({
-        url: `${url_base}/typedemandes?user=` + window.localStorage.getItem('username'),
+        url: `${url_base}/etats`,
         type: 'PUT',
         contentType: "application/json; charset=utf-8",
         data: JSON.stringify(object),
@@ -352,7 +285,7 @@ function updateTypeDemande(object) {
             $('#modalAdd').modal('hide');
             showLoadingNotification();
             setTimeout(function () {
-                DrawTableTypeDemande();
+                DrawTableWorkflow();
                 hideLoadingNotification();
             }, 50);
         }
@@ -361,10 +294,10 @@ function updateTypeDemande(object) {
         }
     });
 }
-function deleteTypeDemande(codTypeDemande) {
+function deleteWorkflow(code) {
     var response = "";
     $.ajax({
-        url: `${url_base}/typedemandes/${codTypeDemande}`,
+        url: `${url_base}/etats/${code}`,
         contentType: "text/html; charset=utf-8",
         type: 'DELETE',
         async: false,
@@ -376,7 +309,7 @@ function deleteTypeDemande(codTypeDemande) {
             $('#modalAdd').modal('hide');
             showLoadingNotification();
             setTimeout(function () {
-                DrawTableTypeDemande();
+                DrawTableWorkflow();
                 hideLoadingNotification();
             }, 50);
 
@@ -384,10 +317,11 @@ function deleteTypeDemande(codTypeDemande) {
     });
     return response;
 }
-function payloadTypeDemande() {
+function payloadWorkflow() {
     var payload = {
-        "codeTypeDemande": $('#codTypeDemande').val(),
-        "description": $('#desTypeDemande').val()
+        "code": $('#codWorkflow').val(),
+        "designation": $('#desWorkflow').val(),
+        "logo": $('#logoWorkflow').val()
     };
     return payload;
 }
@@ -409,7 +343,7 @@ function DrawListRassemblant(idTable, idContainer, list) {
         columns: [
             {
                 title: "Code",
-                data: 'codeTypeDemande',
+                data: 'code',
                 render: function (data, type, row, meta) {
                     if (data !== null)
                         return data;
@@ -418,8 +352,8 @@ function DrawListRassemblant(idTable, idContainer, list) {
                 }
             },
             {
-                title: "Désignation",
-                data: 'description',
+                title: "Responsable de validation",
+                data: 'designation',
                 render: function (data) {
                     if (data === undefined)
                         return '';
@@ -458,55 +392,11 @@ function DrawListRassemblant(idTable, idContainer, list) {
     hideLoadingNotification();
 }
 
-function findTypeDemande(desTypeDemande) {
+function findWorkflow(desWorkflow) {
 
-    var url = url_base + '/typedemandes/filter';
-    if (desTypeDemande !== undefined) {
-        url = url + '?designation=' + desTypeDemande;
-    }
-    var response = "";
-    $.ajax({
-        url: url,
-        contentType: "text/html; charset=utf-8",
-        type: 'GET',
-        dataType: "json",
-        async: false,
-        success: function (data)
-        {
-            response = data;
-        }
-    });
-    return response;
-
-}
-function findTypeDemandePDF(desTypeDemande) {
-
-    var url = url_base + '/pdf/typeDemandes';
-    if (desTypeDemande !== undefined) {
-        url = url + '?designation=' + desTypeDemande;
-    }
-    var response = "";
-    $.ajax({
-        url: url,
-        contentType: "text/html; charset=utf-8",
-        type: 'GET',
-        dataType: "json",
-        async: false,
-        success: function (data)
-        {
-            response = data;
-        }
-    });
-    return response;
-
-}
-
-
-function getTypeDemande(desTypeDemande) {
-
-    var url = url_base + '/export/typeDemandes';
-    if (desTypeDemande !== undefined) {
-        url = url + '?designation=' + desTypeDemande;
+    var url = url_base + '/etats';
+    if (desWorkflow !== undefined) {
+        url = url + '?designation=' + desWorkflow;
     }
     var response = "";
     $.ajax({

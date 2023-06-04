@@ -26,11 +26,11 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity
 @Table(name = "Etat")
 public class Etat implements Serializable {
-
+ private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 50)
+    @Size(min = 1, max = 3)
     @Column(name = "code")
     private String code;
     @Size(max = 50)
@@ -40,7 +40,7 @@ public class Etat implements Serializable {
     @Column(name = "logo")
     private String logo;
 
-    private static final long serialVersionUID = 1L;
+   
 
     public Etat() {
     }

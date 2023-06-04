@@ -400,7 +400,7 @@
                 height: 32%;
                 width: 91%;
             }
-
+            
 
         </style>
     </head>
@@ -415,7 +415,7 @@
                             <a class="btn btn-default accessCtrl pull-right" id="btnFermer"> 
                                 <span class="widget-icon"><i class="glyphicon btn-danger glyphicon-log-out"></i> <spring:message code="fb.global.fermer"/></span>
                             </a>
-                            <a class="btn btn-default  pull-left" id="rafresh" > 
+                            <a class="btn btn-default  pull-left" id="rafresh"> 
                                 <span class="widget-icon"><i class="glyphicon glyphicon-refresh"></i></span>  
                             </a>
                             <h2><strong id="etat-header">Paramétrage des types de demandes</strong></h2> 
@@ -507,7 +507,7 @@
                                             </div>
                                         </div>
                                          <div class="form-group col-md-3" >
-                                            <div class="col-md-5 control-drag">Responsable de validation <span class="champOblig">*</span></div>
+                                            <div class="col-md-5 control-drag">Responsables de validation  <span class="champOblig">*</span></div>
                                             <div class="col-md-6 input-group">
                                                 <select id="selectEtat"class=" form-control datepicker input-xs"  data-mask-clearifnotmatch="true">
 
@@ -526,7 +526,7 @@
 
                                     <div class="container">
                                         <div class="dropzones" id="dropzones">
-                                            <div id="zone">
+                                            <div id="dragDrop">
                                                
 
                                             </div>

@@ -1,6 +1,7 @@
 package com.csys.workflowDemande.factory;
 
 import com.csys.workflowDemande.domain.Demande;
+import com.csys.workflowDemande.domain.Champs;
 import com.csys.workflowDemande.dto.DemandeDTO;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -11,7 +12,7 @@ public class DemandeFactory {
 
     public static DemandeDTO demandeToDemandeDTO(Demande demande) {
         DemandeDTO demandeDTO = new DemandeDTO();
-        demandeDTO.setNumeroDemande(demande.getNumeroDemande());
+        demandeDTO.setCode(demande.getCode());
         demandeDTO.setDesignation(demande.getDesignation());
         demandeDTO.setDateCreation(demande.getDateCreation() != null ? demande.getDateCreation() : null);
         if (demande.getIdEmploye() != null) {
@@ -25,16 +26,34 @@ public class DemandeFactory {
             demandeDTO.setLogoEtat(demande.getEtat().getLogo());
             demandeDTO.setIdEtat(demande.getEtat().getCode());
         }
-       // demandeDTO.setCodeParametrageDemande(demande.getCodeParametrageDemande());
+            demandeDTO.setChampsDTOs(ChampsFactory.listdeschampsToChampsDTOs(demande.getChampses()));
+        
+
+// demandeDTO.setCodeParametrageDemande(demande.getCodeParametrageDemande());
         return demandeDTO;
     }
 
-    public static Demande demandeDTOToDemande(DemandeDTO demandeDTO) {
-        Demande demande = new Demande();
-        demande.setNumeroDemande(demandeDTO.getNumeroDemande());
+    public static Demande demandeDTOToDemande(DemandeDTO demandeDTO, Demande demande) {
+        if (demande == null) {
+            demande = new Demande();
+        }
         demande.setDesignation(demandeDTO.getDesignation());
         demande.setDateCreation(LocalDateTime.now());
-        demande.setCodeParametrageDemande(demandeDTO.getCodeParametrageDemande());
+        demande.setCodeParametrageDemandes(demandeDTO.getCodeParametrage());
+        demande.setIdEmployes(demandeDTO.getIdEmployes());
+
+        List<Champs> champsLists = new ArrayList<>();
+        demandeDTO.getChampsDTOs().forEach(x -> {
+            Champs champs = ChampsFactory.champsDTOToChamps(x);
+
+            champsLists.add(champs);
+        });
+        if (demande.getChampses() != null) {
+            demande.getChampses().clear();
+            demande.getChampses().addAll(champsLists);
+        } else {
+            demande.setChampses(champsLists);
+        }
         return demande;
     }
 

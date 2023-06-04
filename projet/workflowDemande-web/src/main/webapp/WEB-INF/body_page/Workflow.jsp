@@ -20,12 +20,12 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <jsp:include page="../body_page/css_declare.jsp"/>  
         
-       <title>Demandes</title>
-<!--       <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/amcharts/3.21.15/plugins/export/libs/FileSaver.js/FileSaver.min.js"></script>
+       <title>Workflows</title>
+       <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/amcharts/3.21.15/plugins/export/libs/FileSaver.js/FileSaver.min.js"></script>
              <script type="text/javascript" src="https://unpkg.com/exceljs@4.3.0/dist/exceljs.min.js"></script>
               <script type="text/javascript" >
                   console.log('loadet');
-              </script>-->
+              </script>
 
         <style>
 
@@ -40,16 +40,16 @@
             .widget-body{
                 z-index: 0;
             }
-            #_grid_NouvelleDemandes thead > tr th:nth-child(1),
-            #_grid_NouvelleDemandes tbody > tr td:nth-child(1){
+            #_grid_ListWorkflow thead > tr th:nth-child(1),
+            #_grid_ListWorkflow tbody > tr td:nth-child(1){
                 width: 20%!important;
             }
-            #_grid_NouvelleDemandes thead > tr th:nth-child(2),
-            #_grid_NouvelleDemandes tbody > tr td:nth-child(2){
+            #_grid_ListWorkflow thead > tr th:nth-child(2),
+            #_grid_ListWorkflow tbody > tr td:nth-child(2){
                 width: 30%!important;
             }
           
-            #_grid_NouvelleDemandes  tbody {
+            #_grid_ListWorkflow  tbody {
                 flex: 1 1 auto;
                 width: 100%;
                 display: block;
@@ -59,30 +59,30 @@
                 max-height: calc(100vh - 222px);
                 height:auto !important;
             }
-            #_grid_NouvelleDemandes {
+            #_grid_ListWorkflow {
                 display: flex;
                 flex-flow: column;
                 height: 100%;
                 width: 100%;
             }
-            #_grid_NouvelleDemandes thead, #_grid_NouvelleDemandes tbody tr {
+            #_grid_ListWorkflow thead, #_grid_ListWorkflow tbody tr {
                 display: table;
                 table-layout: fixed;
             }
-            #_grid_NouvelleDemandes thead {
+            #_grid_ListWorkflow thead {
                 width: calc(100% -  6px) !important;
                 flex: 0 0 auto;
             }
-            #_grid_NouvelleDemandes tbody tr {
+            #_grid_ListWorkflow tbody tr {
                 width: 100%;
             }
 
-            #_grid_NouvelleDemandes tbody > tr > td,
-            #_grid_NouvelleDemandes  tbody > tr > th,
-            #_grid_NouvelleDemandes  tfoot > tr > td,
-            #_grid_NouvelleDemandes  tfoot > tr > th,
-            #_grid_NouvelleDemandes  thead > tr > td,
-            #_grid_NouvelleDemandes  thead > tr > th {
+            #_grid_ListWorkflow tbody > tr > td,
+            #_grid_ListWorkflow  tbody > tr > th,
+            #_grid_ListWorkflow  tfoot > tr > td,
+            #_grid_ListWorkflow  tfoot > tr > th,
+            #_grid_ListWorkflow  thead > tr > td,
+            #_grid_ListWorkflow  thead > tr > th {
                 padding: 3px 5px!important;
                 font-size: 12px;
             }
@@ -184,7 +184,7 @@
             }
 
 
-            #filter_Demande{
+            #filter_Workflow{
                 z-index: 0 !important;
             }
             td {
@@ -193,7 +193,7 @@
             .bootstrap-tagsinput input {
                 width: 28em;
             }
-            #_grid_NouvelleDemandes_filter{
+            #_grid_ListWorkflow_filter{
                 margin-left: -1132px;
 
             }
@@ -256,16 +256,6 @@
                 padding: 5px;
                 font-size: 12px;
             }
-            
-            .username{
-                text-align: center;
-                font-size: 20px;
-                margin-top: 6px;
-            }
-            .separator{
-                border-top: 3px dashed #bbb;
-                margin: 20px;
-            }
         </style>
     </head>
     <body id="my_body" class="styleCsys">
@@ -275,14 +265,14 @@
                 <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="padding-right: 2px;">
                     <div class="jarviswidget jarviswidget-color-redLight"  data-widget-editbutton="false" data-widget-deletebutton="false">
 
-                        <header class='screen' id="listetid_Demandes">
+                        <header class='screen' id="listetid_Workflow">
                             <a class="btn btn-default accessCtrl pull-right" id="btnFermer"> 
                                 <span class="widget-icon"><i class="glyphicon btn-danger glyphicon-log-out"></i> <spring:message code="fb.global.fermer"/></span>
                             </a>
                             <a class="btn btn-default  pull-left" id="rafresh" > 
                                 <span class="widget-icon"><i class="glyphicon glyphicon-refresh"></i></span>  
                             </a>
-                            <h2><strong id="etat-header">Gestion des Liste des demandes</strong></h2> 
+                            <h2><strong id="etat-header">Gestion de workflow</strong></h2> 
                         </header>
                         <!-- widget div-->
                         <div style="min-height: calc(100vh - 55px);">
@@ -294,11 +284,11 @@
                                     </div>
                                 </label>
                             </div>
-                           
+                        
                             <div class="widget-body screen col-md-12">
 
                                 <div class="row">
-                                    <div  id="_grid_NouvelleDemandes" >
+                                    <div  id="_grid_ListWorkflow" >
                                     </div>
                                 </div>
                             </div>
@@ -326,7 +316,7 @@
                         <div class="row"><br>
                             <div style="padding: 1px 20px 4px;" align="right">
                                 <button id="submitAdd" type="button" class="btn btn-default"><i class="fa fa-check"></i>&nbsp; Valider</button>
-                                <button type="button" class="btn btn-default" onClick="$('#addConfirm').modal('hide');$('#modalAddSousTypeDemandeExamen').modal('show');"><i class="fa fa-times"></i>&nbsp; Fermer</button>
+                                <button type="button" class="btn btn-default" onClick="$('#addConfirm').modal('hide');$('#modalAddSousWorkflowExamen').modal('show');"><i class="fa fa-times"></i>&nbsp; Fermer</button>
                             </div>
                         </div>
                     </div> 
@@ -334,23 +324,43 @@
             </div>
         </div>
         <div class="modal fade screen" id="modalAdd" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-            <div class="modal-dialog centre_screen" style="width: 50%;">
+            <div class="modal-dialog centre_screen" style="width: 60%;">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h4 style="font-size: 20px;color: #3276b1;" class="modal-title">
-                            <i id="modalIconDemande" class="glyphicon glyphicon-plus"></i> 
+                            <i id="modalIconWorkflow" class="glyphicon glyphicon-plus"></i> 
                             <span id="labelTitre"></span>
                         </h4>
                     </div>      
                     <!-- widget div-->
-                    <div id="popup_div" class="modal-body" style="padding:5px;border-style: solid;border-width: 1px;margin: 5px">
+                    <div id="popup_div" class="modal-body">
                         <div class="row">
                             <div class="widget-body screen col-md-12">
-                             
-                                    <div id="parametrage-demande">
-                                       
+                                <fieldset >
+                                    <div class="row">
+                                        <div class="form-group col-md-4">
+                                            <label class="col-md-4 control-label">Code<span class="champOblig">*</span></label>
+                                            <div class="col-md-6 input-group">
+                                                <input maxlength="6" id="codWorkflow" type="text"  class=" form-control datepicker input-xs"  data-mask-clearifnotmatch="true" >
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group col-md-8" >
+                                            <label class="col-md-4 control-label"> Reponsable de validation <span class="champOblig">*</span></label>
+                                            <div class="col-md-8 input-group">
+                                                <input draggable = "true"  maxlength="100" id="desWorkflow" type="text"  class=" form-control datepicker input-xs"  data-mask-clearifnotmatch="true" >
+                                            </div>
+                                        </div> 
+                                        
+                                         <div class="form-group col-md-8" >
+                                            <label class="col-md-4 control-label"> Logo <span class="champOblig">*</span></label>
+                                            <div class="col-md-8 input-group">
+                                                <input draggable = "true"  maxlength="100" id="logoWorkflow" type="text"  class=" form-control datepicker input-xs"  data-mask-clearifnotmatch="true" >
+                                            </div>
+                                        </div> 
+                                        
                                     </div>
-                               
+                                </fieldset>
                             </div>
                         </div>
 
@@ -359,8 +369,8 @@
                     <div  class="modal-footer" style="padding: 1px 20px 4px;">
                         <div class="row">
                             <div align="right">
-                                <button id="btnMAJDemandes" type="button" class="btn btn-default"><i class="fa fa-check"></i>&nbsp; Valider</button>
-                                <button id='btnCloseModalTypeDemande' type="button" class="btn btn-default" onClick="$('#modalAdd').modal('hide');"><i class="fa fa-times"></i>&nbsp; Fermer</button>
+                                <button id="btnMAJWorkflow" type="button" class="btn btn-default"><i class="fa fa-check"></i>&nbsp; Valider</button>
+                                <button id='btnCloseModalWorkflow' type="button" class="btn btn-default" onClick="$('#modalAdd').modal('hide');"><i class="fa fa-times"></i>&nbsp; Fermer</button>
                             </div>
                         </div>
                     </div> 
@@ -369,7 +379,7 @@
         </div>
 
 
-        <div class="modal fade " id="demandes" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal fade " id="parametrage" tabindex="-1" role="dialog" aria-hidden="true">
             <div class="modal-dialog centre_screen" style="width: 850px;">
                 <div class="modal-content">
                     <div class="modal-header"   >
@@ -381,7 +391,7 @@
                         </h4>
                     </div>
 
-                    <div id="Demandebody" class="modal-body" style="  overflow-x: auto;overflow-y: auto;max-height: 100px;">
+                    <div id="parametragebody" class="modal-body" style="  overflow-x: auto;overflow-y: auto;max-height: 200px;">
                     </div>
 
                     <div class="modal-footer" >
@@ -438,7 +448,7 @@
         <script src="body_page_js/otherfunction.js?version=<%=date%>"></script>
         <script src="body_page_js/BackGridEditor.js?version=<%=date%>"></script> 
         <script src="js/plugin/other-plugin/summernote.min.js"></script>    
-        <script src="body_page_js/NouvelleDemande.js?version=<%=date%>"></script>
-        <script src="body_page_js/NouvelleDemande_function.js?version=<%=date%>"></script>
+        <script src="body_page_js/Workflow.js?version=<%=date%>"></script>
+        <script src="body_page_js/Workflow_function.js?version=<%=date%>"></script>
     </body>
 </html>

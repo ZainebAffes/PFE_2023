@@ -89,7 +89,7 @@ function eventbtn() {
 
     $("#10").unbind("click");
     $("#10").bind("click", function (e) {
-        ouvrirOnglet("Paramétrage des demandes", "ListeDemande", false, 'fils', '', 'ListeDemande');
+        ouvrirOnglet("Paramétrage des types de demande", "ListeDemande", false, 'fils', '', 'ListeDemande');
     });
 
     $("#20").unbind("click");
@@ -101,6 +101,11 @@ function eventbtn() {
     $("#30").unbind("click");
     $("#30").bind("click", function (e) {
         ouvrirOnglet("Liste des demandes","Demande", false, 'fils', '', 'Demande');
+    });
+    
+    $("#40").unbind("click");
+    $("#40").bind("click", function (e) {
+        ouvrirOnglet("Workflow des demandes","Workflow", false, 'fils', '', 'Workflow');
     });
 }
 

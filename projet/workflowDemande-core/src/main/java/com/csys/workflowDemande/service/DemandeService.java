@@ -6,11 +6,13 @@ import com.csys.workflowDemande.dto.DemandeDTO;
 import com.csys.workflowDemande.factory.DemandeFactory;
 import com.csys.workflowDemande.repository.DemandeRepository;
 import com.csys.workflowDemande.util.WhereClauseBuilder;
-import com.google.common.base.Preconditions;
+import com.csys.workflowDemande.util.Preconditions;
 import java.lang.String;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -28,29 +30,13 @@ public class DemandeService {
         this.demandeRepository = demandeRepository;
     }
 
-    public DemandeDTO save(DemandeDTO demandeDTO) {
-        log.debug("Request to save Demande: {}", demandeDTO);
-        Demande demande = DemandeFactory.demandeDTOToDemande(demandeDTO);
-        demande = demandeRepository.save(demande);
-        DemandeDTO resultDTO = DemandeFactory.demandeToDemandeDTO(demande);
-        return resultDTO;
-    }
-
-    public DemandeDTO update(DemandeDTO demandeDTO) {
-        log.debug("Request to update Demande: {}", demandeDTO);
-        Optional<Demande> inBase = demandeRepository.findById(demandeDTO.getNumeroDemande());
-        Preconditions.checkArgument(inBase != null, "Demande does not exist");
-        DemandeDTO result = save(demandeDTO);
-        return result;
-    }
-
     @Transactional(
             readOnly = true
     )
-    public DemandeDTO findById(String id) {
+    public DemandeDTO findById(Integer id) {
         log.debug("Request to get Demande: {}", id);
         Optional<Demande> demande = demandeRepository.findById(id);
-        Preconditions.checkArgument(demande != null, "Demande does not exist");
+        Preconditions.checkBusinessLogique(demande != null, "Demande does not exist");
         DemandeDTO dto = DemandeFactory.demandeToDemandeDTO(demande.get());
         return dto;
     }
@@ -58,10 +44,10 @@ public class DemandeService {
     @Transactional(
             readOnly = true
     )
-    public Optional<Demande> findDemande(String id) {
+    public Optional<Demande> findDemande(Integer id) {
         log.debug("Request to get Demande: {}", id);
         Optional<Demande> demande = demandeRepository.findById(id);
-        Preconditions.checkArgument(demande != null, "Demande does not exist");
+        Preconditions.checkBusinessLogique(demande != null, "Demande does not exist");
         return demande;
     }
 
@@ -74,7 +60,7 @@ public class DemandeService {
         return DemandeFactory.demandeToDemandeDTOs(result);
     }
 
-    public void delete(String id) {
+    public void delete(Integer id) {
         log.debug("Request to delete Demande: {}", id);
         demandeRepository.deleteById(id);
     }
@@ -97,10 +83,33 @@ public class DemandeService {
     )
     public List<Demande> findAllDemandeByNums(String[] nums, Integer codeParametrage) {
         QDemande qDemande = QDemande.demande;
+        List<Integer> intList = new ArrayList<Integer>();
+        if (nums !=null ) {
+            for (String s : nums) {
+                intList.add(Integer.valueOf(s));
+            }
+        }
         WhereClauseBuilder builder = new WhereClauseBuilder()
-                .optionalAnd(nums, () -> qDemande.numeroDemande.in(nums))
+                .optionalAnd(nums, () -> qDemande.code.in(intList))
                 .optionalAnd(codeParametrage, () -> qDemande.codeParametrageDemande().code.eq(codeParametrage));
         return (List<Demande>) demandeRepository.findAll(builder);
 
     }
+
+    public String save(DemandeDTO demandeDTO) {
+        log.debug("Request to save Demande: {}", demandeDTO);
+        Demande demande = DemandeFactory.demandeDTOToDemande(demandeDTO, null);
+        demandeRepository.save(demande);
+        return "true";
+    }
+
+    public String update(DemandeDTO demandeDTO) {
+        log.debug("Request to update Demande: {}", demandeDTO);
+        Demande inBase = demandeRepository.findByCode(demandeDTO.getCode());
+        Preconditions.checkBusinessLogique(inBase != null, "Demande does not exist");
+        DemandeFactory.demandeDTOToDemande(demandeDTO, inBase);
+        demandeRepository.save(inBase);
+        return "true";
+    }
+
 }

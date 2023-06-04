@@ -90,4 +90,10 @@ public class WelcomeController {
         model.put("username", SecurityContextHolder.getContext().getAuthentication().getName());
         return "/WEB-INF/body_page/NouvelleDemande.jsp";
     }
+    
+    @RequestMapping("Workflow")
+    public String WorkflowDemande(Map<String, Object> model, Locale locale, Principal user) {
+        model.put("username", SecurityContextHolder.getContext().getAuthentication().getName());
+        return "/WEB-INF/body_page/Workflow.jsp";
+    }
 }
