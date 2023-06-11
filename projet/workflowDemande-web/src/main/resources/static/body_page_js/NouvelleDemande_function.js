@@ -22,16 +22,22 @@ function ActionBoutton() {
         sessionStorage.setItem("Demande", 'ajout');
         $("#typeMode").val("add");
     });
-    $('#btn_Consulter').unbind('click');
+  
+    
+        $('#btn_Consulter').unbind('click');
     $('#btn_Consulter').bind('click', function (e) {
+        sessionStorage.setItem("Demande", 'consult');
         var rowDde = $('#tableNouvelleDemandes').find('tr.selectionnee');
         if (rowDde.length === 0)
             showNotification('Attention', "Veuillez choisir une demande ", 'error', 3000);
         else {
             var numeroDemande = $('.selectionnee').find('td').eq(0).text();
+            findChamps(numeroDemande);
             majNVDemande(numeroDemande, "consult");
         }
     });
+    
+    
     $('#btn_Annuler').unbind('click');
     $('#btn_Annuler').bind('click', function (e) {
         var rowDde = $('#tableNouvelleDemandes').find('tr.selectionnee');
@@ -39,7 +45,8 @@ function ActionBoutton() {
             showNotification('Attention', "Veuillez choisir une demande ", 'error', 3000);
         else
         {
-            var numeroDemande = $('.selectionnee').find('td').eq(0).text();
+              var numeroDemande = $('.selectionnee').find('td').eq(0).text();
+            findChamps(numeroDemande);
             majNVDemande(numeroDemande, "delete");
         }
     });
@@ -69,11 +76,12 @@ function ActionBoutton() {
             showNotification('Avertissement', "Veuillez choisir une demande", 'error', 3000);
         } else
         {
-            validation(liste);
+            validation(liste, false);
         }
     });
     $('#btn_Modifier').unbind('click');
     $('#btn_Modifier').bind('click', function (e) {
+        sessionStorage.setItem("Demande", 'update');
         var rowDde = $('#tableNouvelleDemandes').find('tr.selectionnee');
         if (rowDde.length === 0)
             showNotification('Attention', "Veuillez choisir une demande ", 'error', 3000);
@@ -83,36 +91,45 @@ function ActionBoutton() {
             majNVDemande(numeroDemande, "update");
         }
     });
+    $('#btn_Refuser').unbind('click');
+    $('#btn_Refuser').bind('click', function (e) {
+        var liste = [];
+        $("#tableNouvelleDemandes > tbody > tr").each(function () {
+            if ($(this).find(".checkBoxClassRef").is(":checked")) {
+                liste.push($(this).find('td').eq(0).text());
+            }
+        });
+        if (liste.length === 0)
+        {
+            showNotification('Avertissement', "Veuillez choisir une demande", 'error', 3000);
+        } else
+        {
+            validation(liste, true);
+        }
+    });
 }
 
 function majNVDemande(code, action) {
-    $('#modalAdd').modal('show');
-    $('#designation').val(Demande.designation);
-    $('#code').val(code);
+       $('#modalAdd').modal('show');
     if (action === "update") {
-        $('#designation').prop("disabled", false);
-        $('#codeTypeDemande').prop("disabled", false);
-        $('#selectEtat').prop("disabled", false);
-        $('#modalIconDemande').replaceWith('<i id="modalIconDemande" class="glyphicon glyphicon-edit"></i>');
-        $('#labelTitre').text("Modification d'une " + Demande.designation);
+      $('#labelTitre').text("Modification d'une " + Demande.designation);
         sessionStorage.setItem("Demande", 'modif');
-        $("#btnMAJDemande").show();
+        $("#btnMAJDemandes").show();
     }
     if (action === "delete") {
         $('#modalIconDemande').replaceWith('<i id="modalIconDemande" class="glyphicon glyphicon-trash"></i>');
         $('#labelTitre').text("Suppression d'une " + Demande.designation);
-        $('#designation').prop("disabled", "disabled");
-        $('#codeTypeDemande').prop("disabled", true);
+        $('#code').prop("disabled", true);
         sessionStorage.setItem("Demande", 'delete');
-        $("#btnMAJDemande").show();
+        $("#btnMAJDemandes").show();
     }
     if (action === "consult") {
         $('#modalIconDemande').replaceWith('<i id="modalIconDemande" class="glyphicon glyphicon-list"></i>');
         $('#labelTitre').text("Détail d'une " + Demande.designation);
-        $('#designation').prop("disabled", "disabled");
-        $('#codeTypeDemande').prop("disabled", true);
+         sessionStorage.setItem("Demande", 'consult');
+        $('#code').prop("disabled", true);
         $('#selectEtat').prop("disabled", "disabled");
-        $("#btnMAJDemande").hide();
+        $("#btnMAJDemandes").hide();
     }
     DessinerListeDesChamps(code, action);
 }
@@ -154,16 +171,16 @@ function DessinerListeDesChamps(code, action) {
     }
 
 }
-function validation(list) {
+function validation(list, refus) {
     $.ajax({
-        url: url_base + '/demandes/validation?user=' + window.localStorage.getItem('username') + '&validation=' + list,
+        url: url_base + '/demandes/validation?user=' + window.localStorage.getItem('username') + '&validation=' + list + '&refus=' + refus,
         type: 'PUT',
         contentType: "application/json; charset=utf-8",
         async: false,
         success: function (data)
         {
             showNotification('Succès', "Validation effectuée avec succés", 'success', 5000);
-            DrawTableLesDemandes();
+            DrawLesNouvellesDemandes();
         }
     });
 }
@@ -176,9 +193,9 @@ function DrawTableLesDemandes() {
         window.parent.$.loader.close();
     }, 100);
 }
-function  DrawLesNouvellesDemandes(idTable, idContainers) {
-    showLoadingNotification();
-    var List2 = [];
+function DrawLesNouvellesDemandes() {
+
+    var data = [];
     let id;
     let url = window.location.search;
     if (url !== '') {
@@ -188,120 +205,125 @@ function  DrawLesNouvellesDemandes(idTable, idContainers) {
         t = e[1].split('&');
         id = t[0].split('=')[1];
     }
-    List2 = findAllDemandeByCodeParametrage(id);
-    document.getElementById(idContainers).innerHTML = '';
-    var table_list = "<table id=tableNouvelleDemandes class='display dataTable projects-table table table-striped table-bordered table-hover' cellspacing='0'  width='100%' align='center'>";
+    data = findAllDemandeByCodeParametrage(id);
+    document.getElementById("_grid_NouvelleDemandes").innerHTML = '';
+    var table_list = "<table id='tableNouvelleDemandes' class='display projects-table table table-striped table-bordered table-hover' cellspacing='0'  width='100%'>";
     table_list += "</table>";
     $("#_grid_NouvelleDemandes").html(table_list);
+    var columns = [
+        {
+            title: "Numéro demande",
+            data: 'code',
+            render: function (data, type, row, meta) {
+                if (data !== null)
+                    return data;
+                else
+                    "";
+            }
+        },
+        {
+            title: "Désignation du demande",
+            data: 'desParametrageDemande',
+            render: function (data) {
+                if (data === undefined)
+                    return '';
+                else
+                    return "<span title='" + data + "'>" + data + "</span>";
+            }
+        }, {
+            title: "Employé",
+            data: 'nomEmploye',
+            render: function (data) {
+                if (data === undefined)
+                    return '';
+                else
+                    return "<span title='" + data + "'>" + data + "</span>";
+            }
+        },
+        {
+            title: "Type de demande",
+            data: 'typeDemande',
+            render: function (data) {
+                if (data === undefined)
+                    return '';
+                else
+                    return "<span title='" + data + "'>" + data + "</span>";
+            }
+        },
+        {
+            data: 'dateCreation',
+            title: 'Date du demande ',
+            render: function (data) {
+                if (data === null || data === undefined)
+                    return '';
+                else
+                    return formatCalendarWithTime(data, 'dd/mm/yyyy');
+            }
+        },
+        {
+            title: "Etat",
+            data: 'logoEtat',
+            render: function (data) {
+                if (data === undefined)
+                    return '';
+                else
+                    return "<i class='" + data + "'></i>";
+            }
+        },
+        {
+            data: 'idEtat',
+            title: 'valider',
+            sortable: false,
+            render: function (data, type, row, meta) {
+                var check = data === "0 " ? "unchecked" : "checked";
+                return '<form><label style="display: flex;justify-content: center;align-items: center; "><input name="renouv" type="checkbox" class="editor-active checkBoxClass checkbox" ' + '><span></span></label></form>';
+            }
+        },
+        {
+            data: 'idEtat',
+            title: 'Refuser',
+            sortable: false,
+            render: function (data, type, row, meta) {
+                var check = data === "0 " ? "unchecked" : "checked";
+                return '<form><label style="display: flex;justify-content: center;align-items: center; "><input name="renouv" type="checkbox" class="editor-active checkBoxClass checkBoxClassRef checkbox" ' + '><span></span></label></form>';
+            }
+        }
+
+
+    ];
+    if (window.localStorage.getItem('username') === 'Employe') {
+        columns.splice(6, 2);
+    }
     var pageLength = parseInt(($(document).height() - 220) / 34);
     table = $('#tableNouvelleDemandes').on('page.dt', function () {}).DataTable({
         "dom": 'frtip',
         "searching": true,
         destroy: false,
         bPaginate: true,
-        sort: false,
-        data: List2,
-        language: dataTablesLang,
         "pageLength": pageLength,
-        columns: [
-            {
-                title: "Numéro demande",
-                data: 'code',
-                render: function (data, type, row, meta) {
-                    if (data !== null)
-                        return data;
-                    else
-                        "";
-                }
-            },
-            {
-                title: "Désignation du demande",
-                data: 'desParametrageDemande',
-                render: function (data) {
-                    if (data === undefined)
-                        return '';
-                    else
-                        return "<span title='" + data + "'>" + data + "</span>";
-                }
-            }, {
-                title: "Employé",
-                data: 'nomEmploye',
-                render: function (data) {
-                    if (data === undefined)
-                        return '';
-                    else
-                        return "<span title='" + data + "'>" + data + "</span>";
-                }
-            },
-            {
-                title: "Type de demande",
-                data: 'typeDemande',
-                render: function (data) {
-                    if (data === undefined)
-                        return '';
-                    else
-                        return "<span title='" + data + "'>" + data + "</span>";
-                }
-            },
-            {
-                data: 'dateCreation',
-                title: 'Date du demande ',
-                render: function (data) {
-                    if (data === null || data === undefined)
-                        return '';
-                    else
-                        return formatCalendarWithTime(data, 'dd/mm/yyyy');
-                }
-            },
-            {
-                title: "Etat",
-                data: 'logoEtat',
-                render: function (data) {
-                    if (data === undefined)
-                        return '';
-                    else
-                        return "<i class='" + data + "'></i>";
-                }
-            },
-            {
-                data: 'idEtat',
-                title: 'valider',
-                sortable: false,
-                render: function (data, type, row, meta) {
-                    var check = data === "0 " ? "unchecked" : "checked";
-                    return '<form><label style="display: flex;justify-content: center;align-items: center; "><input name="renouv" type="checkbox" class="editor-active checkBoxClass checkbox" ' + '><span></span></label></form>';
-                }
-            },
-            {
-                data: 'idEtat',
-                title: 'Refuser',
-                sortable: false,
-                render: function (data, type, row, meta) {
-                    var check = data === "0 " ? "unchecked" : "checked";
-                    return '<form><label style="display: flex;justify-content: center;align-items: center; "><input name="renouv" type="checkbox" class="editor-active checkBoxClass checkbox" ' + '><span></span></label></form>';
-                }
-            }
-        ],
+        data: data,
+        "order": [],
+        language: dataTablesLang,
+        columns: columns,
         "aoColumnDefs": [{
-                'bSortable': false,
-            }],
-        "order": [[0, "asc"]]
+                'bSortable': false
+            }]
+
     });
+
     $('#tableNouvelleDemandes  tbody').delegate('tr', 'click', function (e) {
         var highlightColor = '#d9edf7';
         var css = $(this).attr('style');
-        if ($(this).find('.dataTables_empty').length === 0) {
-            if (css !== 'border-color: rgb(217, 237, 247); background-color: rgb(217, 237, 247)') {
-                $('#' + idTable + ' > tbody > tr').removeAttr('style');
-                $('#' + idTable + ' > tbody > tr').removeClass('selectionnee');
-                $(this).addClass('selectionnee');
-                $(this).css('background-color', highlightColor);
-                $(this).css('border-color', highlightColor);
-            } else {
-                $(this).removeAttr('style');
-            }
+        if (css !== 'border-color: rgb(217, 237, 247); background-color: rgb(217, 237, 247)') {
+            $('#tableNouvelleDemandes > tbody > tr').removeAttr('style');
+            $('#tableNouvelleDemandes > tbody > tr').removeClass('selectionnee');
+            $(this).addClass('selectionnee');
+            $(this).css('background-color', highlightColor);
+            $(this).css('border-color', highlightColor);
+        } else {
+            $(this).removeAttr('style');
         }
-        $('#' + idTable + ' tbody > tr').focus();
+        $('#tableNouvelleDemandes > tbody > tr').focus();
     });
     $("#search").on("keyup search input paste cut", function () {
         table.search(this.value).draw();
@@ -317,7 +339,6 @@ function  DrawLesNouvellesDemandes(idTable, idContainers) {
     });
     $('#tableNouvelleDemandes_info').css("padding", '0');
     $('#tableNouvelleDemandes_filter').hide();
-    hideLoadingNotification();
 }
 function  AfficheModalAddLesDemandes() {
     var i = 0;
@@ -344,8 +365,8 @@ function  AfficheModalAddLesDemandes() {
             $('#labelTitre').text("Ajout d'une " + demandeData.designation);
             $('#modal_ajout_Demandes_title h2').val("Ajout d'une " + demandeData.designation);
             var html = "<ul>";
-            
-            html += "<div class='username'><i class='fa fas fa-duotone fa-user-tie'></i>"+"      " + window.localStorage.getItem('username') + "</div>";
+
+            html += "<div class='username'><i class='fa fas fa-duotone fa-user-tie'></i>" + "      " + window.localStorage.getItem('username') + "</div>";
             html += "<div class='separator'></div>";
             for (i = 0; i < demandeData.etiquetteparametragedemandeDTOs.length; i++) {
                 var etiquette = demandeData.etiquetteparametragedemandeDTOs[i];
@@ -368,10 +389,10 @@ function  AfficheModalAddLesDemandes() {
                                 break;
                             case "date":
                                 var today = new Date();
-                            var minDate = formatDate(today);
-                            var maxDate = formatDate(addMonths(today, 1));
-                            inputType = "<input id='" + etiquetteData.description.replace(/\s/g, '') + "s' type='date' min='" + minDate + "' max='" + maxDate + "'/>";
-                            break;
+                                var minDate = formatDate(today);
+                                var maxDate = formatDate(addMonths(today, 1));
+                                inputType = "<input id='" + etiquetteData.description.replace(/\s/g, '') + "s' type='date' min='" + minDate + "' max='" + maxDate + "'/>";
+                                break;
                             case "time":
                                 inputType = "<input id='" + etiquetteData.description.replace(/\s/g, '') + "s' type='time'/>";
                                 break;
@@ -380,7 +401,7 @@ function  AfficheModalAddLesDemandes() {
                                 break;
                         }
                         let x = etiquetteData.description;
-                       
+
 // ajouter le code HTML pour afficher l'étiquette et l'input
                         html += "<div class='col-md-12'><div style='padding:8px ;margin: 8px;'><div class='col-md-4 control-drag'>" + x
                                 + ":</div> " + " <div class='col-md-4 input-group'>" + inputType + "</div>"
@@ -418,33 +439,15 @@ function addMonths(date, months) {
     return newDate;
 }
 function submitMAJLesDemandes() {
+    var rowDde = $('#tableNouvelleDemandes').find('tr.selectionnee');
+
+    var numeroDemande = $('.selectionnee').find('td').eq(0).text();
+
+
     if (sessionStorage.getItem("Demande") === 'delete') {
-        deleteDemandes($('#numeroDemande').val());
+        deleteDemandes(numeroDemande);
     } else {
-        if (($('#numeroDemande').val() === '')) {
-            $('#numeroDemande').addClass('css-error');
-            $('#numeroDemande').attr('style', 'background-color: #fff0f0;border-color: #A90329;');
-        } else {
-            $('#numeroDemande').removeClass('css-error');
-            $('#numeroDemande').attr('style', '');
-        }
-        if (($('#designation').val() === '')) {
-            $('#designation').addClass('css-error');
-            $('#designation').attr('style', 'border-width: 1px;background-color: #fff0f0;border-color: #A90329;');
-        } else {
-            $('#designation').removeClass('css-error');
-            $('#designation').attr('style', '');
-        }
-        if (($('#dateCreation').val() === '')) {
-            $('#dateCreation').addClass('css-error');
-            $('#dateCreation').attr('style', 'border-width: 1px;background-color: #fff0f0;border-color: #A90329;');
-        } else {
-            $('#dateCreation').removeClass('css-error');
-            $('#dateCreation').attr('style', '');
-        }
-        if ($('.css-error').length > 0) {
-            showNotification('Avertissement', "Veuillez vérifier le(s) champ(s) saisi(s) ! ", 'error', 3000);
-        } else {
+       
 
             var payload = payloadLesDemandes();
             if (sessionStorage.getItem("Demande") === 'ajout') {
@@ -454,7 +457,7 @@ function submitMAJLesDemandes() {
                     updateDemandes(payload);
                 }
             }
-        }
+        
     }
 }
 function addLesDemandes(list) {
@@ -562,7 +565,7 @@ function deleteDemandes(numeroDemande) {
         success: function (data)
         {
             response = data;
-            showNotification("Suppression effectuée avec succès", 'success', 5000);
+            showNotification('Succès', "Suppression effectuée avec succès", 'success', 5000);
             $('#addConfirm').modal('hide');
             $('#modalAdd').modal('hide');
             showLoadingNotification();
@@ -576,7 +579,6 @@ function deleteDemandes(numeroDemande) {
 }
 function payloadLesDemandes() {
     var etiquettes = [];
-
     var numeroDemande = $('.selectionnee').find('td').eq(0).text();
     for (var i = 0; i < Demande.etiquetteparametragedemandeDTOs.length; i++) {
         var etiquette = {};

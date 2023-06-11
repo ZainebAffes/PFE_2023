@@ -36,6 +36,7 @@ public class Demande implements Serializable {
     private String designation;
     @Column(name = "dateCreation")
     private LocalDateTime dateCreation;
+    @NotNull
     @Column(name = "etat")
     private String etats;
 
@@ -48,7 +49,7 @@ public class Demande implements Serializable {
     @Column(name = "code_parametrage_demande")
     private Integer codeParametrageDemandes;
 
-    @JoinColumn(name = "id_employe", referencedColumnName = "idEmploye", updatable = false, insertable = false, nullable = true)
+    @JoinColumn(name = "id_employe", referencedColumnName = "UserName", updatable = false, insertable = false, nullable = true)
     @ManyToOne
     private Employe idEmploye;
     

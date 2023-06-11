@@ -5,7 +5,7 @@ $(function () {
         window.parent.$('#hide-menu > span > a').click();
         window.parent.$('#left-panel').attr('hided', 'true');
     }
-    var url = `${url_base_access}/gestion-access-core/api/access-menu-user/findAccessMenuUser?module=${idModule}`;
+    var url = `${url_base_access}/gestion-access-core/api/access-menu-user/findAccessMenuUser?username=` + window.localStorage.getItem('username') + `&module=${idModule}`;;
 
     $.ajax({
         url: url,

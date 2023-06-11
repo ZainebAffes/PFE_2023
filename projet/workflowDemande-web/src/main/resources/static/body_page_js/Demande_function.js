@@ -147,6 +147,19 @@ function validation(list) {
         }
     });
 }
+function refuser(list) {
+    $.ajax({
+        url: url_base + '/demandes/refuser?user=' + window.localStorage.getItem('username') + '&validation=' + list,
+        type: 'PUT',
+        contentType: "application/json; charset=utf-8",
+        async: false,
+        success: function (data)
+        {
+            showNotification('Succès',"La refu a été effectuée avec succès", 'success', 5000);
+            DrawTableLesDemandes();
+        }
+    });
+}
 
 function majDemande(numeroDemande, action) {
     var Demande = findDemandeById(numeroDemande);

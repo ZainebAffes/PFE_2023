@@ -11,6 +11,7 @@ $(function () {
             hideLoadingNotification();
         }, 50);
     });
+    
     $('#btnMAJDemande').unbind('click');
     $('#btnMAJDemande').bind('click', function () {
         window.parent.$.loader.open();

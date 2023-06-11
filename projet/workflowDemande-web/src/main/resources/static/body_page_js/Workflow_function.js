@@ -5,6 +5,7 @@ function drawBtnWorkflow() {
 function ActionBoutton() {
     $('#btn_Ajouter').unbind('click');
     $('#btn_Ajouter').bind('click', function (e) {
+        $('#dropzones').empty();
         AfficheModalAddWorkflow();
     });
 

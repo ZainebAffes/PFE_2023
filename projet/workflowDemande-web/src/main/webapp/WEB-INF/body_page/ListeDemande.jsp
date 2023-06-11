@@ -547,8 +547,9 @@
                                                     <legend style="font-size: 0.9em ;">
                                                         <p class="p1">CRÉER UN CHAMP</p>
                                                         <p>
-                                                            Faites glisser un type de champ vers l'une des sections de gauche
-                                                            afin de créer un champ personnalisé pour ce type de ticket.</p>
+                                                            Faites glisser un type de champ vers l'une des sections 
+                                                            de gauche afin de créer un champ personnalisé pour ce
+                                                            type de ticket.</p>
                                                     </legend>
                                                 </div>  
 

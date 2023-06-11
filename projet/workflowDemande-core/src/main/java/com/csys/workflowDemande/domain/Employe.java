@@ -28,14 +28,11 @@ import javax.xml.bind.annotation.XmlTransient;
 public class Employe implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    @Id
-    @Basic(optional = false)
+   @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 50)
-    @Column(name = "idEmploye")
-    private String idEmploye;
-    @Size(max = 50)
-    @Column(name = "nom")
+    @Size( max = 50)
+    @Id
+    @Column(name = "UserName")
     private String nom;
     @Size(max = 50)
     @Column(name = "prenom")
@@ -59,18 +56,6 @@ public class Employe implements Serializable {
     private TypeEmploye typeEmployé;
 
     public Employe() {
-    }
-
-    public Employe(String idEmploye) {
-        this.idEmploye = idEmploye;
-    }
-
-    public String getIdEmploye() {
-        return idEmploye;
-    }
-
-    public void setIdEmploye(String idEmploye) {
-        this.idEmploye = idEmploye;
     }
 
     public String getNom() {
@@ -136,31 +121,5 @@ public class Employe implements Serializable {
 
     public void setTypeEmployé(TypeEmploye typeEmployé) {
         this.typeEmployé = typeEmployé;
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (idEmploye != null ? idEmploye.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Employe)) {
-            return false;
-        }
-        Employe other = (Employe) object;
-        if ((this.idEmploye == null && other.idEmploye != null) || (this.idEmploye != null && !this.idEmploye.equals(other.idEmploye))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "com.csys.workflowDemande.domain.Empolye[ idEmploye=" + idEmploye + " ]";
-    }
-    
+    }  
 }

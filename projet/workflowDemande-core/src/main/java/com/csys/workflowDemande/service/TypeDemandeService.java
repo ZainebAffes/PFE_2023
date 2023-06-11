@@ -1,5 +1,6 @@
 package com.csys.workflowDemande.service;
 
+import com.csys.workflowDemande.domain.ParametrageDemande;
 import com.csys.workflowDemande.domain.QTypeDemande;
 import com.csys.workflowDemande.domain.TypeDemande;
 import com.csys.workflowDemande.dto.TypeDemandeDTO;
@@ -26,13 +27,17 @@ public class TypeDemandeService {
     private final Logger log = LoggerFactory.getLogger(TypeDemandeService.class);
 
     private final TypeDemandeRepository typedemandeRepository;
+    private final ParametrageDemandeService parametrageDemandeService;
 
-    public TypeDemandeService(TypeDemandeRepository typedemandeRepository) {
+    public TypeDemandeService(TypeDemandeRepository typedemandeRepository, ParametrageDemandeService parametrageDemandeService) {
         this.typedemandeRepository = typedemandeRepository;
+        this.parametrageDemandeService = parametrageDemandeService;
     }
 
     public TypeDemandeDTO save(TypeDemandeDTO typedemandeDTO) {
         log.debug("Request to save TypeDemande: {}", typedemandeDTO);
+        TypeDemande inBase = typedemandeRepository.findByCodeTypeDemande(typedemandeDTO.getCodeTypeDemande());
+        Preconditions.checkBusinessLogique(inBase == null, "TypeDemande exist");
         TypeDemande typedemande = TypeDemandeFactory.typedemandeDTOToTypeDemande(typedemandeDTO);
         typedemande = typedemandeRepository.save(typedemande);
         TypeDemandeDTO resultDTO = TypeDemandeFactory.typedemandeToTypeDemandeDTO(typedemande);
@@ -91,8 +96,8 @@ public class TypeDemandeService {
         TypeDemande inBase = findTypeDemande(id);
 
         Preconditions.checkBusinessLogique(inBase != null, "type-demande.NotFound");
-
-        Preconditions.checkBusinessLogique(inBase != null, "type-demande.NotFound");
+        List<ParametrageDemande> parametrageDemandes = parametrageDemandeService.findAllByDesignation(null, id);
+        Preconditions.checkBusinessLogique(parametrageDemandes == null, "TypeDemande utilisé dans un paramétrage du désignation : " + parametrageDemandes.get(0).getDesignation());
 
         typedemandeRepository.deleteById(id);
     }

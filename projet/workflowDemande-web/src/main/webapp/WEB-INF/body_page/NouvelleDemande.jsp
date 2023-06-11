@@ -343,6 +343,13 @@
                         </h4>
                     </div>      
                     <!-- widget div-->
+                    <div class="row" style='display:none'>
+                        <div class="form-group col-md-6">
+                            <label class="col-md-3 control-label">Code<span class="champOblig">*</span></label>
+                            <div class="col-md-6 input-group">
+                                <input maxlength="10" id="code"  type="text"  class=" form-control datepicker input-xs input-code"  data-mask-clearifnotmatch="true">
+                            </div>
+                        </div> </div>
                     <div id="popup_div" class="modal-body" style="padding:5px;border-style: solid;border-width: 1px;margin: 5px">
                         <div class="row">
                             <div class="widget-body screen col-md-12">

@@ -7,6 +7,7 @@ function drawBtnDemande() {
 function ActionBoutton() {
     $('#btn_Ajouter').unbind('click');
     $('#btn_Ajouter').bind('click', function (e) {
+        $('#dropzones').empty();
         AfficheModalAddDemande();
         $("#typeMode").val("add");
     });
@@ -16,6 +17,7 @@ function ActionBoutton() {
         if (rowDde.length === 0)
             showNotification('Attention', "Veuillez choisir un paramétrage de type de demande ", 'error', 3000);
         else {
+            $('#dropzones').empty();
             var code = $('.selectionnee').find('td').eq(0).text();
             majDemande(code, "update");
         }
@@ -26,6 +28,7 @@ function ActionBoutton() {
         if (rowDde.length === 0)
             showNotification('Attention', "Veuillez choisir un paramétrage de type de demande", 'error', 3000);
         else {
+            $('#dropzones').empty();
             var code = $('.selectionnee').find('td').eq(0).text();
             majDemande(code, "consult");
         }
@@ -37,6 +40,7 @@ function ActionBoutton() {
             showNotification('Attention', "Veuillez choisir un paramétrage de type de demande ", 'error', 3000);
         else
         {
+            $('#dropzones').empty();
             var code = $('.selectionnee').find('td').eq(0).text();
             majDemande(code, "delete");
         }
@@ -163,7 +167,7 @@ function DessinerEtiquette(code) {
                 newInput.classList.add('nom');
                 newInput.setAttribute('value', etiquetteData.description);
 
-                draggedTag.appendChild(newInput);                
+                draggedTag.appendChild(newInput);
                 dropzones.appendChild(draggedTag);
 
                 const newInput2 = document.createElement('input');

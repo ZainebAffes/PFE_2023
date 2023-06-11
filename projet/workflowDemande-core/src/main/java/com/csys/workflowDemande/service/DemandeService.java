@@ -65,14 +65,21 @@ public class DemandeService {
         demandeRepository.deleteById(id);
     }
 
-    public String validation(String[] nums, String user) {
+    public String validation(String[] nums, String user, boolean refus ) {
         List<Demande> demandes = findAllDemandeByNums(nums, null);
+     if(!refus){
         for (Demande demande : demandes) {
 
             int x = Integer.parseInt(demande.getEtat().getCode()) + 1;
             demande.setEtats(String.valueOf(x));
             demandeRepository.save(demande);
+        }}
+     else{
+          for (Demande demande : demandes) {
+            demande.setEtats(String.valueOf(-1));
+            demandeRepository.save(demande);
         }
+     }
 
         return "true";
     }
@@ -99,6 +106,7 @@ public class DemandeService {
     public String save(DemandeDTO demandeDTO) {
         log.debug("Request to save Demande: {}", demandeDTO);
         Demande demande = DemandeFactory.demandeDTOToDemande(demandeDTO, null);
+        demande.setEtats("0");
         demandeRepository.save(demande);
         return "true";
     }

@@ -70,10 +70,11 @@ public class ParametrageDemandeService {
     @Transactional(
             readOnly = true
     )
-    public List<ParametrageDemande> findAllByDesignation(String designation) {
+    public List<ParametrageDemande> findAllByDesignation(String designation,String codType) {
         QParametrageDemande qParametrageDemande = QParametrageDemande.parametrageDemande;
         WhereClauseBuilder builder = new WhereClauseBuilder()
-                .optionalAnd(designation, () -> qParametrageDemande.designation.like("%" + designation + "%"));
+                .optionalAnd(designation, () -> qParametrageDemande.designation.like("%" + designation + "%"))
+                 .optionalAnd(codType, () -> qParametrageDemande.codeTypeDemande.eq(codType));
         return (List<ParametrageDemande>) parametragedemandeRepository.findAll(builder);
     }
 
@@ -83,7 +84,7 @@ public class ParametrageDemandeService {
     public List<ParametrageDemandeDTO> findAll(String designation) {
         log.debug("Request to get All ParametrageDemandes");
         List<ParametrageDemande> result;
-        result = findAllByDesignation(designation);
+        result = findAllByDesignation(designation,null);
         return ParametrageDemandeFactory.parametragedemandeToParametrageDemandeDTOs(result);
     }
 

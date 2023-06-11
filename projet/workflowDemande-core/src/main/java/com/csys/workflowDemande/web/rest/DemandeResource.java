@@ -55,8 +55,8 @@ public class DemandeResource {
     }
   
     @PutMapping("/demandes/validation")
-    public ResponseEntity<String> validation(@RequestParam String[] validation, @RequestParam String user) throws URISyntaxException, MethodArgumentNotValidException {
-        String result = demandeService.validation(validation, user);
+    public ResponseEntity<String> validation(@RequestParam String[] validation, @RequestParam String user,@RequestParam boolean refus) throws URISyntaxException, MethodArgumentNotValidException {
+        String result = demandeService.validation(validation, user,refus);
         return ResponseEntity.created(new URI("/api/demandes/")).body(result);
     }
   

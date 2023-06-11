@@ -6,7 +6,7 @@ $(function () {
     $('#rafresh').bind('click', function (e) {
         showLoadingNotification();
         setTimeout(function () {
-            DrawTableLesDemandes();
+            DrawLesNouvellesDemandes();
             hideLoadingNotification();
         }, 50);
     });
