@@ -54,9 +54,9 @@ public class DemandeService {
     @Transactional(
             readOnly = true
     )
-    public Collection<DemandeDTO> findAll(Integer codeParametrage) {
+    public Collection<DemandeDTO> findAll(Integer codeParametrage,String nomEmploye) {
         log.debug("Request to get All Demandes");
-        Collection<Demande> result = findAllDemandeByNums(null, codeParametrage);
+        Collection<Demande> result = findAllDemandeByNums(null, codeParametrage,nomEmploye);
         return DemandeFactory.demandeToDemandeDTOs(result);
     }
 
@@ -66,7 +66,7 @@ public class DemandeService {
     }
 
     public String validation(String[] nums, String user, boolean refus ) {
-        List<Demande> demandes = findAllDemandeByNums(nums, null);
+        List<Demande> demandes = findAllDemandeByNums(nums, null,null);
      if(!refus){
         for (Demande demande : demandes) {
 
@@ -88,7 +88,7 @@ public class DemandeService {
     @Transactional(
             readOnly = true
     )
-    public List<Demande> findAllDemandeByNums(String[] nums, Integer codeParametrage) {
+    public List<Demande> findAllDemandeByNums(String[] nums, Integer codeParametrage,String nomEmploye) {
         QDemande qDemande = QDemande.demande;
         List<Integer> intList = new ArrayList<Integer>();
         if (nums !=null ) {
@@ -98,7 +98,8 @@ public class DemandeService {
         }
         WhereClauseBuilder builder = new WhereClauseBuilder()
                 .optionalAnd(nums, () -> qDemande.code.in(intList))
-                .optionalAnd(codeParametrage, () -> qDemande.codeParametrageDemande().code.eq(codeParametrage));
+                .optionalAnd(codeParametrage, () -> qDemande.codeParametrageDemande().code.eq(codeParametrage))
+                 .optionalAnd(nomEmploye, () -> qDemande.idEmploye().nom.eq(nomEmploye));
         return (List<Demande>) demandeRepository.findAll(builder);
 
     }
@@ -118,6 +119,10 @@ public class DemandeService {
         DemandeFactory.demandeDTOToDemande(demandeDTO, inBase);
         demandeRepository.save(inBase);
         return "true";
+    }
+
+    Collection<DemandeDTO> findAll(Integer id) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
 }

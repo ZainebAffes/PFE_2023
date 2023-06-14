@@ -22,9 +22,9 @@ function ActionBoutton() {
         sessionStorage.setItem("Demande", 'ajout');
         $("#typeMode").val("add");
     });
-  
-    
-        $('#btn_Consulter').unbind('click');
+
+
+    $('#btn_Consulter').unbind('click');
     $('#btn_Consulter').bind('click', function (e) {
         sessionStorage.setItem("Demande", 'consult');
         var rowDde = $('#tableNouvelleDemandes').find('tr.selectionnee');
@@ -36,8 +36,8 @@ function ActionBoutton() {
             majNVDemande(numeroDemande, "consult");
         }
     });
-    
-    
+
+
     $('#btn_Annuler').unbind('click');
     $('#btn_Annuler').bind('click', function (e) {
         var rowDde = $('#tableNouvelleDemandes').find('tr.selectionnee');
@@ -45,7 +45,7 @@ function ActionBoutton() {
             showNotification('Attention', "Veuillez choisir une demande ", 'error', 3000);
         else
         {
-              var numeroDemande = $('.selectionnee').find('td').eq(0).text();
+            var numeroDemande = $('.selectionnee').find('td').eq(0).text();
             findChamps(numeroDemande);
             majNVDemande(numeroDemande, "delete");
         }
@@ -110,9 +110,9 @@ function ActionBoutton() {
 }
 
 function majNVDemande(code, action) {
-       $('#modalAdd').modal('show');
+    $('#modalAdd').modal('show');
     if (action === "update") {
-      $('#labelTitre').text("Modification d'une " + Demande.designation);
+        $('#labelTitre').text("Modification d'une " + Demande.designation);
         sessionStorage.setItem("Demande", 'modif');
         $("#btnMAJDemandes").show();
     }
@@ -126,7 +126,7 @@ function majNVDemande(code, action) {
     if (action === "consult") {
         $('#modalIconDemande').replaceWith('<i id="modalIconDemande" class="glyphicon glyphicon-list"></i>');
         $('#labelTitre').text("Détail d'une " + Demande.designation);
-         sessionStorage.setItem("Demande", 'consult');
+        sessionStorage.setItem("Demande", 'consult');
         $('#code').prop("disabled", true);
         $('#selectEtat').prop("disabled", "disabled");
         $("#btnMAJDemandes").hide();
@@ -291,7 +291,7 @@ function DrawLesNouvellesDemandes() {
 
 
     ];
-    if (window.localStorage.getItem('username') === 'Employe') {
+    if (window.localStorage.getItem('username').includes('Employe')) {
         columns.splice(6, 2);
     }
     var pageLength = parseInt(($(document).height() - 220) / 34);
@@ -447,17 +447,17 @@ function submitMAJLesDemandes() {
     if (sessionStorage.getItem("Demande") === 'delete') {
         deleteDemandes(numeroDemande);
     } else {
-       
 
-            var payload = payloadLesDemandes();
-            if (sessionStorage.getItem("Demande") === 'ajout') {
-                addDemande(payload);
-            } else {
-                if (sessionStorage.getItem("Demande") === 'modif') {
-                    updateDemandes(payload);
-                }
+
+        var payload = payloadLesDemandes();
+        if (sessionStorage.getItem("Demande") === 'ajout') {
+            addDemande(payload);
+        } else {
+            if (sessionStorage.getItem("Demande") === 'modif') {
+                updateDemandes(payload);
             }
-        
+        }
+
     }
 }
 function addLesDemandes(list) {
@@ -493,6 +493,9 @@ function findAllDemandeByCodeParametrage(code) {
     var url = url_base + '/demandes/filter';
     if (code !== undefined) {
         url = url + '?codeParametrage=' + code;
+    }
+    if (window.localStorage.getItem('username') !== undefined && window.localStorage.getItem('username').toLowerCase().includes('employe') ) {
+        url = url + '&nomEmploye=' + window.localStorage.getItem('username').trim();
     }
     var response = "";
     $.ajax({

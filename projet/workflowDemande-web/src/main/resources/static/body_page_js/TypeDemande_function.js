@@ -175,7 +175,7 @@ function DrawListTypeDemande(idTable, idContainer) {
                 }
             },
             {
-                title: "désignation",
+                title: "Désignation",
                 data: 'description',
                 render: function (data) {
                     if (data === undefined)

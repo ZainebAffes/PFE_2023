@@ -13,7 +13,7 @@ function ActionBoutton() {
     $('#btn_Modifier').bind('click', function (e) {
         var rowDde = $('#tableListWorkflow').find('tr.selectionnee');
         if (rowDde.length === 0)
-            showNotification('Attention', "Veuillez choisir une état ", 'error', 3000);
+            showNotification('Attention', "Veuillez choisir un Responsable de validation des workflows ", 'error', 3000);
         else {
             var codWorkflow = $('.selectionnee').find('td').eq(0).text();
             majWorkflow(codWorkflow, "update");
@@ -24,7 +24,7 @@ function ActionBoutton() {
     $('#btn_Annuler').bind('click', function (e) {
         var rowDde = $('#tableListWorkflow').find('tr.selectionnee');
         if (rowDde.length === 0)
-            showNotification('Attention', "Veuillez choisir une état ", 'error', 3000);
+            showNotification('Attention', "Veuillez choisir un Responsable de validation des workflows ", 'error', 3000);
         else
         {
             var codWorkflow = $('.selectionnee').find('td').eq(0).text();

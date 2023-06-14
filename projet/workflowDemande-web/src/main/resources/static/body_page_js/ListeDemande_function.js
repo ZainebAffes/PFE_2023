@@ -58,7 +58,7 @@ function ActionBoutton() {
         const headers = [
             'Code',
             'Désignation',
-            '	Type Demande '
+            '	Type de Demande '
 
         ];
         console.log(window);
@@ -280,7 +280,7 @@ function DrawListDemande(idTable, idContainer) {
                 }
             },
             {
-                title: "désignation",
+                title: "Désignation",
                 data: 'designation',
                 render: function (data) {
                     if (data === undefined)
@@ -290,7 +290,7 @@ function DrawListDemande(idTable, idContainer) {
                 }
             },
             {
-                title: "Type Demande",
+                title: "Type de demande",
                 data: 'descriptionTypeDemande',
                 render: function (data) {
                     if (data === undefined)
@@ -604,7 +604,7 @@ function DrawListRassemblant(idTable, idContainer, list) {
                 }
             },
             {
-                title: "Type demande",
+                title: "Type de demande",
                 data: 'descriptionTypeDemande',
                 render: function (data) {
                     if (data === undefined)
@@ -733,7 +733,7 @@ function createSelectTypesDemandes() {
 function createSelectEtats() {
     var listEtat = listEtats;
     var select_html1 = "<select id='listSelectEtat' class='select2' style='' >";
-    select_html1 += "<option  selected='selected' value='' >" + " Choisir une état " + "</option>";
+    select_html1 += "<option  selected='selected' value='' >" + " Choisir les responsables" + "</option>";
     $.each(listEtat, function (i, item) {
         var code = listEtat[i].code;
         var libelle = listEtat[i].designation;

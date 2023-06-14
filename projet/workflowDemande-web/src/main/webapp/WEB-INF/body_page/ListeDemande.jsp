@@ -506,8 +506,8 @@
                                                 </select>
                                             </div>
                                         </div>
-                                         <div class="form-group col-md-3" >
-                                            <div class="col-md-5 control-drag">Responsables de validation  <span class="champOblig">*</span></div>
+                                         <div class="form-group col-md-4" >
+                                            <div class="col-md-6 control-drag">Responsables de validation  <span class="champOblig">*</span></div>
                                             <div class="col-md-6 input-group">
                                                 <select id="selectEtat"class=" form-control datepicker input-xs"  data-mask-clearifnotmatch="true">
 
